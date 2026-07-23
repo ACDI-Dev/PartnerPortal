@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- ACDI Branded Hero Section -->
+<section class="mb-10">
+    <div class="bg-acdi-dark rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between shadow-lg relative overflow-hidden">
+        
+        <!-- Decorative Green Glow -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-acdi-green rounded-full mix-blend-overlay filter blur-[100px] opacity-20 transform translate-x-1/3 -translate-y-1/3"></div>
+
+        <div class="max-w-2xl relative z-10">
+            <h1 class="text-4xl font-bold text-white mb-4 font-sans tracking-tight">
+                Welcome, <strong class="text-acdi-green">{{ first_name|default('Partner') }} {{ last_name|default('') }}</strong>
+            </h1>
+            <p class="text-lg text-gray-300 mb-6 font-sans leading-relaxed">
+                Access your exclusive resources, register new opportunities, and manage your deployments all from one centralized hub.
+            </p>
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Account:</span>
+                    <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold bg-gray-700 text-white shadow-sm border border-gray-600">
+                        {{ reseller_account|default('Unknown Account') }}
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Tier:</span>
+                    <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold bg-acdi-green text-acdi-dark shadow-sm">
+                        {{ tier|default('Standard') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hero Logo Image -->
+        <div class="hidden md:flex relative z-10 p-4">
+            <img src="{{ url_for('static', filename='ACDI_Logo180.png') }}" alt="ACDI Icon" class="w-40 h-40 object-contain drop-shadow-xl">
+        </div>
+    </div>
+</section>
+
+<!-- Tools Grid -->
+<section class="mb-12">
+    <div class="flex items-center gap-2 mb-6">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Quick Links</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- ACE Customer Support Expert (Requires 'ACE_Access' permission) -->
+        {% if 'ACE_Access' in permissions %}
+        <a href="/ace" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
+                <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
+            </div>
+            <div class="mb-3 h-6">
+                <img src="{{ url_for('static', filename='ACE logosmall.png') }}" alt="ACE Powered by ACDI" class="h-full object-contain">
+            </div>
+            <p class="text-sm text-gray-600 leading-relaxed">Connect with ACE, your ACDI Customer Support Expert, for instant technical assistance and resources.</p>
+        </a>
+        {% endif %}
+
+        <!-- Deal Registration (Visible to everyone) -->
+        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Deal Registration</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Register new opportunities to secure partner pricing and deal protection.</p>
+        </a>
+
+        <!-- Quote Portal (Requires 'Quote_Create' permission) -->
+        {% if 'Quote_Create' in permissions %}
+        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
+        </a>
+        {% endif %}
+
+        <!-- Resource Hub (Visible to everyone) -->
+        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Resource Hub</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Access battlecards, technical datasheets, and co-branded marketing assets.</p>
+        </a>
+
+        <!-- MDF Requests (Requires 'MDF_Request' permission) -->
+        {% if 'MDF_Request' in permissions %}
+        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">MDF Requests</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Apply for Market Development Funds to run joint webinars and live events.</p>
+        </a>
+        {% endif %}
+
+        <!-- ACDI Academy Training (Visible to everyone) -->
+        <a href="/training" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group flex flex-col">
+            <div class="w-full h-28 mb-5 rounded-lg overflow-hidden border border-gray-100 shadow-sm bg-[#1c3545]">
+                <img src="{{ url_for('static', filename='ACADEMY-LOGO.jpg') }}" alt="ACDI Academy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">ACDI Academy</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Register for training, take certification exams, and increase your technical capability.</p>
+        </a>
+
+        <!-- Software Support (Requires 'Support_Admin' permission) -->
+        {% if 'Support_Admin' in permissions %}
+        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Software Support</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Open priority tickets on behalf of your end-users or access the knowledge base.</p>
+        </a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Debug UI for SAML Assertions passed via IAP -->
+<section class="mt-16">
+    <div class="p-6 bg-white border border-gray-200 shadow-sm rounded-xl">
+        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            Debug: IAP JWT Assertions
+        </h3>
+        <div class="bg-gray-900 p-4 rounded-lg overflow-auto text-sm font-mono text-acdi-green">
+            <ul class="space-y-1">
+                <li>[SYSTEM] Account Name: {{ reseller_account }}</li>
+                <li>[SYSTEM] Identity: {{ first_name }} {{ last_name }}</li>
+                <li class="pt-2"></li>
+                {% if permissions %}
+                    {% for perm in permissions %}
+                        <li>[SYSTEM] Permission granted: {{ perm }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li class="text-gray-500">[SYSTEM] No specific permissions asserted via Identity Platform.</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

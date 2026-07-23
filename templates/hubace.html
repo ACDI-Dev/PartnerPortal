@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACE - ACDI Customer Support Expert</title>
+    <!-- Dynamically link to your custom CSS in the static folder -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <!-- Dynamically link to the ACDI logo -->
+            <img src="{{ url_for('static', filename='ACDI_Logosmall.png') }}" alt="ACDI Logo" height="20">
+        </div>
+        <div class="nav-links">
+            <!-- Route the user back to the authenticated portal dashboard -->
+            <a href="/" target="_self">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <div id="layout-wrapper">
+        <main id="chat-container"></main>
+    </div>
+
+    <!-- Dynamically link to your custom JS in the static folder -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
