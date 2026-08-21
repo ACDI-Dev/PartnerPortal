@@ -48,7 +48,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         <!-- ACE Customer Support Expert (Requires 'ACE_Access' permission) -->
-        {% if 'ACE_Access' in permissions %}
+       {% if 'ACE' in authorized_apps %}
         <a href="/ace" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
@@ -69,19 +69,36 @@
             <p class="text-sm text-gray-600 leading-relaxed">Register new opportunities to secure partner pricing and deal protection.</p>
         </a>
 
-        <!-- Quote Portal (Requires 'Quote_Create' permission) -->
-        {% if 'Quote_Create' in permissions %}
-        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+        <!-- Quote Portal (Requires Authorization for the Quote Portal App) -->
+{% if 'Quote Portal' in authorized_apps %}
+    <!-- ACTIVE STATE: User has access -->
+    <a href="https://acdidev.zohocreator.com/portal/qr" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
+    </a>
+
+{% else %}
+    <!-- LOCKED STATE: User does NOT have access -->
+    <div class="block p-6 bg-gray-50 rounded-xl border border-gray-200 opacity-75 cursor-not-allowed">
+        <div class="flex justify-between items-start mb-5">
+            <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                <!-- Lock Icon -->
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
-        </a>
-        {% endif %}
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
+                Access Required
+            </span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-500 mb-2">Quote Portal</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">Contact your ACDI channel manager to request access to this application.</p>
+    </div>
+{% endif %}
 
         <!-- Resource Hub (Visible to everyone) -->
-        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <a href="https://page.acd-inc.com/acdi-resource-hub-home" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </div>
@@ -110,39 +127,57 @@
         </a>
 
         <!-- Software Support (Requires 'Support_Admin' permission) -->
-        {% if 'Support_Admin' in permissions %}
-        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+  
+        <a href="https://support.acd-inc.com/portal/en/signin" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Software Support</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Open priority tickets on behalf of your end-users or access the knowledge base.</p>
         </a>
-        {% endif %}
+ 
     </div>
 </section>
 
-<!-- Debug UI for SAML Assertions passed via IAP -->
+  {% if 'ACE' in authorized_apps %}
+<!-- Debug UI for Claims passed via FusionAuth -->
 <section class="mt-16">
     <div class="p-6 bg-white border border-gray-200 shadow-sm rounded-xl">
         <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-            Debug: IAP JWT Assertions
+            Debug: FusionAuth JWT Claims
         </h3>
         <div class="bg-gray-900 p-4 rounded-lg overflow-auto text-sm font-mono text-acdi-green">
             <ul class="space-y-1">
                 <li>[SYSTEM] Account Name: {{ reseller_account }}</li>
                 <li>[SYSTEM] Identity: {{ first_name }} {{ last_name }}</li>
-                <li class="pt-2"></li>
+                <li>[SYSTEM] token: {{ token }} </li>
+                <li class="pt-2 text-gray-400">--- Permissions ---</li>
                 {% if permissions %}
                     {% for perm in permissions %}
                         <li>[SYSTEM] Permission granted: {{ perm }}</li>
                     {% endfor %}
                 {% else %}
-                    <li class="text-gray-500">[SYSTEM] No specific permissions asserted via Identity Platform.</li>
+                    <li class="text-gray-500">[SYSTEM] No specific permissions asserted.</li>
                 {% endif %}
+
+               <li class="pt-2 text-gray-400">--- Authorized Apps ---</li>
+                {% if authorized_apps %}
+                    {% for app_id in authorized_apps %}
+                        <li>[SYSTEM] Authorized App ID: {{ app_id }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li class="text-gray-500">[SYSTEM] No authorized applications found.</li>
+                {% endif %}
+
+                <!-- Add this new block for the Raw JWT -->
+                <li class="pt-4 text-gray-400">--- Complete Raw JWT Payload ---</li>
+                <li>
+                    <pre class="text-xs text-gray-300 mt-2 whitespace-pre-wrap">{{ raw_jwt }}</pre>
+                </li>
             </ul>
         </div>
     </div>
 </section>
+   {% endif %}
 {% endblock %}

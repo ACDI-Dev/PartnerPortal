@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACE - ACDI Customer Support Expert</title>
-    <!-- Dynamically link to your custom CSS in the static folder -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 
     <header>
         <div class="logo-container">
-            <!-- Dynamically link to the ACDI logo -->
             <img src="{{ url_for('static', filename='ACDI_Logosmall.png') }}" alt="ACDI Logo" height="20">
         </div>
         <div class="nav-links">
-            <!-- Route the user back to the authenticated portal dashboard -->
-            <a href="/" target="_self">Back to Dashboard</a>
+            <a href="https://acd-inc.com/support/" target="_blank">Back to Main Site</a>
         </div>
     </header>
 
@@ -24,7 +21,56 @@
         <main id="chat-container"></main>
     </div>
 
-    <!-- Dynamically link to your custom JS in the static folder -->
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+	document.addEventListener('DOMContentLoaded', function() {
+    (function(d, t) {
+        var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        
+        // 1. Get the query string from the current URL
+        const queryString = window.location.search;
+
+        // 2. Create a new URLSearchParams object
+        const urlParams = new URLSearchParams(queryString);
+
+        // 3. Extract the 'name' and 'email' properties
+        const name = urlParams.get('name');
+        const email = urlParams.get('email');
+        
+        v.onload = function() {
+    window.voiceflow.chat.load({
+    verify: { projectID: '6a6909ff3629ffc3b501836a' },
+    url: 'https://general-runtime.voiceflow.com',
+    assistant: { 
+    persistence: 'memory' 
+  },
+    render: {
+        mode: 'embedded',
+        target: document.getElementById('chat-container')
+    },
+    autostart: true,
+    
+    // This is the correct way to pass frontend data in Voiceflow
+    launch: {
+        event: {
+            type: 'launch',
+            payload: {
+                Account_Category: 'Internal',
+                Account_Sub_Category: 'Internal',
+                Email: '{{ user.email}}',
+                First_Name: '{{ user.first_name }}',
+                Last_Name: '{{ user.last_name }}',
+				Account: '{{ user.account }}',
+			    user_JWT: '{{ user.token }}'
+            }
+        }
+    }
+});
+        }
+        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; 
+        v.type = "text/javascript"; 
+        s.parentNode.insertBefore(v, s);
+    })(document, 'script');
+});
+	</script>
 </body>
 </html>

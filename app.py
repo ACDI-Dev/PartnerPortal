@@ -1,85 +1,128 @@
 import os
 from functools import wraps
-from flask import Flask, request, render_template
-
-from google.auth.transport import requests
-from google.oauth2 import id_token
+from flask import Flask, render_template, session, redirect, url_for
+from authlib.integrations.flask_client import OAuth
+from urllib.parse import urlencode
 
 app = Flask(__name__)
 
-# The magic switch for local development
-MOCK_IAP = os.environ.get('MOCK_IAP', 'True').lower() == 'true'
+# A secret key is required to manage Flask sessions locally and in production
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a-very-secure-local-secret')
 
-# Format: /projects/<PROJECT_NUMBER>/global/backendServices/<SERVICE_ID>
-IAP_AUDIENCE = os.environ.get('IAP_AUDIENCE', '')
+# Initialize OAuth
+oauth = OAuth(app)
+
+# Register FusionAuth as the OIDC provider
+fusionauth = oauth.register(
+    name='fusionauth',
+    client_id=os.environ.get('FUSIONAUTH_CLIENT_ID'),
+    client_secret=os.environ.get('FUSIONAUTH_CLIENT_SECRET'),
+    server_metadata_url=f"{os.environ.get('FUSIONAUTH_URL')}/.well-known/openid-configuration",
+    client_kwargs={
+        'scope': 'openid profile email'
+    }
+)
+# Map FusionAuth Application IDs to Human-Readable Names
+AUTHORIZED_APP_MAP = {
+    '10ec4e31-10a5-417a-92e3-24b886e1c750': 'ACDI Reseller Portal',
+    '27318a59-d4ae-47a5-b300-3eebabae6aba': 'ACE',
+    'c10ff637-e84d-4916-8e90-903a49471355': 'Dummy Application',
+    '3c219e58-ed0e-4b18-ad48-f4f92793ae32': 'FusionAuth',
+    '416edefe-23fd-48f1-9355-4f63f6965711': 'Quote Portal',
+    '51f6ec5d-b5bc-4cd4-9c39-7a3ac364588f': 'Tenant manager',
+    'ca7f9e18-d00d-40f7-bc31-89012984199a': 'Zoho CRM Portal',
+    '2e4da041-ed7f-478e-a01b-753c0a414f7a': 'Zoho Desk'
+}
 
 def get_user_identity():
-    """Extracts the user identity from IAP headers, or uses mock data locally."""
-    if MOCK_IAP:
-        # LOCAL TESTING BYPASS
-        return {
-            'email': 'partner@localdev.com',
-            'first_name': 'Jane',
-            'last_name': 'Doe',
-            'reseller_account': 'ACME Corp Solutions',
-            'tier': 'Platinum',
-            'permissions': ['Quote_Create', 'MDF_Request', 'Support_Admin', 'ACE_Access'] 
-        }
-        
-    # PRODUCTION IAP FLOW
-    iap_jwt = request.headers.get('x-goog-iap-jwt-assertion')
-
-    if not iap_jwt:
-        return None
-
-    try:
-        # Cryptographically verify the token was signed by Google and meant for this app
-        decoded_jwt = id_token.verify_token(
-            iap_jwt, 
-            requests.Request(), 
-            audience=IAP_AUDIENCE,
-            certs_url='https://www.gstatic.com/iap/verify/public_key'
-        )
-        
-        user = {'email': decoded_jwt.get('email')}
-        
-        # Extract custom SAML assertions mapped by Identity Platform
-        firebase_claims = decoded_jwt.get('firebase', {}).get('identities', {})
-        
-        # New assertions
-        user['first_name'] = firebase_claims.get('firstName', [''])[0]
-        user['last_name'] = firebase_claims.get('lastName', [''])[0]
-        user['reseller_account'] = firebase_claims.get('resellerAccount', [''])[0]
-        
-        # Original assertions
-        user['tier'] = firebase_claims.get('partnerTier', ['Standard'])[0]
-        user['permissions'] = firebase_claims.get('permissions', [])
-        
-        return user
-
-    except Exception as e:
-        print(f"JWT Validation failed: {e}")
-        return None
+    """Extracts the user identity from the Flask session."""
+    return session.get('user')
 
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = get_user_identity()
         if not user:
-            return "Unauthorized - Missing or Invalid IAP Identity", 401
+            # Redirect to the login route if no session exists
+            return redirect(url_for('login'))
         return f(user=user, *args, **kwargs)
     return decorated_function
 
+@app.route('/login')
+def login():
+    """Redirects the user to the FusionAuth login page."""
+    redirect_uri = url_for('auth_callback', _external=True)
+    return fusionauth.authorize_redirect(redirect_uri)
+
+@app.route('/oauth-callback')
+def auth_callback():
+    token = fusionauth.authorize_access_token()
+    user_info = token.get('userinfo')
+    id_token = token.get('access_token')
+    # 1. Get the raw list of UUIDs from the JWT
+    raw_app_ids = user_info.get('authorized_apps', [])
+    
+    # 2. Map the UUIDs to human-friendly names using our dictionary
+    friendly_apps = []
+    for app_id in raw_app_ids:
+        # If the ID exists in our map, grab the friendly name. 
+        # If it's a new ID we haven't mapped yet, just use 'Unknown Application'
+        name = AUTHORIZED_APP_MAP.get(app_id, f'Unknown Application ({app_id})')
+        friendly_apps.append(name)
+    
+    session['user'] = {
+        'email': user_info.get('email'),
+        'first_name': user_info.get('given_name', ''),
+        'last_name': user_info.get('family_name', ''),
+        'account': user_info.get('account', ''),
+        'reseller_account': user_info.get('reseller_account', 'Unknown'),
+        'tier': user_info.get('tier', 'Standard'),
+        'permissions': user_info.get('permissions', []),
+        # 3. Store the clean, human-readable list in the session
+        'authorized_apps': friendly_apps,
+        'raw_jwt': dict(user_info),
+        'token': id_token
+    }
+    
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/logout')
+def logout():
+    """Clears the local session and redirects to FusionAuth to kill the SSO session."""
+    # 1. Clear the local Flask session
+    session.clear()
+    
+    # 2. Build the FusionAuth logout URL
+    client_id = os.environ.get('FUSIONAUTH_CLIENT_ID')
+    fusionauth_url = os.environ.get('FUSIONAUTH_URL')
+    
+    # Where FusionAuth should send the user AFTER they are logged out
+    post_logout_redirect_uri = url_for('login', _external=True) 
+    
+    # 3. Redirect the user to FusionAuth
+    params = {
+        'client_id': client_id,
+        'post_logout_redirect_uri': post_logout_redirect_uri
+    }
+    logout_url = f"{fusionauth_url}/oauth2/logout?{urlencode(params)}"
+    
+    return redirect(logout_url)
 @app.route('/')
 @login_required
 def dashboard(user):
     return render_template('dashboard.html', 
+                           user = user,
                            email=user.get('email'),
                            first_name=user.get('first_name'),
                            last_name=user.get('last_name'),
+                           account=user.get('account'),
                            reseller_account=user.get('reseller_account'),
                            tier=user.get('tier'),
-                           permissions=user.get('permissions'))
+                           permissions=user.get('permissions'),
+                           authorized_apps=user.get('authorized_apps'),
+                           raw_jwt=user.get('raw_jwt', {}),
+                           token = user.get('token'))
 
 @app.route('/training')
 @login_required
@@ -90,21 +133,25 @@ def training(user):
                            last_name=user.get('last_name'),
                            reseller_account=user.get('reseller_account'),
                            tier=user.get('tier'),
-                           permissions=user.get('permissions'))
+                           permissions=user.get('permissions'),
+                           authorized_apps=user.get('authorized_apps'))
 
 @app.route('/ace')
 @login_required
 def ace_portal(user):
     # Check if the user actually has the ACE_Access assertion
-    if 'ACE_Access' not in user.get('permissions', []):
+    if 'ACE' not in user.get('authorized_apps', []):
         return "Unauthorized - You do not have access to the ACE Portal.", 403
 
-    return render_template('hubace.html', 
+    return render_template('hubace.html',
+                           user = user,    
                            email=user.get('email'),
                            first_name=user.get('first_name'),
                            last_name=user.get('last_name'),
+                           account=user.get('account'),
                            reseller_account=user.get('reseller_account'),
-                           tier=user.get('tier'))
+                           tier=user.get('tier'),
+                           authorized_apps=user.get('authorized_apps'))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
