@@ -68,7 +68,16 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">Deal Registration</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Register new opportunities to secure partner pricing and deal protection.</p>
         </a>
+        <!-- Quote Portal (Requires Authorization for the Quote Portal App) -->
 
+    <!-- ACTIVE STATE: User has access -->
+    <a href="{{ url_for('perks_home') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+<div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
+                <img src="{{ url_for('static', filename='icon-register.png') }}" alt="Perks Register Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
+            </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Partner Perks Home</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">As a Partner Perks member, you will receive a points based on a percentage of ACDI’s suggested retail price...</p>
+    </a>
         <!-- Quote Portal (Requires Authorization for the Quote Portal App) -->
 {% if 'Quote Portal' in authorized_apps %}
     <!-- ACTIVE STATE: User has access -->

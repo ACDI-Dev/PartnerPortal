@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Home - ACDI Partner Perks{% endblock %}
+
+{% block content %}
+<section id="page-banner" class="page-banner clearfix text-center">
+    <img class="page-banner-image img-responsive" src="{{ url_for('static', filename='banner.png') }}">
+</section>
+<section class="page-content white">
+    <div class="container container-focus">
+        <h3 class="text-center">Welcome to the New<br>Partner Perks Program!</h3>
+        <p class="lead">As a Partner Perks member, you will receive a cash reward based on a percentage of ACDI’s suggested retail price...</p>
+        <p class="lead">Check out the Partner Perks <a href="{{ url_for('perks_rules') }}">Rules</a> page for more information.</p>
+    </div>
+</section>
+{% endblock %}

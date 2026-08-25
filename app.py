@@ -3,6 +3,7 @@ from functools import wraps
 from flask import Flask, render_template, session, redirect, url_for
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlencode
+from datetime import date, timedelta
 
 app = Flask(__name__)
 
@@ -152,6 +153,37 @@ def ace_portal(user):
                            reseller_account=user.get('reseller_account'),
                            tier=user.get('tier'),
                            authorized_apps=user.get('authorized_apps'))
+@app.route('/perks/home')
+@login_required
+def perks_home(user):
+    return render_template('perks/home.html', user=user)
+
+
+@app.route('/perks/rules')
+@login_required
+def perks_rules(user):
+    return render_template('perks/rules.html', user=user)
+
+
+@app.route('/perks/terms')
+@login_required
+def perks_terms(user):
+    return render_template('perks/terms.html', user=user)
+
+
+@app.route('/perks/contact')
+@login_required
+def perks_contact(user):
+    return render_template('perks/contact.html', user=user)
+
+@app.route('/perks/claim', methods=['GET', 'POST'])
+@login_required
+def perks_claim(user):
+        today = date.today()
+        min_date = today + timedelta(days=-90)
+        return render_template('perks/claim.html', user=user,
+                                               max_date=today.strftime("%Y-%m-%d"),
+                                               min_date=min_date.strftime("%Y-%m-%d"))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))

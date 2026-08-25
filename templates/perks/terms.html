@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Terms - ACDI Partner Perks{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <div class="container">
+        <h2 class="page-title">Terms</h2>
+    </div>
+</section>        
+
+<section class="page-content white">
+    <div class="container content-section">
+        <p><strong>TERMS &amp; CONDITIONS</strong></p>
+        <p>The Partner Perks Rewards Program has been established by Access Control Devices Inc., ACDI to promote awareness of ACDI products by providing sales incentives to eligible authorized dealers and/or their sales employees.</p>
+        <p>All terms and conditions pertaining to the Partner Perks Rewards Program are defined in this document.</p>
+        
+        <p><br><strong>PARTICIPATION ELIGIBILITY</strong></p>
+        <p>Only select, authorized ACDI dealer partners are eligible to participate in the program. Incentives that are earned are to be paid at the individual sales associate level. Eligible representatives must be associated with Solutions sales (ex. Solutions Manager, Solutions Sales Rep, Solutions Account Manager).</p>
+        
+        <p><br><strong>REGISTRATION</strong></p>
+        <p>To register for participation in the Partner Perks Rewards Program, each participant must be employed by a participating dealer partner. Once the dealer partner agreement is signed and the participant has completed the enrollment process, participants can begin claiming qualified orders immediately after receiving their Partner Perks program login.</p>
+        
+        <p><br><strong>PAYMENT ELIGIBILITY</strong></p>
+        <p>To become eligible to receive incentive payments, registered participants must sell eligible ACDI products and solutions. ACDI reserves the right to remove or add products as being eligible for payouts without notice. Eligible solutions can include PaperCut MF, PrinterOn, and ACDI hardware.</p>
+        <p>Only eligible orders placed directly through ACDI will be considered for Partner Perks rewards. <strong>Orders placed directly through an OEM will not be considered for Partner Perks rewards, unless the manufacturer in question has made arrangements to participate in the ACDI Partner Perks Program.</strong> Rewards are added to your card in the month following the month in which the invoice was paid. ACDI reserves the right to cancel or discontinue this promotion at any time and without cause. Participants may claim rewards for orders placed during the month in which they enroll. Once enrolled, a claim must be entered within 90 days of the ACDI sales order date.</p>
+        <p>In order for a participant to receive eligible payout, the representative must be employed by the same partner dealer at the point of claim payout as the date of sale. Additionally, payment may only be made to claimant(s) listed at the time of claim submission and may not be transferred to another rep in the event of termination of employment, a payment hold status, or other reason.</p>
+        
+        <p><br><strong>PAYMENT CALCULATIONS</strong></p>
+        <p>Other promotional programs may apply as approved by ACDI management. Details for promotional programs will be distributed as published literature to each registered participant’s e-mail address. Months correspond to ACDI's financial reporting months. Rewards will be added to your card on or before the end of the month following the month in which the invoice was paid.</p>
+        <ul>
+            <li>All Net New opportunities will pay at 2%
+                <ul>
+                    <li>A Net New qualifying opportunity is defined as a customer who has no preexisting PaperCut license.</li>
+                </ul>
+            </li>
+            <li>All additional opportunities will be paid at 1%
+                <ul>
+                    <li>This includes renewal &amp; add-on licenses, migrations, stand along hardware, etc.</li>
+                </ul>
+            </li>
+            <li>Payments will be calculated on the reseller's purchase price.</li>
+            <li>Invoice payment will be required prior to the perk claim being paid out.</li>
+            <li>Perk claim payments are processed and loaded on cards within the last 5 days of each month.</li>
+        </ul>
+        
+        <p><br><strong>EXAMPLE PARTNER PERKS CALCULATION</strong></p>
+        <p><strong>Example of Net New reward calculation: </strong><br>
+        Paid Invoice of Qualifying products: $3,670.00<br>
+        Incentive: 2%<br>
+        Incentive earned: $73.40</p>
+
+        <p><strong>Example of Other reward calculation: </strong><br>
+        Paid Invoice of Qualifying products: $3,670.00<br>
+        Incentive: 1%<br>
+        Incentive earned: $36.70</p>
+        
+        <p><br><strong>OTHER PARTNER PERKS PROGRAM TERMS</strong></p>
+        <p>Participants are solely responsible for all federal, state and local income taxes and any other taxes which may be payable in connection with any incentive payments.</p>
+        <p>ACDI provides for the highest standard of confidentiality for Partner Perks Rewards Program participants. To provide participants with future promotional opportunities and sales support, ACDI may share standard sales reporting information such as participants’ product sales history, including amounts and timing of sales, to ACDI's field sales force and other ACDI employees.</p>
+        <p>ACDI will not disclose any other personally identifying information regarding Partner Perks participants to any individual or institution other than the individual participant unless it receives prior written consent from that participant for such disclosure.</p>
+        <p>Authorized ACDI dealers are those dealers who have an existing sales relationship with ACDI and are in good standing under our credit terms. Certain annual sales threshold or other criteria may be required for participation. Participation in the Partner Perks Program is voluntary for dealers and their sales employees. Dealer approval is required for its employees' participation in the Partner Perks Rewards Program. ACDI is not responsible for verification of dealer’s approval regarding sales representative participation.</p>
+        <p>If a participant changes employers, and the new employer is an authorized dealer, the participant may be able to continue to use their Partner Perks card but must notify ACDI of the change in employment in order to update all required account information. Failure to notify ACDI of change in employment could result in removal from program.</p>
+        
+        <p><br><strong>ADMINISTRATION OF PARTNER PERKS PROGRAM</strong></p>
+        <p>ACDI will administer the Program in accordance with the Partner Perks Rewards Program terms and conditions. We reserve the right to make any changes and modifications to the Partner Perks Rewards Program at any time without prior notification. When material changes are made to the program’s Terms and Conditions, ACDI will notify participants via an email message sent to the email address provided upon registration.</p>
+        <p>Up to date program Terms and Conditions can be found on the ACDI website (<a href="{{ url_for('perks_terms') }}">acdipartnerperks.com/terms</a>). As the Partner Perks Program administrator, we have the sole right to make determinations regarding all Partner Perks Program requirements and eligibility for Partner Perks Program incentive payments, and all decisions are final.</p>
+        <p>ACDI also reserves the right to terminate and discontinue the Partner Perks Rewards Program at any time and for any reason. We welcome your participation in our industry leading Partner Perks Rewards Program. If you should have any questions regarding the program, please contact us by e-mail at <a href="mailto:info@acdipartnerperks.com">info@acdipartnerperks.com</a>.</p>
+    </div>
+</section>
+{% endblock %}

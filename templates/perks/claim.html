@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Claim - ACDI Partner Perks{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <div class="container">
+        <h2 class="page-title">Submit a Claim</h2>
+    </div>
+</section>        
+
+<section class="page-content white">
+    <div class="container content-section">
+        <form id="claimForm" class="form-classic" method="post" action="/claim/review">    
+            <!-- Hidden Inputs -->
+            <input type="hidden" id="code" name="code" value="6a8dc0f4a0308" />    
+            <input type="hidden" id="filesCode" name="filesCode" value="6a8dc0f4a0308" />    
+            <input type="hidden" id="mode" name="mode" value="new" />    
+            <input type="hidden" id="offer_promotion_id" name="offer_promotion_id" value="1" />    
+            <input type="hidden" id="claim_id" name="claim_id" value="new" />    
+            <input type="hidden" id="created_at" name="created_at" value="" />    
+            <input type="hidden" id="maxParticipants" name="maxParticipants" value="1" />    
+            <input type="hidden" id="maxLineitems" name="maxLineitems" value="-1" />    
+            <input type="hidden" name="_token" value="Xzb4AOsvU4WpusixeNYyo5MWmUKZv0iSOwyffrLJ">    
+            
+            <div class="panel panel-default">                
+                <div class="panel-heading">            
+                    <div class="panel-title">                
+                        <strong style="margin: 0; padding-top: 5px;" class="align-middle">Claim Details</strong>            
+                    </div>        
+                </div>                
+                
+                <div class="panel-body">            
+                    <div class="row" id="claimExternalFields">    
+                        <!-- Left Column -->
+                        <div class="col-md-6">                                    
+                            <div class="field-type-text form-group">    
+                                <label class="control-label" for="customer_contact_first">Contact First Name</label>    
+                                <div>                    
+                                    <input type="text" class="form-control" id="customer_contact_first" data-dynamic_table="claim" name="customer_contact_first" value="{{ user.first_name|default('') }} " disabled>                    
+                                </div>
+                            </div>                                                
+                            
+                            <div class="field-type-text form-group">    
+                                <label class="control-label" for="customer_contact_last">Contact Last Name</label>    
+                                <div>                    
+                                    <input type="text" class="form-control" id="customer_contact_last" data-dynamic_table="claim" name="customer_contact_last" value="{{ user.last_name|default('') }}" disabled>                    
+                                </div>
+                            </div>                                                
+                                           <div class="field-type-text form-group">    
+                                <label class="control-label" for="customer_contact_email">Contact Email</label>    
+                                <div>                    
+                                    <input type="text" class="form-control" id="customer_contact_email" data-dynamic_table="claim" name="customer_contact_email" value="{{ user.email|default('') }}" disabled>                    
+                                </div>
+                            </div>                                                
+                             
+                            <div class="field-type-text form-group">    
+                                <label class="control-label" for="customer_name">End User Company <em class="field-is-required text-danger">*</em></label>    
+                                <div>                    
+                                    <input type="text" class="form-control" id="customer_name" data-dynamic_table="claim" name="customer_name" value="" required>                    
+                                </div>
+                            </div>                                                                                    
+                        </div>    
+                        
+                        <!-- Right Column -->
+                        <div class="col-md-6">                                                                                                
+                            <div class="field-type-date form-group">   					
+                                <label class="control-label" for="activity_date">Date of Sale <em class="field-is-required text-danger">*</em></label>    
+                                <div>                                 
+                                        <input autocomplete="off" type="date"  max="{{ max_date }}" 
+    min="{{ min_date }}" class="form-control" id="activity_date" data-dynamic_table="claim" name="activity_date" value="" required>                
+                                                   
+                                </div>
+                            </div>                                                
+                            
+                            <div class="field-type-text form-group">    
+                                <label class="control-label" for="prm_number">ACDI Sales Order Number</label>    
+                                <div>                    
+                                    <input type="text" class="form-control" id="prm_number" data-dynamic_table="claim" name="prm_number" value="">                    
+                                </div>
+                            </div>                                                
+                            
+                            <div class="field-type-text form-group">    
+                                <label class="control-label" for="distributor_po_number">Company PO Number</label>    
+                                <div>                    
+                                    <input type="text" class="form-control" id="distributor_po_number" data-dynamic_table="claim" name="distributor_po_number" value="">                    
+                                </div>
+                            </div>
+                            <div class="field-type-text form-group">  
+
+
+							
+                                <label class="control-label" for="email_shared_points">Halve Points - Email(optional)</label>    
+                                <div>                    
+                                    <input type="text" class="form-control" id="email_shared_points" data-dynamic_table="claim" name="email_shared_points" value="">                    
+                                </div>
+                            </div>   							
+                        </div>
+                    </div>
+                </div>    
+            </div>
+            
+
+            
+            <div class="form-group text-center clearfix mt-4">        
+                <a class="btn btn-default mr-2" href="{{ url_for('perks_home') }}">Cancel</a>        
+                <button type="submit" class="btn btn-primary" id="review">Submit</button>    
+            </div>    
+        </form>
+    </div>
+</section>
+{% endblock %}

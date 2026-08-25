@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ACDI Partner Perks{% endblock %}</title>
+    <link href="{{ url_for('static', filename='style2.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles2.css') }}" rel="stylesheet">
+</head>
+<body class="env-front-production">
+<div class="page">
+    <header class="page-head affix-top">
+        <div class="container">
+            <a href="{{ url_for('perks_home') }}" class="page-logo">
+                <img class="page-logo-image img-responsive" src="{{ url_for('static', filename='logo.png') }}" alt="ACDI Partner Perks">
+            </a>
+            <div class="page-nav-container">
+                <div class="page-nav" id="page-nav">
+                    <ul class="page-nav-list page-nav--right">
+                    <li class="page-nav-item"><a href="{{ url_for('perks_home') }}">Home</a></li>
+                    <li class="page-nav-item"><a href="{{ url_for('perks_rules') }}">Rules</a></li>
+                    <li class="page-nav-item"><a href="{{ url_for('perks_terms') }}">Terms</a></li>
+					<li class="page-nav-item"><a href="{{ url_for('perks_claim') }}">Claims</a></li>
+                    <li class="page-nav-item"><a href="{{ url_for('perks_contact') }}">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    {% block content %}{% endblock %}
+    
+    {% block program_perks %}
+    <section class="page-component program-component">
+        <div class="container">
+            <h3 class="program-component-title mt-5">Get the most out of the Partner Perks program!</h3>
+            <!-- Include the 4 column grid (Register, Claim, Receive, Spend) here -->
+        </div>
+    </section>
+    {% endblock %}
+    
+    <div class="push"></div>
+</div>
+<footer class="page-foot">
+    <div class="container">
+        <div class="text-center">© 2026 ACDI Partner Perks, All Rights Reserved</div>
+    </div>
+</footer>
+</body>
+</html>
