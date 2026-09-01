@@ -1,4 +1,6 @@
 import os
+import base64
+import json
 from functools import wraps
 from flask import Flask, render_template, session, redirect, url_for
 from authlib.integrations.flask_client import OAuth
@@ -59,6 +61,7 @@ def login():
 def auth_callback():
     token = fusionauth.authorize_access_token()
     user_info = token.get('userinfo')
+    print(user_info)
     id_token = token.get('access_token')
     # 1. Get the raw list of UUIDs from the JWT
     raw_app_ids = user_info.get('authorized_apps', [])
@@ -76,12 +79,12 @@ def auth_callback():
         'first_name': user_info.get('given_name', ''),
         'last_name': user_info.get('family_name', ''),
         'account': user_info.get('account', ''),
-        'reseller_account': user_info.get('reseller_account', 'Unknown'),
+        'account_category': user_info.get('account_category', ''),
+        'reseller_account': user_info.get('reseller_account', ''),
         'tier': user_info.get('tier', 'Standard'),
         'permissions': user_info.get('permissions', []),
         # 3. Store the clean, human-readable list in the session
         'authorized_apps': friendly_apps,
-        'raw_jwt': dict(user_info),
         'token': id_token
     }
     
@@ -112,8 +115,15 @@ def logout():
 @app.route('/')
 @login_required
 def dashboard(user):
+    combined_str = json.dumps(user)
+    # 2. Convert string to UTF-8 bytes, then encode to Base64
+    encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
+
+    # 3. Convert bytes back to a clean string for transport
+    final_string = encoded_bytes.decode('utf-8')
+
     return render_template('dashboard.html', 
-                           user = user,
+                           user = final_string,
                            email=user.get('email'),
                            first_name=user.get('first_name'),
                            last_name=user.get('last_name'),
@@ -121,8 +131,7 @@ def dashboard(user):
                            reseller_account=user.get('reseller_account'),
                            tier=user.get('tier'),
                            permissions=user.get('permissions'),
-                           authorized_apps=user.get('authorized_apps'),
-                           raw_jwt=user.get('raw_jwt', {}),
+                           authorized_apps=user.get('authorized_apps'),                   
                            token = user.get('token'))
 
 @app.route('/training')
@@ -143,13 +152,22 @@ def ace_portal(user):
     # Check if the user actually has the ACE_Access assertion
     if 'ACE' not in user.get('authorized_apps', []):
         return "Unauthorized - You do not have access to the ACE Portal.", 403
+    #1 json convert to string
+    combined_str = json.dumps(user)
+    # 2. Convert string to UTF-8 bytes, then encode to Base64
+    encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
+
+    # 3. Convert bytes back to a clean string for transport
+    final_string = encoded_bytes.decode('utf-8')
 
     return render_template('hubace.html',
-                           user = user,    
+                           user = user,
+                           token = final_string,
                            email=user.get('email'),
                            first_name=user.get('first_name'),
                            last_name=user.get('last_name'),
                            account=user.get('account'),
+                           account_category=user.get('account_category'),
                            reseller_account=user.get('reseller_account'),
                            tier=user.get('tier'),
                            authorized_apps=user.get('authorized_apps'))

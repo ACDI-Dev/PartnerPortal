@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0a562d76-d987-490d-8c9f-7bcef73ef129}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>app.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="requirements.txt" />
+    <Content Include="static\ACADEMY-LOGO.jpg" />
+    <Content Include="static\ACDI_Logo180.png" />
+    <Content Include="static\ACDI_Logosmall.png" />
+    <Content Include="static\ACE Circlesmall.png" />
+    <Content Include="static\ACE logosmall.png" />
+    <Content Include="static\banner.png" />
+    <Content Include="static\favicon.png" />
+    <Content Include="static\icon-claim.png" />
+    <Content Include="static\icon-register.png" />
+    <Content Include="static\icon-visa-receive.png" />
+    <Content Include="static\icon-visa-send.png" />
+    <Content Include="static\iconbackgroundnavy.png" />
+    <Content Include="static\logo.png" />
+    <Content Include="static\script.js" />
+    <Content Include="static\style2.css" />
+    <Content Include="static\styles.css" />
+    <Content Include="static\styles2.css" />
+    <Content Include="templates\base.html" />
+    <Content Include="templates\dashboard.html" />
+    <Content Include="templates\hubace.html" />
+    <Content Include="templates\layout.html" />
+    <Content Include="templates\perks\claim.html" />
+    <Content Include="templates\perks\contact.html" />
+    <Content Include="templates\perks\home.html" />
+    <Content Include="templates\perks\rules.html" />
+    <Content Include="templates\perks\terms.html" />
+    <Content Include="templates\training.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="app.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="static" />
+    <Folder Include="templates" />
+    <Folder Include="templates\perks" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

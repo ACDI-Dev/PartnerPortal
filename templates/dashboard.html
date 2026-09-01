@@ -160,23 +160,24 @@
             <ul class="space-y-1">
                 <li>[SYSTEM] Account Name: {{ reseller_account }}</li>
                 <li>[SYSTEM] Identity: {{ first_name }} {{ last_name }}</li>
+                <li>[SYSTEM] User: {{ user }} </li>
                 <li>[SYSTEM] token: {{ token }} </li>
                 <li class="pt-2 text-gray-400">--- Permissions ---</li>
                 {% if permissions %}
-                    {% for perm in permissions %}
-                        <li>[SYSTEM] Permission granted: {{ perm }}</li>
-                    {% endfor %}
+                {% for perm in permissions %}
+                <li>[SYSTEM] Permission granted: {{ perm }}</li>
+                {% endfor %}
                 {% else %}
-                    <li class="text-gray-500">[SYSTEM] No specific permissions asserted.</li>
+                <li class="text-gray-500">[SYSTEM] No specific permissions asserted.</li>
                 {% endif %}
 
-               <li class="pt-2 text-gray-400">--- Authorized Apps ---</li>
+                <li class="pt-2 text-gray-400">--- Authorized Apps ---</li>
                 {% if authorized_apps %}
-                    {% for app_id in authorized_apps %}
-                        <li>[SYSTEM] Authorized App ID: {{ app_id }}</li>
-                    {% endfor %}
+                {% for app_id in authorized_apps %}
+                <li>[SYSTEM] Authorized App ID: {{ app_id }}</li>
+                {% endfor %}
                 {% else %}
-                    <li class="text-gray-500">[SYSTEM] No authorized applications found.</li>
+                <li class="text-gray-500">[SYSTEM] No authorized applications found.</li>
                 {% endif %}
 
                 <!-- Add this new block for the Raw JWT -->
