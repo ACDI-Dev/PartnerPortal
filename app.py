@@ -3,11 +3,16 @@ import base64
 import json
 from functools import wraps
 from flask import Flask, render_template, session, redirect, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlencode
 from datetime import date, timedelta
 
 app = Flask(__name__)
+
+# Tell Flask to trust Google Cloud Run's X-Forwarded-* headers
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 # A secret key is required to manage Flask sessions locally and in production
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a-very-secure-local-secret')
