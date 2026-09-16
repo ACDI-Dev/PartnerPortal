@@ -23,90 +23,128 @@
             <input type="hidden" id="maxLineitems" name="maxLineitems" value="-1" />    
             <input type="hidden" name="_token" value="Xzb4AOsvU4WpusixeNYyo5MWmUKZv0iSOwyffrLJ">    
             
-            <div class="panel panel-default">                
-                <div class="panel-heading">            
-                    <div class="panel-title">                
-                        <strong style="margin: 0; padding-top: 5px;" class="align-middle">Claim Details</strong>            
-                    </div>        
-                </div>                
-                
-                <div class="panel-body">            
+            <div class="panel shadow panel-squared mt-3">                
+                <div class="panel-body p-4">   
+                    <h4 class="mb-4" style="border-bottom: 2px solid #8cc241; padding-bottom: 10px; color: #333;">Claim Details</h4>
+                    
                     <div class="row" id="claimExternalFields">    
                         <!-- Left Column -->
                         <div class="col-md-6">                                    
                             <div class="field-type-text form-group">    
                                 <label class="control-label" for="customer_contact_first">Contact First Name</label>    
-                                <div>                    
-                                    <input type="text" class="form-control" id="customer_contact_first" data-dynamic_table="claim" name="customer_contact_first" value="{{ user.first_name|default('') }} " disabled>                    
-                                </div>
+                                <input type="text" class="form-control" id="customer_contact_first" data-dynamic_table="claim" name="customer_contact_first" value="{{ user.first_name|default('') }} " disabled>                    
                             </div>                                                
                             
                             <div class="field-type-text form-group">    
                                 <label class="control-label" for="customer_contact_last">Contact Last Name</label>    
-                                <div>                    
-                                    <input type="text" class="form-control" id="customer_contact_last" data-dynamic_table="claim" name="customer_contact_last" value="{{ user.last_name|default('') }}" disabled>                    
-                                </div>
+                                <input type="text" class="form-control" id="customer_contact_last" data-dynamic_table="claim" name="customer_contact_last" value="{{ user.last_name|default('') }}" disabled>                    
                             </div>                                                
-                                           <div class="field-type-text form-group">    
+                            
+                            <div class="field-type-text form-group">    
                                 <label class="control-label" for="customer_contact_email">Contact Email</label>    
-                                <div>                    
-                                    <input type="text" class="form-control" id="customer_contact_email" data-dynamic_table="claim" name="customer_contact_email" value="{{ user.email|default('') }}" disabled>                    
-                                </div>
+                                <input type="text" class="form-control" id="customer_contact_email" data-dynamic_table="claim" name="customer_contact_email" value="{{ user.email|default('') }}" disabled>                    
                             </div>                                                
                              
                             <div class="field-type-text form-group">    
-                                <label class="control-label" for="customer_name">End User Company <em class="field-is-required text-danger">*</em></label>    
-                                <div>                    
-                                    <input type="text" class="form-control" id="customer_name" data-dynamic_table="claim" name="customer_name" value="" required>                    
-                                </div>
+                                <label class="control-label required" for="customer_name">End User Company</label>    
+                                <input type="text" class="form-control" id="customer_name" data-dynamic_table="claim" name="customer_name" value="" required>                    
                             </div>                                                                                    
                         </div>    
                         
                         <!-- Right Column -->
                         <div class="col-md-6">                                                                                                
                             <div class="field-type-date form-group">   					
-                                <label class="control-label" for="activity_date">Date of Sale <em class="field-is-required text-danger">*</em></label>    
-                                <div>                                 
-                                        <input autocomplete="off" type="date"  max="{{ max_date }}" 
-    min="{{ min_date }}" class="form-control" id="activity_date" data-dynamic_table="claim" name="activity_date" value="" required>                
-                                                   
-                                </div>
+                                <label class="control-label required" for="activity_date">Date of Sale</label>    
+                                <input autocomplete="off" type="date" max="{{ max_date }}" min="{{ min_date }}" class="form-control" id="activity_date" data-dynamic_table="claim" name="activity_date" value="" required>                
                             </div>                                                
+                            
+                            <!-- Notice to user about requirement -->
+                            <p class="small text-muted mb-2"><em>* Please provide at least one of the following order numbers:</em></p>
                             
                             <div class="field-type-text form-group">    
                                 <label class="control-label" for="prm_number">ACDI Sales Order Number</label>    
-                                <div>                    
-                                    <input type="text" class="form-control" id="prm_number" data-dynamic_table="claim" name="prm_number" value="">                    
-                                </div>
+                                <input type="text" class="form-control" id="prm_number" data-dynamic_table="claim" name="prm_number" value="">                    
                             </div>                                                
                             
                             <div class="field-type-text form-group">    
                                 <label class="control-label" for="distributor_po_number">Company PO Number</label>    
-                                <div>                    
-                                    <input type="text" class="form-control" id="distributor_po_number" data-dynamic_table="claim" name="distributor_po_number" value="">                    
+                                <input type="text" class="form-control" id="distributor_po_number" data-dynamic_table="claim" name="distributor_po_number" value="">                    
+                            </div>
+                            
+                            <!-- New Checkbox -->
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="split_points_checkbox" name="split_points_checkbox"> 
+                                        <strong>I want to halve points with another user</strong>
+                                    </label>
                                 </div>
                             </div>
-                            <div class="field-type-text form-group">  
-
-
-							
-                                <label class="control-label" for="email_shared_points">Halve Points - Email(optional)</label>    
-                                <div>                    
-                                    <input type="text" class="form-control" id="email_shared_points" data-dynamic_table="claim" name="email_shared_points" value="">                    
-                                </div>
+                            
+                            <!-- Hidden Email Container -->
+                            <div class="field-type-text form-group" id="email_shared_points_container" style="display: none;">  
+                                <label class="control-label" id="email_shared_points_label" for="email_shared_points">Halve Points - Email</label>    
+                                <input type="email" class="form-control" id="email_shared_points" data-dynamic_table="claim" name="email_shared_points" value="" placeholder="Enter colleague's email">                    
                             </div>   							
                         </div>
                     </div>
                 </div>    
             </div>
             
-
-            
-            <div class="form-group text-center clearfix mt-4">        
-                <a class="btn btn-default mr-2" href="{{ url_for('perks_home') }}">Cancel</a>        
-                <button type="submit" class="btn btn-primary" id="review">Submit</button>    
+            <div class="form-group text-center clearfix mt-4 mb-5">        
+                <a class="btn btn-default btn-lg mr-2 shadow" href="{{ url_for('perks_home') }}" style="border: none;">Cancel</a>        
+                <button type="submit" class="btn btn-primary btn-lg shadow" id="review">Submit Claim</button>    
             </div>    
         </form>
     </div>
 </section>
+
+<!-- Form Logic Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Logic for Split Points Checkbox
+    const splitCheckbox = document.getElementById('split_points_checkbox');
+    const emailContainer = document.getElementById('email_shared_points_container');
+    const emailInput = document.getElementById('email_shared_points');
+    const emailLabel = document.getElementById('email_shared_points_label');
+
+    splitCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            emailContainer.style.display = 'block';
+            emailInput.required = true;
+            emailLabel.classList.add('required'); // Adds the red asterisk from your CSS
+        } else {
+            emailContainer.style.display = 'none';
+            emailInput.required = false;
+            emailInput.value = ''; // Clear the input if they uncheck it
+            emailLabel.classList.remove('required');
+        }
+    });
+
+    // 2. Logic to require at least one of the two ID numbers
+    const prmNumber = document.getElementById('prm_number');
+    const poNumber = document.getElementById('distributor_po_number');
+
+    function validateOrderNumbers() {
+        // Check if both fields are empty
+        if (prmNumber.value.trim() === '' && poNumber.value.trim() === '') {
+            const errorMsg = 'Please provide either an ACDI Sales Order Number or a Company PO Number.';
+            // setCustomValidity hooks into HTML5 native form validation
+            prmNumber.setCustomValidity(errorMsg);
+            poNumber.setCustomValidity(errorMsg);
+        } else {
+            // Clear errors if at least one has a value
+            prmNumber.setCustomValidity('');
+            poNumber.setCustomValidity('');
+        }
+    }
+
+    // Run validation whenever either field is typed into
+    prmNumber.addEventListener('input', validateOrderNumbers);
+    poNumber.addEventListener('input', validateOrderNumbers);
+    
+    // Run once on load just in case
+    validateOrderNumbers();
+});
+</script>
 {% endblock %}
