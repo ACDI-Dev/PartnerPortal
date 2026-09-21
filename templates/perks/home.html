@@ -3,14 +3,22 @@
 {% block title %}Home - ACDI Partner Perks{% endblock %}
 
 {% block content %}
-<section id="page-banner" class="page-banner clearfix text-center">
-    <img class="page-banner-image img-responsive" src="{{ url_for('static', filename='banner.png') }}">
+<section class="page-heading">
+    <div class="container">
+        <h2 class="page-title">Home</h2>
+    </div>
 </section>
 <section class="page-content white">
     <div class="container container-focus">
-        <h3 class="text-center">Welcome to the New<br>Partner Perks Program!</h3>
-        <p class="lead">As a Partner Perks member, you will receive a cash reward based on a percentage of ACDI’s suggested retail price...</p>
-        <p class="lead">Check out the Partner Perks <a href="{{ url_for('perks_rules') }}">Rules</a> page for more information.</p>
+        <h3 class="text-center">Welcome to the ACDI<br>Partner Perks Program!</h3>
+
+        <p class="lead">As a Partner Perks member, you’ll earn points on eligible ACDI products and services. That’s right — you can earn rewards on nearly everything we offer, from our industry-leading software and hardware solutions to professional services and even training certificates.</p>
+
+        <p class="lead">Start earning from the get-go — no quotas or minimum sales thresholds to reach before you’re eligible to claim. The more ACDI solutions you sell, the more points you can earn. Redeem your points for available rewards through the ACDI Partner Perks Program.</p>
+
+        <p class="lead">ACDI’s Partner Perks Program gives you more ways to earn, more ways to be rewarded, and another reason to make ACDI part of every opportunity.</p>
+
+        <p class="lead">Check out the Partner Perks <a href="{{ url_for('perks_rules') }}">Rules</a> page for complete program details, eligible products and services, and information on earning and redeeming points.</p>
     </div>
 </section>
 {% endblock %}

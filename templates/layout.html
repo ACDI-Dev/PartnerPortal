@@ -6,22 +6,22 @@
     <title>ACDI Partner Portal</title>
     <!-- Favicon Integration -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom Tailwind Config for ACDI Branding -->
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              acdi: {
-                green: '#8CC63F', /* ACDI Signature Green */
-                dark: '#1e293b'
-              }
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        acdi: {
+                            green: '#8CC63F', /* ACDI Signature Green */
+                            dark: '#1e293b'
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     </script>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans antialiased">
@@ -29,7 +29,7 @@
     <nav class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                
+
                 <!-- Logo and Branding -->
                 <div class="flex-shrink-0 flex items-center gap-4">
                     <img src="{{ url_for('static', filename='ACDI_Logosmall.png') }}" alt="ACDI Logo" class="h-10 w-auto">
@@ -37,16 +37,32 @@
                 </div>
 
                 {% if email %}
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center gap-4">
+                    <!-- Account & Tier Info -->
+                    <div class="hidden md:flex items-center gap-4 border-r border-gray-200 pr-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Account:</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700 border border-gray-200">
+                                {{ reseller_account|default('Unknown Account') }}
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tier:</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-acdi-green text-acdi-dark shadow-sm">
+                                {{ tier|default('Standard') }}
+                            </span>
+                        </div>
+                    </div>
+
                     <span class="text-sm font-medium text-gray-500">{{ email }}</span>
                     <!-- With IAP, logging out requires clearing the IAP session -->
-                   <a href="/logout" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-gray-200">Logout</a>
+                    <a href="/logout" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-gray-200">Logout</a>
                 </div>
                 {% endif %}
             </div>
         </div>
     </nav>
-    
+
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {% block content %}{% endblock %}
     </main>

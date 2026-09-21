@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0a562d76-d987-490d-8c9f-7bcef73ef129}</ProjectGuid>
+    <ProjectGuid>{bff427c1-0bfb-4930-930b-2ce53579b392}</ProjectGuid>
     <ProjectHome />
     <StartupFile>app.py</StartupFile>
     <SearchPath />

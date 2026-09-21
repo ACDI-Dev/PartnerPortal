@@ -34,7 +34,7 @@ fusionauth = oauth.register(
 AUTHORIZED_APP_MAP = {
     '10ec4e31-10a5-417a-92e3-24b886e1c750': 'ACDI Reseller Portal',
     '27318a59-d4ae-47a5-b300-3eebabae6aba': 'ACE',
-    'c10ff637-e84d-4916-8e90-903a49471355': 'Dummy Application',
+    'bbbfb4de-e0b6-4719-ac75-b7e35018503a': 'Partner Perks',
     '3c219e58-ed0e-4b18-ad48-f4f92793ae32': 'FusionAuth',
     '416edefe-23fd-48f1-9355-4f63f6965711': 'Quote Portal',
     '51f6ec5d-b5bc-4cd4-9c39-7a3ac364588f': 'Tenant manager',
@@ -179,34 +179,58 @@ def ace_portal(user):
 @app.route('/perks/home')
 @login_required
 def perks_home(user):
-    return render_template('perks/home.html', user=user)
+    authorized_apps=user.get('authorized_apps')
+    if 'Dummy Application' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+        
+    return render_template('perks/home.html', user=user, authorized_apps=authorized_apps)
 
 
 @app.route('/perks/rules')
 @login_required
 def perks_rules(user):
-    return render_template('perks/rules.html', user=user)
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Dummy Application' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+        
+    return render_template('perks/rules.html', user=user, authorized_apps=authorized_apps)
 
 
 @app.route('/perks/terms')
 @login_required
 def perks_terms(user):
-    return render_template('perks/terms.html', user=user)
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Dummy Application' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+        
+    return render_template('perks/terms.html', user=user, authorized_apps=authorized_apps)
 
 
 @app.route('/perks/contact')
 @login_required
 def perks_contact(user):
-    return render_template('perks/contact.html', user=user)
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Dummy Application' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+        
+    return render_template('perks/contact.html', user=user, authorized_apps=authorized_apps)
+
 
 @app.route('/perks/claim', methods=['GET', 'POST'])
 @login_required
 def perks_claim(user):
-        today = date.today()
-        min_date = today + timedelta(days=-90)
-        return render_template('perks/claim.html', user=user,
-                                               max_date=today.strftime("%Y-%m-%d"),
-                                               min_date=min_date.strftime("%Y-%m-%d"))
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Dummy Application' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+        
+    today = date.today()
+    min_date = today + timedelta(days=-90)
+    
+    return render_template('perks/claim.html', 
+                           user=user,
+                           authorized_apps=authorized_apps,
+                           max_date=today.strftime("%Y-%m-%d"),
+                           min_date=min_date.strftime("%Y-%m-%d"))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
