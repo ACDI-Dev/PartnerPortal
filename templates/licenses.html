@@ -1,0 +1,341 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- Title Section -->
+<section class="mb-8">
+    <div class="flex items-center gap-2 mb-6">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">License Dashboard</h2>
+    </div>
+
+    <!-- Summary Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for key, value in summary.items() %}
+        <div class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-acdi-green hover:shadow-md transition-all duration-200 group">
+            <h6 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{{ key }}</h6>
+            <h3 class="text-3xl font-bold text-gray-900">{{ value }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Extract Unique Filters using Jinja -->
+{% set unique_products = [] %}
+{% set unique_statuses = [] %}
+{% for lic in licenses %}
+    {% if lic.get('Product_Name') and lic.get('Product_Name') not in unique_products %}
+        {% set _ = unique_products.append(lic.get('Product_Name')) %}
+    {% endif %}
+    {% if lic.get('Status') and lic.get('Status') not in unique_statuses %}
+        {% set _ = unique_statuses.append(lic.get('Status')) %}
+    {% endif %}
+{% endfor %}
+
+<!-- Detailed License Table -->
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900">Detailed License Roster</h3>
+            <p class="text-sm text-gray-500 mt-1">View, sort, filter, and export your deployments.</p>
+        </div>
+
+        <div class="p-6 overflow-x-auto">
+
+            <!-- Custom Filter Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
+                <!-- Product Filter -->
+                <div>
+                    <label for="productFilter" class="block text-sm font-medium text-gray-700 mb-1">Product</label>
+                    <select id="productFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Products</option>
+                        {% for p in unique_products|sort %}
+                        <option value="{{ p }}">{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Status Filter -->
+                <div>
+                    <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select id="statusFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Statuses</option>
+                        {% for s in unique_statuses|sort %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Quick Date Filter -->
+                <div>
+                    <label for="quickDateFilter" class="block text-sm font-medium text-gray-700 mb-1">Quick Dates</label>
+                    <select id="quickDateFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="custom">Custom...</option>
+                        <option value="expired90">Expired Last 90 Days</option>
+                        <option value="next90">Expiring Next 90 Days</option>
+                        <option value="next180" selected>Expiring Next 180 Days</option>
+                        <option value="next365">Expiring Next 365 Days</option>
+                    </select>
+                </div>
+
+                <!-- Date Range Filters -->
+                <div>
+                    <label for="minDate" class="block text-sm font-medium text-gray-700 mb-1">Exp. Date (From)</label>
+                    <input type="date" id="minDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+                <div>
+                    <label for="maxDate" class="block text-sm font-medium text-gray-700 mb-1">Exp. Date (To)</label>
+                    <input type="date" id="maxDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+
+                <!-- Clear Dates Button -->
+                <div>
+                    <button type="button" id="clearDatesBtn" class="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-medium py-2 px-4 rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-300">
+                        Clear Dates
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <table id="licensesTable" class="w-full text-left text-sm text-gray-600">
+                <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">CRN</th>
+                        <th class="px-4 py-3">End User</th>
+                        <th class="px-4 py-3">Product</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Expiration Date</th>
+                        <th class="px-4 py-3">Days Left</th>
+                        <th class="px-4 py-3 rounded-tr-lg">Embeds</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for lic in licenses %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 font-bold text-gray-900">{{ lic.get('CRN', 'N/A') }}</td>
+
+                        {% set end_user = lic.get('End_User_Name', {}) %}
+                        <td class="px-4 py-3">{{ end_user.get('name', 'N/A') if end_user else 'N/A' }}</td>
+
+                        <!-- data-search attribute for perfect filtering -->
+                        {% set product = lic.get('Product_Name', 'Unknown') %}
+                        <td class="px-4 py-3 font-medium" data-search="{{ product }}">{{ product }}</td>
+
+                        <!-- data-search attribute for perfect filtering -->
+                        {% set status = lic.get('Status', 'Unknown') %}
+                        <td class="px-4 py-3" data-search="{{ status }}">
+                            {% if 'Active' in status %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#f0f9e8] text-green-700 border border-green-200 shadow-sm">
+                                {{ status }}
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-100 shadow-sm">
+                                {{ status }}
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="px-4 py-3">{{ lic.get('Expiration_Date') or 'N/A' }}</td>
+
+                        <td class="px-4 py-3">
+                            {% set days_left = lic.get('Days_Until_Expiration') %}
+                            {% if days_left != None %}
+                            <span class="{% if days_left < 0 %}text-red-600 font-bold{% endif %}">
+                                {{ days_left }}
+                            </span>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+
+                        <td class="px-4 py-3">{{ lic.get('Embeds') if lic.get('Embeds') != None else '0' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DataTables Core CSS -->
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<!-- DataTables Buttons CSS -->
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<style>
+    /* Tailwind tweaks for standard DataTables */
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        outline: none;
+    }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 1px #10b981;
+        }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+        border-radius: 0.375rem;
+    }
+
+    table.dataTable.no-footer {
+        border-bottom: 1px solid #e5e7eb;
+    }
+    /* Adds a little space between the top pagination and the table header */
+    .dataTables_wrapper > .flex.mt-4 {
+        margin-top: 1rem;
+    }
+
+    .dataTables_wrapper > .flex.mb-4.text-sm {
+        margin-bottom: 1rem;
+    }
+    /* Remove default button background to allow Tailwind classes to apply cleanly */
+    button.dt-button.tailwind-btn {
+        background: none !important;
+        border: none !important;
+        margin-left: 0.5rem;
+    }
+</style>
+
+<!-- DataTables Core JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons & Export JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+<script>
+        // DataTables Custom Search function for Date Range
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var min = $('#minDate').val();
+                var max = $('#maxDate').val();
+                var dateStr = data[4]; // Column 4 is Expiration Date
+
+                // If no dates are selected, don't filter out anything based on date
+                if (!min && !max) {
+                    return true;
+                }
+
+                // If there's a filter applied but the row has no valid date, hide it
+                if (!dateStr || dateStr === 'N/A') {
+                    return false;
+                }
+
+                // Simple string comparison works for YYYY-MM-DD formats
+                if (min && dateStr < min) { return false; }
+                if (max && dateStr > max) { return false; }
+
+                return true;
+            }
+        );
+
+        $(document).ready(function() {
+            // Helper function to format dates as YYYY-MM-DD for the HTML5 input
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [year, month, day].join('-');
+            }
+
+            // Helper function to add/subtract days
+            function addDaysToToday(days) {
+                var d = new Date();
+                d.setDate(d.getDate() + days);
+                return formatDate(d);
+            }
+
+            var todayStr = formatDate(new Date());
+
+            // Pre-fill the date inputs based on the default "next180" selection
+            $('#minDate').val(todayStr);
+            $('#maxDate').val(addDaysToToday(180));
+
+            // Initialize DataTables
+            var table = $('#licensesTable').DataTable({
+                order: [[5, 'asc']], // Sort by Days Left ascending by default
+                pageLength: 25,
+                language: {
+                    search: "Search Roster:"
+                },
+                // The 'dom' string includes 'B' for Buttons next to 'l' (length).
+                dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                     '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                     'rt' +
+                     '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        text: 'Export CSV',
+                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Export Excel',
+                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                    }
+                ]
+            });
+
+            // Quick Date Dropdown Event
+            $('#quickDateFilter').on('change', function() {
+                var val = $(this).val();
+                if (val === 'expired90') {
+                    $('#minDate').val(addDaysToToday(-90));
+                    $('#maxDate').val(todayStr);
+                } else if (val === 'next90') {
+                    $('#minDate').val(todayStr);
+                    $('#maxDate').val(addDaysToToday(90));
+                } else if (val === 'next180') {
+                    $('#minDate').val(todayStr);
+                    $('#maxDate').val(addDaysToToday(180));
+                } else if (val === 'next365') {
+                    $('#minDate').val(todayStr);
+                    $('#maxDate').val(addDaysToToday(365));
+                }
+
+                if (val !== 'custom') {
+                    table.draw();
+                }
+            });
+
+            // Bind Events for Manual Date Range Inputs
+            $('#minDate, #maxDate').on('change', function() {
+                // If user manually changes dates, reset quick filter to 'custom'
+                $('#quickDateFilter').val('custom');
+                table.draw();
+            });
+
+            // Bind Events for Text Dropdowns
+            $('#productFilter').on('change', function() {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                table.column(2).search(val ? '^' + val + '$' : '', true, false).draw();
+            });
+
+            $('#statusFilter').on('change', function() {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+            });
+
+            // Clear Dates Button Functionality
+            $('#clearDatesBtn').on('click', function() {
+                $('#minDate').val('');
+                $('#maxDate').val('');
+                $('#quickDateFilter').val('custom');
+                table.draw();
+            });
+        });
+</script>
+{% endblock %}

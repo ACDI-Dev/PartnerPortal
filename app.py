@@ -1,6 +1,7 @@
 import os
 import base64
 import json
+import requests
 from functools import wraps
 from flask import Flask, render_template, session, redirect, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -117,6 +118,56 @@ def logout():
     logout_url = f"{fusionauth_url}/oauth2/logout?{urlencode(params)}"
     
     return redirect(logout_url)
+    
+    
+@app.route('/licenses')
+@login_required
+def reseller_licenses(user):
+    
+    # Extract the email from the injected 'user' object.
+    user_email = user.get('email') 
+    
+    # Test logic: override the email for the API call if it's an internal ACDI address
+    api_email = user_email
+    if user_email and '@acd-inc.com' in user_email.lower():
+        api_email = 'eknight@tomorrowsoffice.com'
+    
+    # Use an f-string to inject the API email into the Zoho URL
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfresellerlicenselookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
+        data = response.json()
+        
+        if data.get("code") == "success":
+            raw_output = data["details"]["output"]
+            parsed_data = json.loads(raw_output)
+            
+            licenses = parsed_data.get("Licenses", [])
+            summary = parsed_data.get("Summary", {})
+            
+            # Render template and pass along the layout.html requirements
+            return render_template(
+                'licenses.html', 
+                licenses=licenses, 
+                summary=summary,
+                first_name=session.get('first_name', user.get('first_name', 'Partner')),
+                last_name=session.get('last_name', user.get('last_name', '')),
+                user=user_email,  # Keeps their real email in the UI
+                reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
+                tier=session.get('tier', user.get('tier', 'Standard')),
+                authorized_apps=session.get('authorized_apps', user.get('authorized_apps', [])),
+                permissions=session.get('permissions', user.get('permissions', []))
+            )
+        else:
+            return "API returned an error.", 400
+            
+    except requests.RequestException as e:
+        return f"Error fetching data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing the license data from the API.", 500    
 @app.route('/')
 @login_required
 def dashboard(user):
