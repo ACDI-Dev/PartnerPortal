@@ -35,7 +35,7 @@ fusionauth = oauth.register(
 AUTHORIZED_APP_MAP = {
     '10ec4e31-10a5-417a-92e3-24b886e1c750': 'ACDI Reseller Portal',
     '27318a59-d4ae-47a5-b300-3eebabae6aba': 'ACE',
-    'bbbfb4de-e0b6-4719-ac75-b7e35018503a': 'Partner Perks',
+    '2c6ebaaa-4419-4b3c-8fff-1770f7122810': 'Partner Perks',
     '3c219e58-ed0e-4b18-ad48-f4f92793ae32': 'FusionAuth',
     '416edefe-23fd-48f1-9355-4f63f6965711': 'Quote Portal',
     '51f6ec5d-b5bc-4cd4-9c39-7a3ac364588f': 'Tenant manager',
@@ -241,7 +241,7 @@ def perks_home(user):
 @login_required
 def perks_rules(user):
     authorized_apps = user.get('authorized_apps', [])
-    if 'Dummy Application' not in authorized_apps:
+    if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
     return render_template('perks/rules.html', user=user, authorized_apps=authorized_apps)
@@ -251,7 +251,7 @@ def perks_rules(user):
 @login_required
 def perks_terms(user):
     authorized_apps = user.get('authorized_apps', [])
-    if 'Dummy Application' not in authorized_apps:
+    if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
     return render_template('perks/terms.html', user=user, authorized_apps=authorized_apps)
@@ -261,7 +261,7 @@ def perks_terms(user):
 @login_required
 def perks_contact(user):
     authorized_apps = user.get('authorized_apps', [])
-    if 'Dummy Application' not in authorized_apps:
+    if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
     return render_template('perks/contact.html', user=user, authorized_apps=authorized_apps)
@@ -271,7 +271,7 @@ def perks_contact(user):
 @login_required
 def perks_claim(user):
     authorized_apps = user.get('authorized_apps', [])
-    if 'Dummy Application' not in authorized_apps:
+    if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
     today = date.today()
