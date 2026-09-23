@@ -4,14 +4,16 @@
 <!-- ACDI Branded Hero Section -->
 <section class="mb-10">
     <div class="bg-acdi-dark rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between shadow-lg relative overflow-hidden">
+        
+        <!-- Decorative Green Glow -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-acdi-green rounded-full mix-blend-overlay filter blur-[100px] opacity-20 transform translate-x-1/3 -translate-y-1/3"></div>
 
-        <!-- Main Content -->
-        <div class="w-full relative z-10 pt-4 md:pt-0">
+        <div class="max-w-2xl relative z-10">
             <h1 class="text-4xl font-bold text-white mb-4 font-sans tracking-tight">
                 Welcome, <strong class="text-acdi-green">{{ first_name|default('Partner') }} {{ last_name|default('') }}</strong>
             </h1>
             <p class="text-lg text-gray-300 mb-6 font-sans leading-relaxed">
-                Access your exclusive resources, get industry leading support, and manage your deployments all from one centralized hub.
+                Access your exclusive resources, register new opportunities, and manage your deployments all from one centralized hub.
             </p>
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
@@ -28,7 +30,7 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Hero Logo Image -->
         <div class="hidden md:flex relative z-10 p-4">
             <img src="{{ url_for('static', filename='ACDI_Logo180.png') }}" alt="ACDI Icon" class="w-40 h-40 object-contain drop-shadow-xl">
@@ -44,18 +46,30 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        {% if 'ACE' in authorized_apps %}
+        
+       {% if 'ACE' in authorized_apps %}
         <a href="/ace" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors p-2">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">ACE Support</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Connect with ACE, your ACDI Customer Support Expert, for instant technical assistance and resources.</p>
         </a>
         {% endif %}
-        <!-- License Dashboard (NEW LINK) -->
-        <a href="/licenses" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+
+        <!-- License Dashboard -->
+        <a href="/licenses" id="licenseLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+            
+            <!-- Loading Overlay (Hidden by default, triggered by JS) -->
+            <div id="licenseLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
+                <!-- Tailwind SVG Spinner -->
+                <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-sm font-bold text-gray-700 tracking-wide">Fetching Data...</span>
+            </div>
+
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
             </div>
@@ -64,45 +78,44 @@
         </a>
 
         <!-- Partner Perks Home -->
-        <!-- ACTIVE STATE: User has access -->
         <a href="{{ url_for('perks_home') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='icon-register.png') }}" alt="Perks Register Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Partner Perks Home</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">As a Partner Perks member, you are eligible to claim points for selling ACDI products and services.</p>
+            <p class="text-sm text-gray-600 leading-relaxed">As a Partner Perks member, you will receive points based on a percentage of ACDI’s suggested retail price...</p>
         </a>
-
+        
         <!-- Quote Portal (Requires Authorization for the Quote Portal App) -->
         {% if 'Quote Portal' in authorized_apps %}
-        <!-- ACTIVE STATE -->
-        <a href="[https://acdidev.zohocreator.com/portal/qr](https://acdidev.zohocreator.com/portal/qr)" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
-        </a>
+            <!-- ACTIVE STATE: User has access -->
+            <a href="https://acdidev.zohocreator.com/portal/qr" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+                <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
+                <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
+            </a>
 
         {% else %}
-        <!-- LOCKED STATE: User does NOT have access -->
-        <div class="block p-6 bg-gray-50 rounded-xl border border-gray-200 opacity-75 cursor-not-allowed">
-            <div class="flex justify-between items-start mb-5">
-                <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                    <!-- Lock Icon -->
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+            <!-- LOCKED STATE: User does NOT have access -->
+            <div class="block p-6 bg-gray-50 rounded-xl border border-gray-200 opacity-75 cursor-not-allowed">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                        <!-- Lock Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
+                        Access Required
+                    </span>
                 </div>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
-                    Access Required
-                </span>
+                <h3 class="text-xl font-bold text-gray-500 mb-2">Quote Portal</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">Contact your ACDI channel manager to request access to this application.</p>
             </div>
-            <h3 class="text-xl font-bold text-gray-500 mb-2">Quote Portal</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">Contact your ACDI sales representative to request access to this application.</p>
-        </div>
         {% endif %}
 
-        <!-- Resource Hub -->
-        <a href="[https://page.acd-inc.com/acdi-resource-hub-home](https://page.acd-inc.com/acdi-resource-hub-home)" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <!-- Resource Hub (Visible to everyone) -->
+        <a href="https://page.acd-inc.com/acdi-resource-hub-home" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </div>
@@ -122,28 +135,27 @@
         {% endif %}
 
         <!-- ACDI Academy Training (Visible to everyone) -->
-        <!-- ACDI Academy Training -->
         <a href="/training" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">ACDI Academy</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Register for training, take certification exams, and increase your technical capability.</p>
         </a>
 
-     <!-- Software Support -->
-        <a href="[https://support.acd-inc.com/portal/en/signin](https://support.acd-inc.com/portal/en/signin)" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <!-- Software Support -->
+        <a href="https://support.acd-inc.com/portal/en/signin" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Software Support</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Open priority tickets on behalf of your end-users or access the knowledge base.</p>
         </a>
-
+ 
     </div>
 </section>
 
-  {% if 'ACEss' in authorized_apps %}
+{% if 'ACE' in authorized_apps %}
 <!-- Debug UI for Claims passed via FusionAuth -->
 <section class="mt-16">
     <div class="p-6 bg-white border border-gray-200 shadow-sm rounded-xl">
@@ -175,7 +187,6 @@
                 <li class="text-gray-500">[SYSTEM] No authorized applications found.</li>
                 {% endif %}
 
-                <!-- Add this new block for the Raw JWT -->
                 <li class="pt-4 text-gray-400">--- Complete Raw JWT Payload ---</li>
                 <li>
                     <pre class="text-xs text-gray-300 mt-2 whitespace-pre-wrap">{{ raw_jwt }}</pre>
@@ -184,5 +195,21 @@
         </div>
     </div>
 </section>
-   {% endif %}
+{% endif %}
+
+<!-- Add simple script to handle the Loading Overlay -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const licenseLink = document.getElementById('licenseLink');
+        const overlay = document.getElementById('licenseLoadingOverlay');
+        
+        if (licenseLink && overlay) {
+            licenseLink.addEventListener('click', function() {
+                // Show the overlay when clicked
+                overlay.classList.remove('hidden');
+            });
+        }
+    });
+</script>
+
 {% endblock %}

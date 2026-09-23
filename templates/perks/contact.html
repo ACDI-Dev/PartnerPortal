@@ -1,22 +1,38 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 
 {% block title %}Contact - ACDI Partner Perks{% endblock %}
 
 {% block content %}
-<section class="page-heading">
-    <div class="container">
-        <h2 class="page-title">Contact</h2>
+<!-- Include the centralized Partner Perks Navigation -->
+{% include "perks/_nav.html" %}
+
+<section class="mb-8">
+    <div class="flex items-center gap-2 mb-6">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Contact</h2>
     </div>
-</section>        
+</section>
 
-<section class="page-content white">
-    <div class="container content-section">
-        <p>If you have any questions, don't hesitate to contact us. You will receive a response within 24 hours.</p>
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12">
+        <div class="max-w-2xl mx-auto text-center">
+            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-acdi-green mx-auto mb-6">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+            
+            <p class="text-lg text-gray-700 leading-relaxed mb-8">If you have any questions, don't hesitate to contact us. You will receive a response within 24 hours.</p>
 
-        <p>
-            <strong>Office Hours:</strong> 9:00am - 5:00pm (CST)<br>
-            <strong>Email:</strong> <a href="mailto:accounting@acd-inc.com" class="link-secondary">accounting@acd-inc.com</a>
-        </p>
+            <div class="bg-gray-50 rounded-lg p-6 inline-block text-left border border-gray-100">
+                <p class="text-gray-900 mb-2">
+                    <strong class="font-bold uppercase tracking-wider text-xs text-gray-500 block mb-1">Office Hours</strong> 
+                    9:00am - 5:00pm (CST)
+                </p>
+                <p class="text-gray-900">
+                    <strong class="font-bold uppercase tracking-wider text-xs text-gray-500 block mb-1">Email</strong> 
+                    <a href="mailto:accounting@acd-inc.com" class="text-acdi-green hover:text-green-700 font-medium transition-colors">accounting@acd-inc.com</a>
+                </p>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}

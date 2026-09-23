@@ -1,0 +1,268 @@
+<!-- claims_2.html -->
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- Include the centralized Partner Perks Navigation -->
+{% include "perks/_nav.html" %}
+
+<!-- Title Section -->
+<section class="mb-8">
+    <div class="flex items-center gap-2 mb-6">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Claims Dashboard</h2>
+    </div>
+
+    <!-- Summary Grid (Optional: If you pass a summary dictionary like in licenses) -->
+    {% if summary %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for key, value in summary.items() %}
+        <div class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-acdi-green hover:shadow-md transition-all duration-200 group">
+            <h6 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{{ key }}</h6>
+            <h3 class="text-3xl font-bold text-gray-900">{{ value }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<!-- Extract Unique Filters using Jinja -->
+{% set unique_statuses = [] %}
+{% for claim in claims %}
+    {% if claim.get('Status') and claim.get('Status') not in unique_statuses %}
+        {% set _ = unique_statuses.append(claim.get('Status')) %}
+    {% endif %}
+{% endfor %}
+
+<!-- Detailed Claims Table -->
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900">Detailed Claims Roster</h3>
+            <p class="text-sm text-gray-500 mt-1">View, sort, filter, and export your Partner Perks claims.</p>
+        </div>
+        
+        <div class="p-6 overflow-x-auto">
+            
+            <!-- Custom Filter Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
+                
+                <!-- Status Filter -->
+                <div>
+                    <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select id="statusFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Statuses</option>
+                        {% for s in unique_statuses|sort %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Date Range Filters -->
+                <div>
+                    <label for="minDate" class="block text-sm font-medium text-gray-700 mb-1">Created Date (From)</label>
+                    <input type="date" id="minDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+                <div>
+                    <label for="maxDate" class="block text-sm font-medium text-gray-700 mb-1">Created Date (To)</label>
+                    <input type="date" id="maxDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+                
+                <!-- Clear Dates Button -->
+                <div>
+                    <button type="button" id="clearDatesBtn" class="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-medium py-2 px-4 rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-300">
+                        Clear Dates
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <table id="claimsTable" class="w-full text-left text-sm text-gray-600">
+                <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">Claim ID</th>
+                        <th class="px-4 py-3">PO Number</th>
+                        <th class="px-4 py-3">End User Organization</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Created Date</th>
+                        <th class="px-4 py-3">Amount</th>
+                        <th class="px-4 py-3 rounded-tr-lg">Points</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for claim in claims %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <!-- Claim ID -->
+                        <td class="px-4 py-3 font-bold text-gray-900">{{ claim.get('Claim_ID', 'N/A') }}</td>
+                        
+                        <!-- Purchase Order -->
+                        <td class="px-4 py-3">{{ claim.get('Re_Seller_Purchase_Order') or 'N/A' }}</td>
+
+                        <!-- End User -->
+                        <td class="px-4 py-3">{{ claim.get('End_User_Organization') or 'N/A' }}</td>
+                        
+                        <!-- Status with data-search attribute for perfect filtering -->
+                        {% set status = claim.get('Status', 'Unknown') %}
+                        <td class="px-4 py-3" data-search="{{ status }}">
+                            {% if 'Paid' in status %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#f0f9e8] text-green-700 border border-green-200 shadow-sm">
+                                    {{ status }}
+                                </span>
+                            {% elif 'Denied' in status %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-100 shadow-sm">
+                                    {{ status }}
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700 border border-gray-200 shadow-sm">
+                                    {{ status }}
+                                </span>
+                            {% endif %}
+                        </td>
+                        
+                        <!-- Sales Order Created Time (Sliced to show just YYYY-MM-DD for cleaner viewing) -->
+                        {% set created_time = claim.get('Sales_Order_Created_Time') %}
+                        <td class="px-4 py-3" data-order="{{ created_time or '' }}">
+                            {{ created_time[:10] if created_time else 'N/A' }}
+                        </td>
+                        
+                        <!-- Claim Amount -->
+                        {% set amount = claim.get('Claim_Amount') %}
+                        <td class="px-4 py-3 font-medium {% if amount != None and amount < 0 %}text-red-600{% endif %}">
+                            {{ "$%.2f"|format(amount) if amount != None else '$0.00' }}
+                        </td>
+                        
+                        <!-- Claim Points -->
+                        {% set points = claim.get('Claim_Points') %}
+                        <td class="px-4 py-3 font-bold text-acdi-green">
+                            {{ points if points != None else '0' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DataTables Core CSS -->
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<!-- DataTables Buttons CSS -->
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<style>
+    /* Tailwind tweaks for standard DataTables */
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        outline: none;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #10b981; 
+        box-shadow: 0 0 0 1px #10b981;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+        border-radius: 0.375rem;
+    }
+    table.dataTable.no-footer {
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .dataTables_wrapper > .flex.mt-4 {
+        margin-top: 1rem;
+    }
+    .dataTables_wrapper > .flex.mb-4.text-sm {
+        margin-bottom: 1rem;
+    }
+    button.dt-button.tailwind-btn {
+        background: none !important;
+        border: none !important;
+        margin-left: 0.5rem;
+    }
+</style>
+
+<!-- DataTables Core JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons & Export JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+<script>
+    // DataTables Custom Search function for Date Range
+    $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+            var min = $('#minDate').val();
+            var max = $('#maxDate').val();
+            var dateStr = data[4]; // Column 4 is Created Date
+
+            // If no dates are selected, don't filter out anything based on date
+            if (!min && !max) { 
+                return true; 
+            }
+
+            // If there's a filter applied but the row has no valid date, hide it
+            if (!dateStr || dateStr === 'N/A') { 
+                return false; 
+            }
+
+            // Extract just the YYYY-MM-DD from the table data if it's an ISO string
+            var cleanDateStr = dateStr.substring(0, 10);
+
+            if (min && cleanDateStr < min) { return false; }
+            if (max && cleanDateStr > max) { return false; }
+
+            return true;
+        }
+    );
+
+    $(document).ready(function() {
+        // Initialize DataTables
+        var table = $('#claimsTable').DataTable({
+            order: [[4, 'desc']], // Sort by Created Date descending (newest first)
+            pageLength: 25,
+            language: {
+                search: "Search Claims:"
+            },
+            dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                 '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                 'rt' +
+                 '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export CSV',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export Excel',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                }
+            ]
+        });
+
+        // Bind Events for Text Dropdowns
+        $('#statusFilter').on('change', function() {
+            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            // Column 3 is Status
+            table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        // Bind Events for Date Range Inputs
+        $('#minDate, #maxDate').on('change', function() {
+            table.draw();
+        });
+
+        // Clear Dates Button Functionality
+        $('#clearDatesBtn').on('click', function() {
+            $('#minDate').val('');
+            $('#maxDate').val('');
+            table.draw();
+        });
+    });
+</script>
+{% endblock %}

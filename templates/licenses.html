@@ -3,17 +3,55 @@
 {% block content %}
 <!-- Title Section -->
 <section class="mb-8">
-    <div class="flex items-center gap-2 mb-6">
-        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
-        <h2 class="text-2xl font-bold text-gray-900 font-sans">License Dashboard</h2>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+            <h2 class="text-2xl font-bold text-gray-900 font-sans">License Dashboard</h2>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <!-- Force Refresh Button -->
+            <a href="?refresh=true" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-acdi-green focus:outline-none transition-colors" onclick="this.innerHTML='<svg class=\'animate-spin h-4 w-4 text-acdi-green\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg> Refreshing...';">
+                <!-- Sync Icon -->
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Force Refresh
+            </a>
+
+            <!-- Prominent Reseller Account Display -->
+            {% set account_name = summary.get('Reseller Account Name', reseller_account) %}
+            {% if account_name %}
+            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
+                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Account:</span>
+                <span class="text-base font-bold text-gray-800">{{ account_name }}</span>
+            </div>
+            {% endif %}
+        </div>
     </div>
 
-    <!-- Summary Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {% for key, value in summary.items() %}
-        <div class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-acdi-green hover:shadow-md transition-all duration-200 group">
-            <h6 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{{ key }}</h6>
-            <h3 class="text-3xl font-bold text-gray-900">{{ value }}</h3>
+
+    <!-- Summary Grid (One panel per product) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        {% for prod in summary.get('Product Licenses Summary', []) %}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col group">
+            <!-- Product Title Header -->
+            <div class="bg-gray-50 border-b border-gray-200 px-5 py-3">
+                <h6 class="text-sm font-bold text-gray-700 uppercase tracking-wider truncate" title="{{ prod.get('Product Name') }}">
+                    {{ prod.get('Product Name') }}
+                </h6>
+            </div>
+            <!-- Stats Row -->
+            <div class="flex divide-x divide-gray-200 flex-1">
+                <!-- Active Box -->
+                <div class="p-5 flex-1 hover:bg-gray-50 transition-colors">
+                    <span class="text-xs font-semibold text-gray-400 uppercase block mb-1">Active</span>
+                    <h3 class="text-3xl font-bold text-gray-900">{{ prod.get('Active Support', 0) }}</h3>
+                </div>
+                <!-- Expired Box (Red Highlighted) -->
+                <div class="p-5 flex-1 bg-red-50 hover:bg-red-100 transition-colors border-l-4 border-l-red-500">
+                    <span class="text-xs font-semibold text-red-500 uppercase block mb-1">Expired</span>
+                    <h3 class="text-3xl font-bold text-red-700">{{ prod.get('Expired Support', 0) }}</h3>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -116,11 +154,8 @@
                         {% set end_user = lic.get('End_User_Name', {}) %}
                         <td class="px-4 py-3">{{ end_user.get('name', 'N/A') if end_user else 'N/A' }}</td>
 
-                        <!-- data-search attribute for perfect filtering -->
-                        {% set product = lic.get('Product_Name', 'Unknown') %}
-                        <td class="px-4 py-3 font-medium" data-search="{{ product }}">{{ product }}</td>
+                        <td class="px-4 py-3 font-medium" data-search="{{ lic.get('Product_Name', '') }}">{{ lic.get('Product_Name', 'Unknown') }}</td>
 
-                        <!-- data-search attribute for perfect filtering -->
                         {% set status = lic.get('Status', 'Unknown') %}
                         <td class="px-4 py-3" data-search="{{ status }}">
                             {% if 'Active' in status %}
@@ -162,7 +197,6 @@
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
 
 <style>
-    /* Tailwind tweaks for standard DataTables */
     .dataTables_wrapper .dataTables_length select,
     .dataTables_wrapper .dataTables_filter input {
         border: 1px solid #e5e7eb;
@@ -170,30 +204,18 @@
         padding: 0.25rem 0.5rem;
         outline: none;
     }
-
-        .dataTables_wrapper .dataTables_filter input:focus {
-            border-color: #10b981;
-            box-shadow: 0 0 0 1px #10b981;
-        }
-
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 1px #10b981;
+    }
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
         background: #f3f4f6 !important;
         border-color: #e5e7eb !important;
         border-radius: 0.375rem;
     }
-
-    table.dataTable.no-footer {
-        border-bottom: 1px solid #e5e7eb;
-    }
-    /* Adds a little space between the top pagination and the table header */
-    .dataTables_wrapper > .flex.mt-4 {
-        margin-top: 1rem;
-    }
-
-    .dataTables_wrapper > .flex.mb-4.text-sm {
-        margin-bottom: 1rem;
-    }
-    /* Remove default button background to allow Tailwind classes to apply cleanly */
+    table.dataTable.no-footer { border-bottom: 1px solid #e5e7eb; }
+    .dataTables_wrapper > .flex.mt-4 { margin-top: 1rem; }
+    .dataTables_wrapper > .flex.mb-4.text-sm { margin-bottom: 1rem; }
     button.dt-button.tailwind-btn {
         background: none !important;
         border: none !important;
@@ -211,66 +233,54 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
 <script>
-        // DataTables Custom Search function for Date Range
         $.fn.dataTable.ext.search.push(
             function(settings, data, dataIndex) {
                 var min = $('#minDate').val();
                 var max = $('#maxDate').val();
                 var dateStr = data[4]; // Column 4 is Expiration Date
 
-                // If no dates are selected, don't filter out anything based on date
-                if (!min && !max) {
-                    return true;
-                }
-
-                // If there's a filter applied but the row has no valid date, hide it
-                if (!dateStr || dateStr === 'N/A') {
-                    return false;
-                }
-
-                // Simple string comparison works for YYYY-MM-DD formats
+                if (!min && !max) { return true; }
+                if (!dateStr || dateStr === 'N/A') { return false; }
                 if (min && dateStr < min) { return false; }
                 if (max && dateStr > max) { return false; }
-
                 return true;
             }
         );
 
         $(document).ready(function() {
-            // Helper function to format dates as YYYY-MM-DD for the HTML5 input
             function formatDate(date) {
                 var d = new Date(date),
                     month = '' + (d.getMonth() + 1),
                     day = '' + d.getDate(),
                     year = d.getFullYear();
-
                 if (month.length < 2) month = '0' + month;
                 if (day.length < 2) day = '0' + day;
-
                 return [year, month, day].join('-');
             }
 
-            // Helper function to add/subtract days
             function addDaysToToday(days) {
                 var d = new Date();
                 d.setDate(d.getDate() + days);
                 return formatDate(d);
             }
+            
+            // Generate Dynamic Filename Function
+            var getExportFileName = function() {
+                var accountName = "{{ summary.get('Reseller Account Name', 'Account') }}".replace(/[^a-zA-Z0-9]/g, '_');
+                var minDate = $('#minDate').val() ? $('#minDate').val().replace(/-/g, '') : 'Start';
+                var maxDate = $('#maxDate').val() ? $('#maxDate').val().replace(/-/g, '') : 'End';
+                return accountName + '_Licenses_' + minDate + '-' + maxDate;
+            };
 
             var todayStr = formatDate(new Date());
 
-            // Pre-fill the date inputs based on the default "next180" selection
             $('#minDate').val(todayStr);
             $('#maxDate').val(addDaysToToday(180));
 
-            // Initialize DataTables
             var table = $('#licensesTable').DataTable({
-                order: [[5, 'asc']], // Sort by Days Left ascending by default
+                order: [[5, 'asc']], // Sort by UI's Days Left column
                 pageLength: 25,
-                language: {
-                    search: "Search Roster:"
-                },
-                // The 'dom' string includes 'B' for Buttons next to 'l' (length).
+                language: { search: "Search Roster:" },
                 dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
                      '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
                      'rt' +
@@ -279,17 +289,93 @@
                     {
                         extend: 'csv',
                         text: 'Export CSV',
+                        filename: getExportFileName,
+                        title: null, 
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 6] // Excludes the UI's static 'Days Left' column (Index 5)
+                        },
                         className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                     },
                     {
                         extend: 'excel',
                         text: 'Export Excel',
-                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        filename: getExportFileName,
+                        title: null, 
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 6] // Excludes the UI's static 'Days Left' column (Index 5)
+                        },
+                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500',
+                        customize: function (xlsx) {
+                            
+                            /* --- 1. Modify Sheet 1 (Append Dynamic Days Left Column) --- */
+                            var sheet1 = xlsx.xl.worksheets['sheet1.xml'];
+                            
+                            $('row', sheet1).each(function(index) {
+                                var rowNum = index + 1; // Excel rows are 1-indexed
+                                
+                                if (index === 0) {
+                                    // Header Row: Append 'Days Left' at Column G
+                                    $(this).append('<c t="inlineStr" r="G' + rowNum + '"><is><t>Days Left</t></is></c>');
+                                } else {
+                                    // Data Row: Append Formula at Column G
+                                    // Formula: =IF(OR(E2="N/A", E2=""), "", E2-TODAY())
+                                    var formula = 'IF(OR(E' + rowNum + '="N/A", E' + rowNum + '=""), "", E' + rowNum + '-TODAY())';
+                                    $(this).append('<c r="G' + rowNum + '"><f>' + formula + '</f></c>');
+                                }
+                            });
+
+                            /* --- 2. Build Sheet 2 (Filter Details) --- */
+                            var prodFilter = $('#productFilter').val() || 'All Products';
+                            var statFilter = $('#statusFilter').val() || 'All Statuses';
+                            var dFrom = $('#minDate').val() || 'None';
+                            var dTo = $('#maxDate').val() || 'None';
+                            var expDate = new Date().toLocaleString();
+
+                            var filterSheetXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+                                '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+                                '<sheetData>' +
+                                '<row r="1"><c t="inlineStr" r="A1"><is><t>Report Export Date</t></is></c><c t="inlineStr" r="B1"><is><t>' + expDate + '</t></is></c></row>' +
+                                '<row r="2"><c t="inlineStr" r="A2"><is><t>Product Filter</t></is></c><c t="inlineStr" r="B2"><is><t>' + prodFilter + '</t></is></c></row>' +
+                                '<row r="3"><c t="inlineStr" r="A3"><is><t>Status Filter</t></is></c><c t="inlineStr" r="B3"><is><t>' + statFilter + '</t></is></c></row>' +
+                                '<row r="4"><c t="inlineStr" r="A4"><is><t>Date From</t></is></c><c t="inlineStr" r="B4"><is><t>' + dFrom + '</t></is></c></row>' +
+                                '<row r="5"><c t="inlineStr" r="A5"><is><t>Date To</t></is></c><c t="inlineStr" r="B5"><is><t>' + dTo + '</t></is></c></row>' +
+                                '</sheetData></worksheet>';
+
+                            var filterSheetDOM = $.parseXML(filterSheetXML);
+                            
+                            // Inject into the JSZip file structure
+                            xlsx.xl.worksheets['sheet2.xml'] = filterSheetDOM;
+
+                            // Update workbook.xml to register the new sheet tab
+                            var workbook = xlsx.xl['workbook.xml'];
+                            var sheets = workbook.getElementsByTagName('sheets')[0];
+                            var newSheet = workbook.createElement('sheet');
+                            newSheet.setAttribute('name', 'Filter Details');
+                            newSheet.setAttribute('sheetId', '2');
+                            newSheet.setAttribute('r:id', 'rId99'); 
+                            sheets.appendChild(newSheet);
+
+                            // Add relationship to workbook.xml.rels
+                            var rels = xlsx.xl._rels['workbook.xml.rels'];
+                            var relNode = rels.getElementsByTagName('Relationships')[0];
+                            var newRel = rels.createElement('Relationship');
+                            newRel.setAttribute('Id', 'rId99');
+                            newRel.setAttribute('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet');
+                            newRel.setAttribute('Target', 'worksheets/sheet2.xml');
+                            relNode.appendChild(newRel);
+
+                            // Register the content type in [Content_Types].xml
+                            var contentTypes = xlsx['[Content_Types].xml'];
+                            var types = contentTypes.getElementsByTagName('Types')[0];
+                            var newOverride = contentTypes.createElement('Override');
+                            newOverride.setAttribute('PartName', '/xl/worksheets/sheet2.xml');
+                            newOverride.setAttribute('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml');
+                            types.appendChild(newOverride);
+                        }
                     }
                 ]
             });
 
-            // Quick Date Dropdown Event
             $('#quickDateFilter').on('change', function() {
                 var val = $(this).val();
                 if (val === 'expired90') {
@@ -311,14 +397,11 @@
                 }
             });
 
-            // Bind Events for Manual Date Range Inputs
             $('#minDate, #maxDate').on('change', function() {
-                // If user manually changes dates, reset quick filter to 'custom'
                 $('#quickDateFilter').val('custom');
                 table.draw();
             });
 
-            // Bind Events for Text Dropdowns
             $('#productFilter').on('change', function() {
                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
                 table.column(2).search(val ? '^' + val + '$' : '', true, false).draw();
@@ -329,7 +412,6 @@
                 table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
             });
 
-            // Clear Dates Button Functionality
             $('#clearDatesBtn').on('click', function() {
                 $('#minDate').val('');
                 $('#maxDate').val('');

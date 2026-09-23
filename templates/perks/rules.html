@@ -1,72 +1,70 @@
-{% extends "base.html" %}
-
-{% block title %}Rules - ACDI Partner Perks{% endblock %}
+{% extends "layout.html" %}
 
 {% block content %}
-<section class="page-heading">
-    <div class="container">
-        <h2 class="page-title">Rules</h2>
+<!-- Include the centralized Partner Perks Navigation -->
+{% include "perks/_nav.html" %}
+
+<section class="mb-8">
+    <div class="flex items-center gap-2 mb-6">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Rules</h2>
     </div>
 </section>
 
-<section class="page-content white">
-    <div class="container content-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 pull-right">
-                    <div class="media">
-                        <div class="media-left media-middle">
-                            <a href="{{ url_for('perks_rules') }}">
-                                <img style="max-width:150px;" class="media-object" src="{{ url_for('static', filename='icon-register.png') }}" alt="1 register">
-                            </a>
-                        </div>
-                        <div class="media-body media-middle">
-                            <p>Register to join the Partner Perks program. (You’ve already done this…YAY!)</p>
-                        </div>
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <div class="space-y-8">
+                <div class="flex items-center gap-6">
+                    <div class="flex-shrink-0">
+                        <img class="w-24 h-auto object-contain" src="{{ url_for('static', filename='icon-register.png') }}" alt="1 register">
                     </div>
-                    <div class="media">
-                        <div class="media-left media-middle">
-                            <a href="{{ url_for('perks_rules') }}">
-                                <img style="max-width:150px;" class="media-object" src="{{ url_for('static', filename='icon-claim.png') }}" alt="1 register">
-                            </a>
-                        </div>
-                        <div class="media-body media-middle">
-                            <p>Every time you sell an ACDI Solution, login to your Partner Perks account and submit your deal on the claim form.<br></p>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <div class="media-left media-middle">
-                            <a href="{{ url_for('perks_rules') }}">
-                                <img style="max-width:150px;" class="media-object" src="{{ url_for('static', filename='icon-visa-send.png') }}" alt="1 register">
-                            </a>
-                        </div>
-                        <div class="media-body media-middle">
-                            <p>Your ACDI Partner Perks Reloadable VISA card is mailed to you.<br></p>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <div class="media-left media-middle">
-                            <a href="{{ url_for('perks_rules') }}">
-                                <img style="max-width:150px;" class="media-object" src="{{ url_for('static', filename='icon-visa-receive.png') }}" alt="1 register">
-                            </a>
-                        </div>
-                        <div class="media-body media-middle">
-                            <p>A percentage of ACDI’s suggested retail price on all approved products and services from claimed and paid ACDI invoices will be loaded onto your Partner Perks VISA card!<br></p>
-                        </div>
+                    <div>
+                        <p class="text-gray-700 leading-relaxed">Register to join the Partner Perks program. (You’ve already done this…YAY!)</p>
                     </div>
                 </div>
-                <div class="col-md-6 pull-right">
-                    <p class="mt-2">At ACDI, we believe that solid partnerships help build mutual success. We want to reward you for your hard work. Up to two Partner Perks members are eligible for the reward.</p>
-                    <p class="alert alert-warning" style="text-align:left;">
-                        <span class="fa fa-exclamation-triangle fa-2x pull-left" style="position:relative;top:12px;left:7px;margin-right:18px;"></span> 
-                        Only orders that have been processed through ACDI's Order Processing department are eligible to be claimed. For new participants - You may claim rewards for sales that occur back to the first of the month in which you enroll. Once enrolled, deals must be claimed within 90 days of the sale date.
-                    </p>
-                    <p><br></p>
+                <div class="flex items-center gap-6">
+                    <div class="flex-shrink-0">
+                        <img class="w-24 h-auto object-contain" src="{{ url_for('static', filename='icon-claim.png') }}" alt="2 claim">
+                    </div>
+                    <div>
+                        <p class="text-gray-700 leading-relaxed">Every time you sell an ACDI Solution, login to your Partner Perks account and submit your deal on the claim form.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex-shrink-0">
+                        <img class="w-24 h-auto object-contain" src="{{ url_for('static', filename='icon-visa-send.png') }}" alt="3 send">
+                    </div>
+                    <div>
+                        <p class="text-gray-700 leading-relaxed">Your ACDI Partner Perks Reloadable VISA card is mailed to you.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex-shrink-0">
+                        <img class="w-24 h-auto object-contain" src="{{ url_for('static', filename='icon-visa-receive.png') }}" alt="4 receive">
+                    </div>
+                    <div>
+                        <p class="text-gray-700 leading-relaxed">A percentage of ACDI’s suggested retail price on all approved products and services from claimed and paid ACDI invoices will be loaded onto your Partner Perks VISA card!</p>
+                    </div>
                 </div>
             </div>
+
+            <div>
+                <p class="text-gray-700 leading-relaxed mb-6">At ACDI, we believe that solid partnerships help build mutual success. We want to reward you for your hard work. Up to two Partner Perks members are eligible for the reward.</p>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg flex gap-4">
+                    <div class="flex-shrink-0 mt-0.5">
+                        <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-yellow-800 leading-relaxed">
+                            Only orders that have been processed through ACDI's Order Processing department are eligible to be claimed. For new participants - You may claim rewards for sales that occur back to the first of the month in which you enroll. Once enrolled, deals must be claimed within 90 days of the sale date.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
 </section>
 {% endblock %}
-
-{% block program_perks %}{% endblock %}

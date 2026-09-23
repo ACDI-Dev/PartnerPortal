@@ -3,11 +3,12 @@ import base64
 import json
 import requests
 from functools import wraps
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, request, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlencode
 from datetime import date, timedelta
+from flask_caching import Cache
 
 app = Flask(__name__)
 
@@ -17,6 +18,23 @@ app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 # A secret key is required to manage Flask sessions locally and in production
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a-very-secure-local-secret')
+
+# --- CACHING SETUP ---
+# Use an environment variable for the Redis URL (e.g., redis://10.0.0.5:6379)
+redis_url = os.environ.get('REDIS_URL')
+
+if redis_url:
+    # Production: Unified Redis Cache across all Google Cloud Run instances
+    app.config['CACHE_TYPE'] = 'RedisCache'
+    app.config['CACHE_REDIS_URL'] = redis_url
+else:
+    # Local Development: Fall back to simple RAM cache if no Redis URL is found
+    app.config['CACHE_TYPE'] = 'SimpleCache'
+
+app.config['CACHE_DEFAULT_TIMEOUT'] = 14400 # 4 hours
+
+# Initialize the cache
+cache = Cache(app)
 
 # Initialize OAuth
 oauth = OAuth(app)
@@ -31,6 +49,7 @@ fusionauth = oauth.register(
         'scope': 'openid profile email'
     }
 )
+
 # Map FusionAuth Application IDs to Human-Readable Names
 AUTHORIZED_APP_MAP = {
     '10ec4e31-10a5-417a-92e3-24b886e1c750': 'ACDI Reseller Portal',
@@ -56,6 +75,30 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(user=user, *args, **kwargs)
     return decorated_function
+
+
+# --- CACHED API HELPERS ---
+
+@cache.memoize(timeout=14400) # Caches results per email for 4 hours
+def get_cached_licenses(api_email):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfresellerlicenselookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
+
+@cache.memoize(timeout=14400) # Caches results per email for 4 hours
+def get_cached_claims(api_email):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/perks_claims_list/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
+
+
+# --- AUTH ROUTES ---
 
 @app.route('/login')
 def login():
@@ -118,28 +161,49 @@ def logout():
     logout_url = f"{fusionauth_url}/oauth2/logout?{urlencode(params)}"
     
     return redirect(logout_url)
-    
-    
+
+
+# --- MAIN APPLICATION ROUTES ---
+
+@app.route('/')
+@login_required
+def dashboard(user):
+    combined_str = json.dumps(user)
+    # 2. Convert string to UTF-8 bytes, then encode to Base64
+    encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
+
+    # 3. Convert bytes back to a clean string for transport
+    final_string = encoded_bytes.decode('utf-8')
+
+    return render_template('dashboard.html', 
+                           user = final_string,
+                           email=user.get('email'),
+                           first_name=user.get('first_name'),
+                           last_name=user.get('last_name'),
+                           account=user.get('account'),
+                           reseller_account=user.get('reseller_account'),
+                           tier=user.get('tier'),
+                           permissions=user.get('permissions'),
+                           authorized_apps=user.get('authorized_apps'),                   
+                           token = user.get('token'))
+
 @app.route('/licenses')
 @login_required
 def reseller_licenses(user):
-    
-    # Extract the email from the injected 'user' object.
     user_email = user.get('email') 
     
-    # Test logic: override the email for the API call if it's an internal ACDI address
     api_email = user_email
     if user_email and '@acd-inc.com' in user_email.lower():
         api_email = 'eknight@tomorrowsoffice.com'
     
-    # Use an f-string to inject the API email into the Zoho URL
-    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
-    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfresellerlicenselookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
-    
     try:
-        response = requests.get(api_url)
-        response.raise_for_status()
-        data = response.json()
+        # Check if the user clicked "Force Refresh"
+        if request.args.get('refresh') == 'true':
+            # This deletes the specific cached entry for this email
+            cache.delete_memoized(get_cached_licenses, api_email)
+            
+        # Fetch from cache (or API if we just cleared the cache)
+        data = get_cached_licenses(api_email)
         
         if data.get("code") == "success":
             raw_output = data["details"]["output"]
@@ -167,28 +231,7 @@ def reseller_licenses(user):
     except requests.RequestException as e:
         return f"Error fetching data: {str(e)}", 500
     except json.JSONDecodeError:
-        return "Error parsing the license data from the API.", 500    
-@app.route('/')
-@login_required
-def dashboard(user):
-    combined_str = json.dumps(user)
-    # 2. Convert string to UTF-8 bytes, then encode to Base64
-    encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
-
-    # 3. Convert bytes back to a clean string for transport
-    final_string = encoded_bytes.decode('utf-8')
-
-    return render_template('dashboard.html', 
-                           user = final_string,
-                           email=user.get('email'),
-                           first_name=user.get('first_name'),
-                           last_name=user.get('last_name'),
-                           account=user.get('account'),
-                           reseller_account=user.get('reseller_account'),
-                           tier=user.get('tier'),
-                           permissions=user.get('permissions'),
-                           authorized_apps=user.get('authorized_apps'),                   
-                           token = user.get('token'))
+        return "Error parsing the license data from the API.", 500
 
 @app.route('/training')
 @login_required
@@ -227,11 +270,15 @@ def ace_portal(user):
                            reseller_account=user.get('reseller_account'),
                            tier=user.get('tier'),
                            authorized_apps=user.get('authorized_apps'))
+
+
+# --- PERKS ROUTES ---
+
 @app.route('/perks/home')
 @login_required
 def perks_home(user):
-    authorized_apps=user.get('authorized_apps')
-    if 'Dummy Application' not in authorized_apps:
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
     return render_template('perks/home.html', user=user, authorized_apps=authorized_apps)
@@ -282,6 +329,57 @@ def perks_claim(user):
                            authorized_apps=authorized_apps,
                            max_date=today.strftime("%Y-%m-%d"),
                            min_date=min_date.strftime("%Y-%m-%d"))
+
+@app.route('/perks/claims')
+@login_required
+def perks_claims(user):
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Partner Perks' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+        
+    user_email = user.get('email') 
+    
+    api_email = user_email
+    if user_email and '@acd-inc.com' in user_email.lower():
+        api_email = 'eknight@tomorrowsoffice.com'
+    
+    try:
+        # Check if the user clicked "Force Refresh"
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_cached_claims, api_email)
+
+        # Fetch from cache (or API if we just cleared the cache)
+        data = get_cached_claims(api_email)
+
+        # Safely parse stringified details from Zoho
+        if data.get("code") == "success" and "details" in data and "output" in data["details"]:
+            raw_output = data["details"]["output"]
+            parsed_data = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
+            claims = parsed_data.get("Claims", [])
+            summary = parsed_data.get("Summary", {})
+        else:
+            claims = data.get("Claims", [])
+            summary = {}
+            
+        return render_template(
+            'perks/claims.html', 
+            claims=claims, 
+            summary=summary,
+            first_name=session.get('first_name', user.get('first_name', 'Partner')),
+            last_name=session.get('last_name', user.get('last_name', '')),
+            user=user_email,
+            email=user_email,
+            reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
+            tier=session.get('tier', user.get('tier', 'Standard')),
+            authorized_apps=authorized_apps,
+            permissions=session.get('permissions', user.get('permissions', []))
+        )
+            
+    except requests.RequestException as e:
+        return f"Error fetching claims data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing the claims data from the API.", 500
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))

@@ -1,108 +1,120 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 
 {% block title %}Claim - ACDI Partner Perks{% endblock %}
 
 {% block content %}
-<section class="page-heading">
-    <div class="container">
-        <h2 class="page-title">Submit a Claim</h2>
-    </div>
-</section>        
+<!-- Include the centralized Partner Perks Navigation -->
+{% include "perks/_nav.html" %}
 
-<section class="page-content white">
-    <div class="container content-section">
-        <form id="claimForm" class="form-classic" method="post" action="/claim/review">    
-            <!-- Hidden Inputs -->
-            <input type="hidden" id="code" name="code" value="6a8dc0f4a0308" />    
-            <input type="hidden" id="filesCode" name="filesCode" value="6a8dc0f4a0308" />    
-            <input type="hidden" id="mode" name="mode" value="new" />    
-            <input type="hidden" id="offer_promotion_id" name="offer_promotion_id" value="1" />    
-            <input type="hidden" id="claim_id" name="claim_id" value="new" />    
-            <input type="hidden" id="created_at" name="created_at" value="" />    
-            <input type="hidden" id="maxParticipants" name="maxParticipants" value="1" />    
-            <input type="hidden" id="maxLineitems" name="maxLineitems" value="-1" />    
-            <input type="hidden" name="_token" value="Xzb4AOsvU4WpusixeNYyo5MWmUKZv0iSOwyffrLJ">    
-            
-            <div class="panel shadow panel-squared mt-3">                
-                <div class="panel-body p-4">   
-                    <h4 class="mb-4" style="border-bottom: 2px solid #8cc241; padding-bottom: 10px; color: #333;">Claim Details</h4>
-                    
-                    <div class="row" id="claimExternalFields">    
-                        <!-- Left Column -->
-                        <div class="col-md-6">                                    
-                            <div class="field-type-text form-group">    
-                                <label class="control-label" for="customer_contact_first">Contact First Name</label>    
-                                <input type="text" class="form-control" id="customer_contact_first" data-dynamic_table="claim" name="customer_contact_first" value="{{ user.first_name|default('') }} " disabled>                    
-                            </div>                                                
-                            
-                            <div class="field-type-text form-group">    
-                                <label class="control-label" for="customer_contact_last">Contact Last Name</label>    
-                                <input type="text" class="form-control" id="customer_contact_last" data-dynamic_table="claim" name="customer_contact_last" value="{{ user.last_name|default('') }}" disabled>                    
-                            </div>                                                
-                            
-                            <div class="field-type-text form-group">    
-                                <label class="control-label" for="customer_contact_email">Contact Email</label>    
-                                <input type="text" class="form-control" id="customer_contact_email" data-dynamic_table="claim" name="customer_contact_email" value="{{ user.email|default('') }}" disabled>                    
-                            </div>                                                
-                             
-                            <div class="field-type-text form-group">    
-                                <label class="control-label required" for="customer_name">End User Company</label>    
-                                <input type="text" class="form-control" id="customer_name" data-dynamic_table="claim" name="customer_name" value="" required>                    
-                            </div>                                                                                    
-                        </div>    
-                        
-                        <!-- Right Column -->
-                        <div class="col-md-6">                                                                                                
-                            <div class="field-type-date form-group">   					
-                                <label class="control-label required" for="activity_date">Date of Sale</label>    
-                                <input autocomplete="off" type="date" max="{{ max_date }}" min="{{ min_date }}" class="form-control" id="activity_date" data-dynamic_table="claim" name="activity_date" value="" required>                
-                            </div>                                                
-                            
-                            <!-- Notice to user about requirement -->
-                            <p class="small text-muted mb-2"><em>* Please provide at least one of the following order numbers:</em></p>
-                            
-                            <div class="field-type-text form-group">    
-                                <label class="control-label" for="prm_number">ACDI Sales Order Number</label>    
-                                <input type="text" class="form-control" id="prm_number" data-dynamic_table="claim" name="prm_number" value="">                    
-                            </div>                                                
-                            
-                            <div class="field-type-text form-group">    
-                                <label class="control-label" for="distributor_po_number">Company PO Number</label>    
-                                <input type="text" class="form-control" id="distributor_po_number" data-dynamic_table="claim" name="distributor_po_number" value="">                    
-                            </div>
-                            
-                            <!-- New Checkbox -->
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="split_points_checkbox" name="split_points_checkbox"> 
-                                        <strong>I want to halve points with another user</strong>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <!-- Hidden Email Container -->
-                            <div class="field-type-text form-group" id="email_shared_points_container" style="display: none;">  
-                                <label class="control-label" id="email_shared_points_label" for="email_shared_points">Halve Points - Email</label>    
-                                <input type="email" class="form-control" id="email_shared_points" data-dynamic_table="claim" name="email_shared_points" value="" placeholder="Enter colleague's email">                    
-                            </div>   							
-                        </div>
-                    </div>
-                </div>    
+<style>
+    .required:after {
+        content: " *";
+        color: #ef4444; 
+    }
+</style>
+
+<section class="mb-8">
+    <div class="flex items-center gap-2 mb-6">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Submit a Claim</h2>
+    </div>
+</section>
+
+<section class="mb-12">
+    <form id="claimForm" method="post" action="/claim/review">    
+        <!-- Hidden Inputs -->
+        <input type="hidden" id="code" name="code" value="6a8dc0f4a0308" />    
+        <input type="hidden" id="filesCode" name="filesCode" value="6a8dc0f4a0308" />    
+        <input type="hidden" id="mode" name="mode" value="new" />    
+        <input type="hidden" id="offer_promotion_id" name="offer_promotion_id" value="1" />    
+        <input type="hidden" id="claim_id" name="claim_id" value="new" />    
+        <input type="hidden" id="created_at" name="created_at" value="" />    
+        <input type="hidden" id="maxParticipants" name="maxParticipants" value="1" />    
+        <input type="hidden" id="maxLineitems" name="maxLineitems" value="-1" />    
+        <input type="hidden" name="_token" value="Xzb4AOsvU4WpusixeNYyo5MWmUKZv0iSOwyffrLJ">    
+        
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-900">Claim Details</h3>
             </div>
             
-            <div class="form-group text-center clearfix mt-4 mb-5">        
-                <a class="btn btn-default btn-lg mr-2 shadow" href="{{ url_for('perks_home') }}" style="border: none;">Cancel</a>        
-                <button type="submit" class="btn btn-primary btn-lg shadow" id="review">Submit Claim</button>    
+            <div class="p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="claimExternalFields">    
+                    
+                    <div class="space-y-5">                                    
+                        <div>    
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="customer_contact_first">Contact First Name</label>    
+                            <input type="text" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-gray-50 text-gray-500 cursor-not-allowed" id="customer_contact_first" name="customer_contact_first" value="{{ user.get('first_name', '') }} " disabled>                    
+                        </div>                                                
+                        
+                        <div>    
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="customer_contact_last">Contact Last Name</label>    
+                            <input type="text" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-gray-50 text-gray-500 cursor-not-allowed" id="customer_contact_last" name="customer_contact_last" value="{{ user.get('last_name', '') }}" disabled>                    
+                        </div>                                                
+                        
+                        <div>    
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="customer_contact_email">Contact Email</label>    
+                            <input type="text" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-gray-50 text-gray-500 cursor-not-allowed" id="customer_contact_email" name="customer_contact_email" value="{{ user.get('email', '') }}" disabled>                    
+                        </div>                                                
+                         
+                        <div>    
+                            <label class="block text-sm font-medium text-gray-700 mb-1 required" for="customer_name">End User Company</label>    
+                            <input type="text" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white" id="customer_name" name="customer_name" value="" required>                    
+                        </div>                                                                                    
+                    </div>    
+                    
+                    <div class="space-y-5">                                                                                                
+                        <div>   					
+                            <label class="block text-sm font-medium text-gray-700 mb-1 required" for="activity_date">Date of Sale</label>    
+                            <input autocomplete="off" type="date" max="{{ max_date }}" min="{{ min_date }}" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white" id="activity_date" name="activity_date" value="" required>                
+                        </div>                                                
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-2 space-y-4">
+                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">* Provide at least one order number</p>
+                            
+                            <div>    
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="prm_number">ACDI Sales Order Number</label>    
+                                <input type="text" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white" id="prm_number" name="prm_number" value="">                    
+                            </div>                                                
+                            
+                            <div>    
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="distributor_po_number">Company PO Number</label>    
+                                <input type="text" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white" id="distributor_po_number" name="distributor_po_number" value="">                    
+                            </div>
+                        </div>
+                        
+                        <div class="pt-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="split_points_checkbox" name="split_points_checkbox" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded cursor-pointer"> 
+                                <label for="split_points_checkbox" class="ml-2 block text-sm font-bold text-gray-900 cursor-pointer">
+                                    I want to halve points with another user
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="email_shared_points_container" style="display: none;">  
+                            <label class="block text-sm font-medium text-gray-700 mb-1" id="email_shared_points_label" for="email_shared_points">Halve Points - Colleague's Email</label>    
+                            <input type="email" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white" id="email_shared_points" name="email_shared_points" value="" placeholder="Enter colleague's email">                    
+                        </div>   							
+                    </div>
+                </div>
             </div>    
-        </form>
-    </div>
+        </div>
+        
+        <div class="mt-8 flex justify-end gap-4">        
+            <a href="{{ url_for('perks_home') }}" class="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                Cancel
+            </a>        
+            <button type="submit" id="review" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-acdi-green hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                Submit Claim
+            </button>    
+        </div>    
+    </form>
 </section>
 
 <!-- Form Logic Script -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Logic for Split Points Checkbox
     const splitCheckbox = document.getElementById('split_points_checkbox');
     const emailContainer = document.getElementById('email_shared_points_container');
     const emailInput = document.getElementById('email_shared_points');
@@ -112,38 +124,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.checked) {
             emailContainer.style.display = 'block';
             emailInput.required = true;
-            emailLabel.classList.add('required'); // Adds the red asterisk from your CSS
+            emailLabel.classList.add('required');
         } else {
             emailContainer.style.display = 'none';
             emailInput.required = false;
-            emailInput.value = ''; // Clear the input if they uncheck it
+            emailInput.value = ''; 
             emailLabel.classList.remove('required');
         }
     });
 
-    // 2. Logic to require at least one of the two ID numbers
     const prmNumber = document.getElementById('prm_number');
     const poNumber = document.getElementById('distributor_po_number');
 
     function validateOrderNumbers() {
-        // Check if both fields are empty
         if (prmNumber.value.trim() === '' && poNumber.value.trim() === '') {
             const errorMsg = 'Please provide either an ACDI Sales Order Number or a Company PO Number.';
-            // setCustomValidity hooks into HTML5 native form validation
             prmNumber.setCustomValidity(errorMsg);
             poNumber.setCustomValidity(errorMsg);
         } else {
-            // Clear errors if at least one has a value
             prmNumber.setCustomValidity('');
             poNumber.setCustomValidity('');
         }
     }
 
-    // Run validation whenever either field is typed into
     prmNumber.addEventListener('input', validateOrderNumbers);
     poNumber.addEventListener('input', validateOrderNumbers);
-    
-    // Run once on load just in case
     validateOrderNumbers();
 });
 </script>
