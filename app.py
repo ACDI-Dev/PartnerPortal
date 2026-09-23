@@ -281,7 +281,16 @@ def perks_home(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    return render_template('perks/home.html', user=user, authorized_apps=authorized_apps)
+    return render_template('perks/home.html',
+            email=user.get('email'),
+            first_name=user.get('first_name'),
+            last_name=user.get('last_name'),
+            account=user.get('account'),
+            account_category=user.get('account_category'),
+            reseller_account=user.get('reseller_account'),
+            tier=user.get('tier'),
+            authorized_apps=user.get('authorized_apps'),
+            permissions=session.get('permissions', user.get('permissions', [])))
 
 
 @app.route('/perks/rules')
@@ -291,7 +300,16 @@ def perks_rules(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    return render_template('perks/rules.html', user=user, authorized_apps=authorized_apps)
+    return render_template('perks/rules.html',
+            email=user.get('email'),
+            first_name=user.get('first_name'),
+            last_name=user.get('last_name'),
+            account=user.get('account'),
+            account_category=user.get('account_category'),
+            reseller_account=user.get('reseller_account'),
+            tier=user.get('tier'),
+            authorized_apps=user.get('authorized_apps'),
+            permissions=session.get('permissions', user.get('permissions', [])))
 
 
 @app.route('/perks/terms')
@@ -301,8 +319,16 @@ def perks_terms(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    return render_template('perks/terms.html', user=user, authorized_apps=authorized_apps)
-
+    return render_template('perks/terms.html',
+            email=user.get('email'),
+            first_name=user.get('first_name'),
+            last_name=user.get('last_name'),
+            account=user.get('account'),
+            account_category=user.get('account_category'),
+            reseller_account=user.get('reseller_account'),
+            tier=user.get('tier'),
+            authorized_apps=user.get('authorized_apps'),
+            permissions=session.get('permissions', user.get('permissions', [])))
 
 @app.route('/perks/contact')
 @login_required
@@ -311,7 +337,16 @@ def perks_contact(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    return render_template('perks/contact.html', user=user, authorized_apps=authorized_apps)
+    return render_template('perks/contact.html',
+            email=user.get('email'),
+            first_name=user.get('first_name'),
+            last_name=user.get('last_name'),
+            account=user.get('account'),
+            account_category=user.get('account_category'),
+            reseller_account=user.get('reseller_account'),
+            tier=user.get('tier'),
+            authorized_apps=user.get('authorized_apps'),
+            permissions=session.get('permissions', user.get('permissions', [])))
 
 
 @app.route('/perks/claim', methods=['GET', 'POST'])
@@ -324,11 +359,19 @@ def perks_claim(user):
     today = date.today()
     min_date = today + timedelta(days=-90)
     
-    return render_template('perks/claim.html', 
-                           user=user,
-                           authorized_apps=authorized_apps,
-                           max_date=today.strftime("%Y-%m-%d"),
-                           min_date=min_date.strftime("%Y-%m-%d"))
+    return render_template('perks/claim.html',
+            email=user.get('email'),
+            first_name=user.get('first_name'),
+            last_name=user.get('last_name'),
+            account=user.get('account'),
+            account_category=user.get('account_category'),
+            reseller_account=user.get('reseller_account'),
+            tier=user.get('tier'),
+            user=user,
+            authorized_apps=user.get('authorized_apps'),
+            permissions=session.get('permissions', user.get('permissions', [])),
+            max_date=today.strftime("%Y-%m-%d"),
+            min_date=min_date.strftime("%Y-%m-%d"))
 
 @app.route('/perks/claims')
 @login_required
@@ -367,7 +410,7 @@ def perks_claims(user):
             summary=summary,
             first_name=session.get('first_name', user.get('first_name', 'Partner')),
             last_name=session.get('last_name', user.get('last_name', '')),
-            user=user_email,
+            user=user,
             email=user_email,
             reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
             tier=session.get('tier', user.get('tier', 'Standard')),
