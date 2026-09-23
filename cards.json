@@ -1,0 +1,2085 @@
+{
+    "catalogName": "Reward Link US (No Donations)",
+    "brands": [
+        
+        {
+            "brandKey": "B455151",
+            "brandName": "Airbnb",
+            "disclaimer": "<p class=\"p1\"><span class=\"s1\">Funds do not expire. No fees apply to purchase/activation of Card. Redeemable by U.S. residents, not including residents of U.S. territories and possessions, for merchandise and services on <a href=\"http://airbnb.com/\"><span class=\"s2\">airbnb.com</span></a> only. The Card is non-reloadable and, except where required by law, cannot be redeemed for cash, refunded, or returned. Treat this Card as cash; issuer is not responsible for lost, damaged or stolen cards, or for unauthorized use. Issued by Airbnb Payments, Inc. Terms apply and are subject to change without notice; visit <a href=\"http://airbnb.com/terms/gift_cards\"><span class=\"s2\">airbnb.com/terms/gift_cards</span></a> for current terms, conditions, and limitations.</span></p>",
+            "description": "<p>Give Airbnb—amazing places to stay and things to do, all around the world.</p>\n<p>Give the perfect getaway—everything from lakeside cabins to secluded beach houses to apartments in the heart of the city.</p>\n<p>Give immersive Experiences, from guided tours to lessons to tastings, led by local experts.</p>\n<p>Airbnb gift cards never expire.</p>\n<p>Use to book stays or Experiences; spend all at once or apply to multiple bookings.</p>",
+            "shortDescription": "<p>Give Airbnb. Amazing places to stay and things to do.</p>",
+            "terms": "<p>Card balance does not expire. No fees apply to purchase/activation of Card. Redeemable by residents of the U.S., not including U.S. territories and possessions, for goods and services on <a href=\"http://www.airbnb.com\">airbnb.com</a> only. Card cannot be reloaded, resold, transferred for value, refunded or redeemed for cash, except as required by law. Safeguard this Card like cash; issuer not responsible for lost, damaged or stolen cards, or unauthorized use. Issued by Airbnb Gift Card Services, LLC. Terms apply and are subject to change without notice; visit <a href=\"http://www.airbnb.com/terms/gift_cards\">airbnb.com/terms/gift_cards</a> for current terms.</p>",
+            "createdDate": "2017-05-08T18:38:51Z",
+            "lastUpdateDate": "2024-06-24T22:07:12Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "<p><strong>See Full Terms and Conditions at <a href=\"https://www.airbnb.com/terms/gift_cards\">https://www.airbnb.com/terms/gift_cards</a></strong></p>\n<ul>\n<li>\n<p>Gift Cards can not be applied to long term reservations of 28 nights or longer. For payment plans and reservations of 28 nights or more, Gift Cards may be applied to the initial payment at the time of the initial booking request, but may not be applied to subsequent payments.</p>\n</li>\n<li>\n<p>Gift Cards may not be applied towards changes to existing reservations</p>\n</li>\n<li>\n<p>Gift Cards are not valid as payment on credit account or for gratuities.</p>\n</li>\n<li>\n<p>Once a gift card has been added to your Airbnb account, the funds won’t expire. The redeemed funds cannot be transferred to another Airbnb account.</p>\n</li>\n</ul>",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b656796-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b656796-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b656796-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b656796-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b656796-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b656796-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U986050",
+                    "rewardName": "Airbnb Gift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 25,
+                    "maxValue": 500,
+                    "createdDate": "2021-01-25T21:32:41.327Z",
+                    "lastUpdateDate": "2026-04-10T17:31:59.417Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "pin",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>Here&rsquo;s how to redeem your gift:</p>\n<ol>\n<li>Sign up or log in at <strong><a href=\"https://www.airbnb.com/gift\">airbnb.com/gift</a></strong></li>\n<li>Follow the on-screen prompts</li>\n<li>We&rsquo;ll automatically apply the credit when you book</li>\n</ol>\n<p><strong>*Please note:</strong> Gift cards can only be redeemed by US residents with a US-based payment method and can not be applied to long term reservations of 28 nights or longer.&nbsp; See Full Terms and Conditions at <a href=\"https://www.airbnb.com/help/article/2872\">www.airbnb.com/terms/gift_cards</a>.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "20122ee3-ed36-4259-bb3c-a2072cfd8c93",
+                    "description": "Travel"
+                }
+            ]
+        },
+        {
+            "brandKey": "B916708",
+            "brandName": "Amazon.com",
+            "disclaimer": "<p>Restrictions apply, see <a href=\"https://www.amazon.com/gp/help/customer/display.html/ref=s9_acss_bw_tm_BGMDT7_md1_w?nodeId=3122091&amp;pf_rd_m=ATVPDKIKX0DER&amp;pf_rd_s=merchandised-search-8&amp;pf_rd_r=1FJP0A5NSBGJC5AJC6RK&amp;pf_rd_t=101&amp;pf_rd_p=89081f45-f3a3-44e0-8747-edb0acca2333&amp;pf_rd_i=17238247011\">amazon.com/gc-legal</a></p>",
+            "description": "<p>Use your <a href=\"http://amazon.com/\">Amazon.com</a> Gift Card* towards Books, Electronics, Music, and more. The <a href=\"http://amazon.com/\">Amazon.com</a> web site is the place to find and discover almost any thing you want to buy online at a great price.</p>",
+            "shortDescription": "<p><a href=\"http://amazon.com/\">Amazon.com</a> Gift Cards* never expire and can be redeemed towards millions of items at <a href=\"http://www.amazon.com/\">www.amazon.com</a>.</p>",
+            "terms": "<p>Restrictions apply, see <a href=\"https://www.amazon.com/gp/help/customer/display.html/ref=s9_acss_bw_tm_BGMDT7_md1_w?nodeId=3122091&amp;pf_rd_m=ATVPDKIKX0DER&amp;pf_rd_s=merchandised-search-8&amp;pf_rd_r=1FJP0A5NSBGJC5AJC6RK&amp;pf_rd_t=101&amp;pf_rd_p=89081f45-f3a3-44e0-8747-edb0acca2333&amp;pf_rd_i=17238247011\">amazon.com/gc-legal</a></p>",
+            "createdDate": "2016-04-18T16:11:30Z",
+            "lastUpdateDate": "2025-11-18T09:27:05Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "<ol>\n<li>Amazon's brand guidelines are available at <a href=\"https://www.amazon.com/b/?node=17238247011\">https://www.amazon.com/b/?node=17238247011</a>. </li>\n<li>Logos and graphics shown may not be altered in any way and must be used in accordance with the Logo Usage Guidelines: <a href=\"https://images-na.ssl-images-amazon.com/images/G/01//gift-certificates/corporate/Brand/Guidelines/LogoUsageGuideline._V517253014_.pdf\">https://images-na.ssl-images-amazon.com/images/G/01//gift-certificates/corporate/Brand/Guidelines/LogoUsageGuideline._V517253014_.pdf</a></li>\n<li>If you are describing the gift card value, then display the dollar amount first \"$XX Amazon.com Gift Card\".</li>\n<li>Always display the disclaimer when showing Amazon logos or product name. The disclaimer is “Restrictions apply, see <a href=\"https://www.amazon.com/gp/help/customer/display.html/ref=s9_acss_bw_tm_BGMDT7_md1_w?nodeId=3122091&amp;pf_rd_m=ATVPDKIKX0DER&amp;pf_rd_s=merchandised-search-8&amp;pf_rd_r=1FJP0A5NSBGJC5AJC6RK&amp;pf_rd_t=101&amp;pf_rd_p=89081f45-f3a3-44e0-8747-edb0acca2333&amp;pf_rd_i=17238247011\">amazon.com/gc-legal</a>”.</li>\n<li>Use of the Amazon brand should not imply partnership, endorsement or sponsorship and you agree that you will not misrepresent or embellish the relationship between Amazon and your business.</li>\n<li>Do not use statements can refer to the gift card as “free”, a term which is regulated and carries strong implications for customers.</li>\n</ol>",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b916708-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b916708-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b916708-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b916708-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b916708-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b916708-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U163059",
+                    "rewardName": "Amazon eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 2000,
+                    "createdDate": "2021-11-03T16:30:36.08Z",
+                    "lastUpdateDate": "2026-07-22T14:52:16.266Z",
+                    "countries": [
+                        "PR",
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\n<li><strong>Copy</strong> the security code above.</li>\n<li><strong>Click</strong> on the Redemption URL and <strong>paste</strong> the security code to unlock your reward.  </li>\n</ol>\n<p><strong>Please note: </strong>the Security Code above is not the rewards Claim Code used at checkout. Please only use the Claim Code provided on the following landing page.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "e1a13abc-be00-4ff3-bb19-36d68b57cda0",
+                    "description": "Online & Retail"
+                }
+            ]
+        },
+        {
+            "brandKey": "B555916",
+            "brandName": "Bass Pro Shops®",
+            "disclaimer": "<div lang=\"en-US\">\n\n<p>*Bass Pro Shops® is not a sponsor of the rewards or promotion&nbsp;or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates.&nbsp;© 2019 Bass Pro Shops® International, Inc. The Bass Pro Shops® logo is a registered trademark and copyrighted work of Bass Pro Shops® International, Inc.</p>\n</div>",
+            "description": "<div lang=\"en-US\">\n\n<p>Bass Pro Shops provides customers with an unmatched selection of top-quality gear for fishing, hunting and all outdoor adventures. North America’s Premier Outdoor Retail and Conservation Company supports its 250 million annual customers with a steadfast commitment to quality, value and friendly expert service. Three great ways to shop: in-store, online and through our catalog.</p>\n</div>",
+            "shortDescription": "<div lang=\"en-US\">\n\n<p>Bass Pro Shops provides customers with an unmatched selection of top-quality gear for fishing, hunting and all outdoor adventures. North America’s Premier Outdoor Retail and Conservation Company supports its 250 million annual customers with a steadfast commitment to quality, value and friendly expert service. Three great ways to shop: in-store, online and through our catalog.</p>\n</div>",
+            "terms": "<div lang=\"en-US\">\n\n<p>**PROTECT THIS CARD LIKE CASH.**\n<br>For balance inquiries, visit <a href=\"https://basspro.com/balance\" rel=\"noopener noreferrer\" target=\"_blank\">basspro.com/balance</a> or call 1-800-494-1100.\n<br>This card, issued by BPIP, LLC, is redeemable for merchandise, food and beverages only at Bass Pro Shops’ and Cabela’s stores, restaurants, or catalogs; Mack’s Prairie Wings retail stores; online at <a href=\"https://basspro.com\" rel=\"noopener noreferrer\" target=\"_blank\">basspro.com</a>, <a href=\"https://cabelas.com\" rel=\"noopener noreferrer\" target=\"_blank\">cabelas.com</a>, <a href=\"https://mackspw.com\" rel=\"noopener noreferrer\" target=\"_blank\">mackspw.com</a> or <a href=\"https://bigcedar.com\" rel=\"noopener noreferrer\" target=\"_blank\">bigcedar.com</a>; or at Bass Pro resorts. See <a href=\"https://www.basspro.com/giftcardterms\" rel=\"noopener noreferrer\" target=\"_blank\">www.basspro.com/giftcardterms</a> for list of resorts. Card (i) is not redeemable or exchangeable for cash, check, or credit, except as required by law, (ii) is not a credit or debit card and not reloadable, (iii) does not expire, and (iv) once purchased and activated, is valid until redeemed. Lost, stolen, or compromised cards will not be replaced. By purchasing, accepting, retaining, or using this Card, you agree to the Bass Pro Shops Gift Card Terms &amp; Conditions, found at <a href=\"https://www.basspro.com/giftcardterms,\" rel=\"noopener noreferrer\" target=\"_blank\">www.basspro.com/giftcardterms,</a> including binding arbitration and your waiver of rights to participate in a class action against Bass Pro Shops. Card not valid until activated.</p>\n</div>",
+            "createdDate": "2016-04-26T19:55:39Z",
+            "lastUpdateDate": "2026-06-12T16:53:02Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b587389-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b587389-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b587389-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b587389-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b587389-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b587389-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U318911",
+                    "rewardName": "Bass Pro Shops® eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": true,
+                    "minValue": 5,
+                    "maxValue": 200,
+                    "createdDate": "2016-04-26T19:58:43.174Z",
+                    "lastUpdateDate": "2026-04-10T16:59:48.521Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>Open the Redemption URL above and print out the Digital Gift Card. The card is redeemable at Bass Pro Shops&reg; stores located nationwide and on <a href=\"http://www.basspro.com\">www.basspro.com</a>.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "3cf07af1-d84c-4b09-b1be-c26e52f9ed25",
+                    "description": "Sporting Goods"
+                }
+            ]
+        },
+        {
+            "brandKey": "B931976",
+            "brandName": "Bath & Body Works",
+            "disclaimer": "<p>Bath &amp; Body Works is not a sponsor of the rewards or otherwise affiliated with this company.&nbsp;The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>We Make Fragrance Fun!&trade;<br />\r\nFrom head-to-toe and throughout your home, Bath &amp; Body Works brings you the best indulgences with exclusive Signature Collection scents, the world&rsquo;s best Home Fragrances, Anti-Bacterial Hand Soaps &amp; Sanitizers, perfect gifts &amp; so much more!</p>\r\n",
+            "shortDescription": "<p>We Make Fragrance Fun!&trade;<br />\r\nFrom head-to-toe and throughout your home, Bath &amp; Body Works brings you the best indulgences with exclusive Signature Collection scents, the world&rsquo;s best Home Fragrances, Anti-Bacterial Hand Soaps &amp; Sanitizers, perfect gifts &amp; so much more!</p>\r\n",
+            "terms": "<p>This card is issued by Bath &amp; Body Works GC, LLC. Redeem this card for merchandise only, and for cash when the balance is under $10, at all Bath &amp; Body Works (BBW) or White Barn (WB) US &amp; Puerto Rico store locations and online at BathandBodyWorks.com; it may not otherwise be returned.</p>\r\n\r\n<p>Check your card balance at a participating BBW or WB store or <a href=\"https://www.bathandbodyworks.com/giftcards\">BathandBodyWorks.com/giftcards</a>. If this card is lost, stolen or destroyed BBW or WB will replace it with the value of the card at the time replacement is requested if you provide the card number. To check your card balance or report a lost, stolen or destroyed card, call 1-800-640-6052.</p>\r\n\r\n<p>This card does not expire. For complete terms and conditions, visit <a href=\"https://www.bathandbodyworks.com/giftcards\">BathandBodyWorks.com/giftcards</a>. Use of this card constitutes acceptance of these terms and conditions.</p>\r\n",
+            "createdDate": "2016-10-21T22:30:51Z",
+            "lastUpdateDate": "2024-04-22T22:47:26Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b945943-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b945943-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b945943-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b945943-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b945943-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b945943-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U728067",
+                    "rewardName": "Bath & Body Works eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 500,
+                    "createdDate": "2016-10-27T23:35:20.24Z",
+                    "lastUpdateDate": "2026-04-10T17:19:39.286Z",
+                    "countries": [
+                        "PR",
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\n<li>Click on the Redemption URL provided above.</li>\n<li>Print the eGift Card page.</li>\n<li>Redeem at any Bath & Body Works, White Barn Candle stores in the U.S. and Puerto Rico and online at <a href=\"https://BathandBodyWorks.com\">BathandBodyWorks.com</a></li>\n</ol>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "06472040-8fb1-4767-b8d4-ccfcd467a720",
+                    "description": "For The Home"
+                }
+            ]
+        },
+{
+            "brandKey": "B036232",
+            "brandName": "Cabela's",
+            "disclaimer": "<p><span style=\"color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Cabela's is not a sponsor of the rewards or promotion or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company's website for additional terms and conditions.</span></p>",
+            "description": "<p>Cabela's offers quality Hunting Fishing &amp; Outdoor products. Shop <a href=\"http://www.cabelas.com\" rel=\"noopener noreferrer\" target=\"_blank\">cabelas.com</a>, <a href=\"http://www.basspro.com\">basspro.com</a>, catalogs and retail stores.</p>",
+            "shortDescription": "<p>Cabela's offers quality Hunting Fishing &amp; Outdoor products. Shop <a href=\"http://www.cabelas.com\" rel=\"noopener noreferrer\" target=\"_blank\">cabelas.com</a>, <a href=\"http://www.basspro.com\">basspro.com</a>, catalogs and retail stores.</p>",
+            "terms": "<p>**PROTECT THIS CARD LIKE CASH.**</p>\n\n<p>For customer service or balance inquiries, visit <a href=\"https://www.basspro.com/shop/en/gift-cards#balance\">www.basspro.com/balance</a>, see any cashier, or call 1-800-494-1100. This Gift Card is redeemable for merchandise, food and beverages only at Bass Pro Shops and Cabela’s stores, restaurants, or catalogs; online at <a href=\"https://www.basspro.com/shop/en\">basspro.com</a>, <a href=\"https://www.cabelas.com/shop/en\">cabelas.com</a>, or <a href=\"https://bigcedar.com/\">big-cedar.com</a>; or at Bass Pro resorts (Big Cypress, Big Cedar, Top of the Rock or Buffalo Ridge). Except as required by law, this Card is not redeemable or exchangeable for cash, check, or credit. This Card is not a credit or debit card and is not reloadable. This Card does not expire and is valid until redeemed. The Card issuer is BPIP, LLC. All rights reserved. Purchase or use of this card constitutes acceptance of the Bass Pro Shops Gift Card Terms &amp; Conditions, found at <a href=\"https://www.basspro.com/shop/en/gift-card-terms\">www.basspro.com/giftcardterms</a>, including binding arbitration and your waiver of rights to participate in a class action against Bass Pro Shops.</p>",
+            "createdDate": "2016-04-22T05:35:20Z",
+            "lastUpdateDate": "2024-08-22T20:12:13Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b036232-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b036232-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b036232-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b036232-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b036232-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b036232-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U406402",
+                    "rewardName": "Cabela's eGift",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 500,
+                    "createdDate": "2024-08-22T20:14:53.701Z",
+                    "lastUpdateDate": "2026-04-10T17:03:56.363Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>Open the Redemption URL provided above to view your Cabela's eGiftCard.&nbsp;</p>\n\n<p>\n\n<br>\n</p>\n\n<p><strong>In-Store Instructions:</strong></p>\n\n<p>This Gift Card is redeemable for merchandise, food and beverages only at Bass Pro Shops and Cabela’s stores, restaurants, or catalogs; or at Bass Pro resorts (Big Cypress, Big Cedar, Top of the Rock or Buffalo Ridge)</p>\n\n<p>Retail stores located nationwide.</p>\n\n<ol>\n<li>Print out E-gift card number</li>\n<li>Show cashier printed gift card at payment</li>\n<li>Cashier will also accept gift card numbers show on electronic devices.</li>\n</ol>\n\n<p>Hand key in gift card number and pin number if no barcode is available.</p>\n\n<p>For a store near you, visit <a href=\"http://www.cabelas.com/\" rel=\"noopener noreferrer\" style=\"user-select: auto;\" target=\"_blank\">www.cabelas.com</a>.</p>\n\n<p>\n<br>\n</p>\n\n<p><strong>Online Instructions:</strong></p>\n\n<p>This Gift Card is redeemable online at <a href=\"https://www.basspro.com/shop/en\" rel=\"noopener noreferrer\" target=\"_blank\">basspro.com</a>, <a href=\"https://www.cabelas.com/shop/en\" rel=\"noopener noreferrer\" target=\"_blank\">cabelas.com</a>, or <a href=\"https://bigcedar.com/\" rel=\"noopener noreferrer\" target=\"_blank\">big-cedar.com</a>.</p>\n\n<ol>\n<li>Go to <a href=\"https://www.basspro.com/shop/en\" style=\"user-select: auto;\">basspro.com</a>, <a href=\"https://www.cabelas.com/shop/en\" style=\"user-select: auto;\">cabelas.com</a>, or <a href=\"https://bigcedar.com/\" style=\"user-select: auto;\">big-cedar.com</a></li>\n<li>Shop for desired products and add to cart</li>\n<li>Checkout when ready</li>\n<li>When entering payment information, enter 19 digit gift card number and 4 digit pin number, then select 'Apply' and continue with checkout</li>\n</ol>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "3cf07af1-d84c-4b09-b1be-c26e52f9ed25",
+                    "description": "Sporting Goods"
+                }
+            ]
+        },
+        {
+            "brandKey": "B347219",
+            "brandName": "Callaway",
+            "disclaimer": "<p>*Callaway is not a sponsor of the rewards or otherwise affiliated with this reward program. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Fuel the desire with a Callaway Golf Gift Card, passage to the world&rsquo;s most-recognized and respected name in golf. The Gift Card from Callaway Golf lets you choose exactly what product you want from the brand built on the promise of helping every golfer become a better golfer.</p>\r\n\r\n<p>Gift Card recipients can place their order online anytime or by calling 1-877-CALLAWAY during M-Th 8am-8pm CT, and 9am-3pm CT on Saturday. Gift Cards can only be redeemed for new product through the&nbsp;<a href=\"http://callawaygolf.com/\">CallawayGolf.com</a>&nbsp;or&nbsp;<a href=\"http://odysseygolf.com/\">OdysseyGolf.com</a>&nbsp;websites. These gift cards are NOT redeemable through Callaway Golf retail accounts or through Callaway Golf Pre-Owned.</p>\r\n",
+            "shortDescription": "<p>Fuel the desire with a Callaway Golf Gift Card, passage to the world&rsquo;s most-recognized and respected name in golf.</p>\r\n",
+            "terms": "<p>Available in a variety of denominations, the Callaway Golf Gift Card offers recipients the freedom to choose the gift they want making them ideal for any occasion.</p>\r\n\r\n<ul>\r\n\t<li>Callaway Golf Gift Card recipients have access to a full lineup of products from one of golf&#39;s most respected brands.</li>\r\n\t<li>Gift Card recipients can place their order online anytime or by calling 1-877-CALLAWAY during M-Th 8am-8pm CT, and 9am-3pm CT on Saturday&#39;s.</li>\r\n\t<li>Gift Cards can only be redeemed for new product through the&nbsp;<a href=\"http://callawaygolf.com/\">CallawayGolf.com</a>&nbsp;or&nbsp;<a href=\"http://odysseygolf.com/\">OdysseyGolf.com</a>&nbsp;websites.</li>\r\n\t<li>Shipping is FREE when using the UPS Ground shipping option.</li>\r\n\t<li>These gift cards are NOT redeemable through Callaway Golf retail accounts or through Callaway Golf Pre-Owned.</li>\r\n</ul>\r\n",
+            "createdDate": "2017-08-07T22:02:37Z",
+            "lastUpdateDate": "2024-05-06T21:35:03Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b347219-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b347219-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b347219-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b347219-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b347219-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b347219-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U958803",
+                    "rewardName": "Callaway E-Gift Card $100",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 100.00,
+                    "createdDate": "2017-08-08T17:34:34.184Z",
+                    "lastUpdateDate": "2026-04-10T17:30:42.801Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>To Redeem your Callaway E-Gift Card:</p>\r\n\r\n<ol>\r\n\t<li>Visit <a href=\"http://callawaygolf.com/\">CallawayGolf.com</a> or <a href=\"http://odysseygolf.com/\">OdysseyGolf.com</a></li>\r\n\t<li>Select items and add them to your cart.</li>\r\n\t<li>Proceed to Checkout once you are ready to finalize your order.</li>\r\n\t<li>Select the \"I have a Gift Card\" box under Billing Options.</li>\r\n\t<li>Enter the E-Gift Card Number provided above and click the \"Apply\" button.</li>\r\n\t<li>The amount of your E-Gift Card will automatically be applied to your order.</li>\r\n</ol>\r\n\r\n<p>Gift Card recipients can place their order online anytime or by calling 1-877-CALLAWAY during M-Th 8am-8pm CT, and 9am-3pm CT on Saturday.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                },
+                {
+                    "utid": "U963423",
+                    "rewardName": "Callaway E-Gift Card $25",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 25.00,
+                    "createdDate": "2017-08-08T17:21:35.101Z",
+                    "lastUpdateDate": "2026-04-10T17:30:52.91Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>To Redeem your Callaway E-Gift Card:</p>\r\n\r\n<ol>\r\n\t<li>Visit <a href=\"http://callawaygolf.com/\">CallawayGolf.com</a> or <a href=\"http://odysseygolf.com/\">OdysseyGolf.com</a></li>\r\n\t<li>Select items and add them to your cart.</li>\r\n\t<li>Proceed to Checkout once you are ready to finalize your order.</li>\r\n\t<li>Select the \"I have a Gift Card\" box under Billing Options.</li>\r\n\t<li>Enter the E-Gift Card Number provided above and click the \"Apply\" button.</li>\r\n\t<li>The amount of your E-Gift Card will automatically be applied to your order.</li>\r\n</ol>\r\n\r\n<p>Gift Card recipients can place their order online anytime or by calling 1-877-CALLAWAY during M-Th 8am-8pm CT, and 9am-3pm CT on Saturday.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                },
+                {
+                    "utid": "U487830",
+                    "rewardName": "Callaway E-Gift Card $50",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 50.00,
+                    "createdDate": "2017-08-08T17:30:11.012Z",
+                    "lastUpdateDate": "2026-04-10T17:07:56.271Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>To Redeem your Callaway E-Gift Card:</p>\r\n\r\n<ol>\r\n\t<li>Visit <a href=\"http://callawaygolf.com/\">CallawayGolf.com</a> or <a href=\"http://odysseygolf.com/\">OdysseyGolf.com</a></li>\r\n\t<li>Select items and add them to your cart.</li>\r\n\t<li>Proceed to Checkout once you are ready to finalize your order.</li>\r\n\t<li>Select the \"I have a Gift Card\" box under Billing Options.</li>\r\n\t<li>Enter the E-Gift Card Number provided above and click the \"Apply\" button.</li>\r\n\t<li>The amount of your E-Gift Card will automatically be applied to your order.</li>\r\n</ol>\r\n\r\n<p>Gift Card recipients can place their order online anytime or by calling 1-877-CALLAWAY during M-Th 8am-8pm CT, and 9am-3pm CT on Saturday.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "3cf07af1-d84c-4b09-b1be-c26e52f9ed25",
+                    "description": "Sporting Goods"
+                }
+            ]
+        },
+        {
+            "brandKey": "B082042",
+            "brandName": "Carnival Cruise Lines",
+            "disclaimer": "<p>Carnival Cruise Lines is not a sponsor of the rewards or otherwise affiliated with the reward program. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company's website for additional terms and conditions.</p>",
+            "description": "<p>Carnival Cruise Lines, a unit of Carnival Corporation is “The World’s Most Popular Cruise Line®,” with 24 “Fun Ships” operating three- to 16-day voyages to The Bahamas, Caribbean, Mexican Riviera, Alaska, Hawaii, Panama Canal, Canada, New England, Bermuda, Europe, the Pacific Islands and New Zealand. Sharing a passion to please each guest and a commitment to quality and value, Carnival inspires people to discover their best vacation experience by offering a variety of exciting and enriching cruises to the world's most desirable destinations.</p>",
+            "shortDescription": "<p>Carnival Cruise Lines, a unit of Carnival Corporation is “The World’s Most Popular Cruise Line®,” with 24 “Fun Ships” operating three- to 16-day voyages to The Bahamas, Caribbean, Mexican Riviera, Alaska, Hawaii, Panama Canal, Canada, New England, Bermuda, Europe, the Pacific Islands and New Zealand. Sharing a passion to please each guest and a commitment to quality and value, Carnival inspires people to discover their best vacation experience by offering a variety of exciting and enriching cruises to the world's most desirable destinations.</p>",
+            "terms": "<p>Treat this ecard like cash. E-card recipient bears all risk of loss in the event this ecard, or its information, is lost, stolen, damaged or used without e-card holder’s permission. In no event is CCL Gifts, LLC or any parent, subsidiary or affiliate responsible or required to replace any e-card value. Card cannot be redeemed for cash unless required by law. Complete terms and conditions available at <a href=\"https://carnival.ourgiftcards.com/\">carnival.ourgiftcards.com</a>. Use of this ecard constitutes acceptance of these terms and conditions. This ecard does not expire. Digital gift card is non-refundable and will not be replaced if lost, stolen or destroyed. © 2012 Carnival Cruise Lines. All rights reserved. Bottom of Form Ships’ Registry: The Bahamas, Panama and Malta</p>",
+            "createdDate": "2023-10-11T00:02:59Z",
+            "lastUpdateDate": "2024-02-20T18:43:28Z",
+            "brandRequirements": {
+                "displayInstructions": null,
+                "termsAndConditionsInstructions": null,
+                "disclaimerInstructions": null,
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b082042-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b082042-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b082042-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b082042-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b082042-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b082042-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U464092",
+                    "rewardName": "Carnival Cruise Lines eGift Card ",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 100,
+                    "maxValue": 1000,
+                    "createdDate": "2023-10-11T00:12:18.751Z",
+                    "lastUpdateDate": "2026-04-10T17:06:53.871Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "barcodeNumber",
+                        "cardNumber",
+                        "pin",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>To redeem towards the purchase of a Carnival cruise, call 1-800-Carnival or book online at <a href=\"https://www.carnival.com/\">www.carnival.com</a>.</p>\n<p>To redeem towards activities/shore excursions or onboard gifts, drinks and fun, print and bring this ecard to the Guest Services Desk on board your cruise ship so it can be credited towards your Sail &amp; Sign account.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "20122ee3-ed36-4259-bb3c-a2072cfd8c93",
+                    "description": "Travel"
+                }
+            ]
+        },
+    
+        {
+            "brandKey": "B048772",
+            "brandName": "Cinemark",
+            "disclaimer": "<p>*Cinemark is not a sponsor of the rewards or otherwise affiliated with this reward program. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Give the gift of entertainment! Cinemark gift cards make the perfect gift for any occasion. Buy one for yourself, or give it as a gift. Cinemark gift cards can be redeemed online at&nbsp;<a href=\"http://cinemark.com/\">Cinemark.com</a>&nbsp;or at any local theatre for box office and concessions.</p>\r\n",
+            "shortDescription": "<p>Give the gift of entertainment! Cinemark gift cards make the perfect gift for any occasion. Buy one for yourself, or give it as a gift. Cinemark gift cards can be redeemed online at&nbsp;<a href=\"http://cinemark.com/\">Cinemark.com</a>&nbsp;or at any local theatre for box office and concessions.</p>\r\n",
+            "terms": "<p>Cinemark gift cards may be used to purchase goods and services online and at any box office, kiosk, concession register or restaurant at Cinemark theatres in the U.S. Online purchases may incur an online fee. Purchases, including any applicable online fee, will be deducted from the gift card until the balance reaches zero. Not refundable or redeemable for cash, except as provided by law. Protect this card like cash. No expiration date or dormancy fees. For more information regarding online fees or balance inquiries please visit&nbsp;<a href=\"http://cinemark.com/giftcards\">Cinemark.com/giftcards</a>&nbsp;or contact&nbsp;<a href=\"mailto:giftcards@cinemark.com\">giftcards@cinemark.com</a>&nbsp;or call 1-800-CINEMARK. Cinemark gift cards remain the property of Cinemark at all times and may be retained in the event of improper use. Visit&nbsp;<a href=\"http://cinemark.com/\">Cinemark.com</a>&nbsp;for a complete list of theatres and to register the gift card. These terms are subject to change by Cinemark.</p>\r\n",
+            "createdDate": "2019-12-06T21:42:43Z",
+            "lastUpdateDate": "2026-06-12T16:43:14Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "<p>Gift cards will need to be registered to account in order to redeem.</p>\r\n",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b048772-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b048772-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b048772-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b048772-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b048772-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b048772-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U828533",
+                    "rewardName": "Cinemark Gift Card $25",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 25,
+                    "createdDate": "2019-12-10T18:12:58.057Z",
+                    "lastUpdateDate": "2026-04-10T17:24:13.466Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p><strong>Redeem Online:</strong></p>\r\n\r\n<ol>\r\n\t<li>Select movie and theatre online at <a href=\"http://cinemark.com/\">Cinemark.com</a>.</li>\r\n\t<li>At check out register the reward to account under gift card portion.</li>\r\n\t<li>Add card number and name to save to account. Once registered checkout with gift card payment option.</li>\r\n</ol>\r\n\r\n<p><strong>Redeem in store:</strong></p>\r\n\r\n<p>Simply show cashier card number to redeem in theatres. For a list of locations go to <a href=\"http://www.cinemark.com/\">www.cinemark.com</a>. </p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                },
+                {
+                    "utid": "U472558",
+                    "rewardName": "Cinemark Gift Card $50",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 50,
+                    "createdDate": "2019-12-10T18:13:11.937Z",
+                    "lastUpdateDate": "2026-04-10T17:07:13.629Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p><strong>Redeem Online:</strong></p>\r\n\r\n<ol>\r\n\t<li>Select movie and theatre online at <a href=\"http://cinemark.com/\">Cinemark.com</a>.</li>\r\n\t<li>At check out register the reward to account under gift card portion.</li>\r\n\t<li>Add card number and name to save to account. Once registered checkout with gift card payment option.</li>\r\n</ol>\r\n\r\n<p><strong>Redeem in store:</strong></p>\r\n\r\n<p>Simply show cashier card number to redeem in theatres. For a list of locations go to <a href=\"http://www.cinemark.com/\">www.cinemark.com</a>. </p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "67e5e327-4c96-4dd4-a60e-3ca6c2205da4",
+                    "description": "Entertainment"
+                }
+            ]
+        },
+        {
+            "brandKey": "B834860",
+            "brandName": "Columbia Sportswear",
+            "disclaimer": "<p>Columbia Sportswear is not a sponsor of the rewards or promotion or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. &nbsp;Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Shop direct from Columbia Sportswear. Buy Columbia jackets, pants, shirts,&nbsp;fleece, shoes, boots &amp; sweaters. Visit our blog, watch videos &amp; meet our athletes. Trying Stuff&nbsp;since 1938.</p>\r\n",
+            "shortDescription": "<p>Shop direct from Columbia Sportswear. Buy Columbia jackets, pants, shirts,&nbsp;fleece, shoes, boots &amp; sweaters. Visit our blog, watch videos &amp; meet our athletes. Trying Stuff&nbsp;since 1938.</p>\r\n",
+            "terms": "<p>If you have concerns, please contact customer service at 855-793-8452 or email&nbsp;<a href=\"mailto:columbiab2bsupport@cashstar.com\">columbiab2bsupport@cashstar.com</a>. You may redeem this e-gift card at Columbia or Mountainhardwear location in the US, including Outlet and Factory stores, and at&nbsp;<a href=\"http://www.columbia.com/\">Columbia.com</a>,&nbsp;<a href=\"http://www.mountainhardwear.com/\">Mountainhardwear.com</a>, or&nbsp;<a href=\"http://www.sorel.com/\">Sorel.com</a>.&nbsp;This card is not redeemable for cash except as required by law.</p>\r\n",
+            "createdDate": "2016-06-09T22:42:42Z",
+            "lastUpdateDate": "2024-02-20T18:42:48Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b834860-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b834860-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b834860-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b834860-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b834860-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b834860-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U171716",
+                    "rewardName": "Columbia Sportswear eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 10,
+                    "maxValue": 250,
+                    "createdDate": "2016-06-13T19:41:48.157Z",
+                    "lastUpdateDate": "2026-04-10T16:52:38.513Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "bypassUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>Click the Redemption URL provided above.&nbsp;The resulting page will contain your Card Number and PIN.</p>\r\n\r\n<p>You may redeem your Columbia Sportswear eGift Card at Columbia or Mountain Hardwear location in the US, including Outlet and Factory stores, and at&nbsp;the following websites:&nbsp;<a href=\"http://columbia.com/\">columbia.com</a>,&nbsp;<a href=\"http://mountainhardwear.com/\">mountainhardwear.com</a>, and&nbsp;<a href=\"https://www.sorel.com/\">sorel.com</a>.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "b663267f-8b0c-4caa-acbc-40c87983d31e",
+                    "description": "Fashion"
+                }
+            ]
+        },
+        {
+            "brandKey": "B173929",
+            "brandName": "Delta Air Lines",
+            "disclaimer": "<p>*Delta Air Lines is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company's website for additional terms and conditions</p>\n<p><strong>Please note:</strong> Up to 5 Gift Cards can be redeemed per transaction on <a href=\"https://www.delta.com/\">delta.com</a> and up to 4 Gift Cards can be redeemed per transaction on <a href=\"https://www.delta.com/us/en/delta-vacations\">delta.com/vacations</a>. If you wish to redeem more Gift Cards for a single purchase, please call Delta Air Lines at 800-225-1366 or Delta Vacations at 800-800-1504 and a Reservations Specialist will be able to assist you.</p>",
+            "description": "<p class=\"p1\">Give the Gift of Vacation.TM With over hundreds of destinations and limitless adventures to choose from, the Delta Gift Card opens up a world of possibilities. Delta Gift Cards can be used toward any flight at <a href=\"http://www.delta.com\">Delta.com</a> or any Delta Vacations package. *</p>\n<p class=\"p1\">Fast, Free Wi-Fi is now available for SkyMiles® Members on most domestic flights. Not a member? Sign up for instant access to free Wi-Fi and other benefits. SkyMiles is always free to join. Wi-Fi and SkyMiles® Terms of Use Apply. </p>\n<p class=\"p3\">*Delta Vacations packages must include Delta airfare in order to use Delta Gift Card.</p>",
+            "shortDescription": "<p class=\"p1\">Give the Gift of Vacation.TM With over hundreds of destinations and limitless adventures to choose from, the Delta Gift Card opens up a world of possibilities. Delta Gift Cards can be used toward any flight at <a href=\"http://www.delta.com\">Delta.com</a> or any Delta Vacations package. *</p>\n<p class=\"p1\">Fast, Free Wi-Fi is now available for SkyMiles® Members on most domestic flights. Not a member? Sign up for instant access to free Wi-Fi and other benefits. SkyMiles is always free to join. Wi-Fi and SkyMiles® Terms of Use Apply. </p>\n<p class=\"p3\">*Delta Vacations packages must include Delta airfare in order to use Delta Gift Card.</p>",
+            "terms": "<p>Delta Gift Cards may be only used toward airfare sold on <a href=\"http://www.delta.com\">Delta.com </a>or Delta Vacations packages that include airfare, and may not be used for other purchases, such as baggage fee, seat upgrade or other ancillary products.  Delta Gift Cards are issued by and represents an obligation solely of Delta Gift Cards, Inc. Full terms: <a href=\"https://www.delta.com/us/en/gift-cards/overview\"><span class=\"s1\">delta.com/giftcard</span></a>.</p>",
+            "createdDate": "2016-05-25T19:13:47Z",
+            "lastUpdateDate": "2024-04-26T21:06:19Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "<p><strong>Please note:</strong> Up to 5 forms of payment can be redeemed per transaction on <a href=\"https://www.delta.com/\"><span class=\"s2\">delta.com</span></a> or 4 forms of payment at <a href=\"https://www.delta.com/us/en/delta-vacations\"><span class=\"s2\">delta.com/vacations</span></a>. If you wish to redeem more Gift Cards for a single purchase, please call Delta Air Lines at 1-800-225-1366 or Delta Vacations at 1-800-800-1504 and a Reservations Specialist will be able to assist you.</p>",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b173929-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b173929-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b173929-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b173929-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b173929-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b173929-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U972783",
+                    "rewardName": "Delta eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 50,
+                    "maxValue": 500,
+                    "createdDate": "2021-01-25T22:42:08.854Z",
+                    "lastUpdateDate": "2026-04-10T17:31:15.967Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p class=\"p1\">Delta Gift Cards can only be redeemed using one of these methods:</p>\n<ul>\n<li><span class=\"s2\">At <a href=\"https://www.delta.com/edocs/redeem-documents\"><span class=\"s3\">delta.com/redeem</span></a>.</span></li>\n<li>Call Delta Air Lines Reservations and advise the agent that you are redeeming a Delta Gift Card. In the U.S. and Canada, call 800-225-1366 or 800-225-2525; in Japan, 0570-077733 or 0476-31-8000; in all other countries, call the local Delta Air Lines Reservations office. This method of redemption may result in direct ticketing charges.</li>\n<li>At <a href=\"https://www.delta.com/us/en/delta-vacations\"><span class=\"s5\">delta.com/vacations</span></a> or by calling 800-800-1504 for Delta Vacations® packages that include air transportation. (Travel Advisors, call 800-727-1111.)</li>\n</ul>\n<p class=\"p1\">Delta Gift Cards may be used for travel on Delta Air Lines marketed flights, including those operated as Delta Connection® and by Delta Air Lines codeshare partners with a Delta Air Lines flight number, or Delta Vacations packages that include air transportation. Cards may not be used for other purchases, such as baggage fees, in-flight purchases, seat upgrades or other ancillary products.</p>\n<ul class=\"ul1\">\n<li class=\"li1\">Up to 5 forms of payment can be redeemed per transaction on <a href=\"https://www.delta.com/\"><span class=\"s5\">delta.com</span></a> or 4 forms of payment at <a href=\"https://www.delta.com/us/en/delta-vacations\"><span class=\"s5\">delta.com/vacations</span></a>. If you wish to redeem more Gift Cards for a single purchase, please call Delta Air Lines at 1-800-225-1366 or Delta Vacations at 1-800-800-1504 and a Reservations Specialist will be able to assist you.</li>\n<li class=\"li1\">Additional terms apply. For full terms, visit <a href=\"https://www.delta.com/us/en/gift-cards/overview\"><span class=\"s5\">delta.com/giftcard</span></a></li>\n</ul>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "20122ee3-ed36-4259-bb3c-a2072cfd8c93",
+                    "description": "Travel"
+                }
+            ]
+        },
+        {
+            "brandKey": "B046367",
+            "brandName": "Dick's Sporting Goods",
+            "disclaimer": "<p>Dick&#39;s Sporting Goods is not a sponsor of the rewards or promotion or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates.&nbsp; Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>The best collection of sporting goods, apparel and footwear is a click away. Purchase a DICK&#39;S Sporting Goods eGift Card and start shopping today.</p>\r\n\r\n<p>Every season starts at Dick&#39;s Sporting Goods!</p>\r\n",
+            "shortDescription": "<p>The best collection of sporting goods, apparel and footwear is a click away. Purchase a DICK&#39;S Sporting Goods eGift Card and start shopping today.</p>\r\n\r\n<p>Every season starts at Dick&#39;s Sporting Goods!</p>\r\n",
+            "terms": "<p>DICK&#39;S&nbsp;Sporting Goods, Field &amp; Stream and Golf Galaxy Gift Cards and eGift Cards can be used to buy the gear and services you love at all DICK&#39;S, Field &amp; Stream and Golf Galaxy retail locations or online at&nbsp;<a href=\"http://dicks.com/\">DICKS.com</a>,&nbsp;<a href=\"http://fieldandstreamshop.com/\">FieldandStreamShop.com</a>&nbsp;and&nbsp;<a href=\"http://golfgalaxy.com/\">GolfGalaxy.com</a>.</p>\r\n\r\n<ul>\r\n\t<li>Gift Cards will not be delivered until the checkout transaction is completed. An accurate physical address or email address for the recipient is required to deliver Gift Cards. We are not responsible for Gift Cards that are undeliverable or not received due to an incorrect physical or email address.</li>\r\n\t<li>eGift Cards are subject to the same terms and conditions as Gift Cards.</li>\r\n\t<li>If you return items in-store purchased with your eGift Card, a new Gift Card will be issued.</li>\r\n\t<li>Recipients will receive their eGift Card via email, which will include a code that must be used to redeem the eGift Card. eGift Card codes are activated within 24 hours after you receive them.</li>\r\n\t<li>eGift Cards are delivered via email. If you have confirmed the recipient&#39;s email address but the eGift Card has not been viewed within a reasonable period after the requested delivery date, following is a list of the most common reasons why delivery may have failed:\r\n\t<ul>\r\n\t\t<li>Spam filter blocked email or routed it to a bulk/spam folder</li>\r\n\t\t<li>Recipient&#39;s firewall blocked the email</li>\r\n\t\t<li>Email inbox is over size limit</li>\r\n\t\t<li>Invalid email address</li>\r\n\t</ul>\r\n\t</li>\r\n\t<li>If you need further assistance, please contact Customer Service. Have your order number or email address ready. Please check to make sure the address of the recipient is correct and contact Customer Support if you suspect the recipient did not receive his/her Gift Card.</li>\r\n</ul>\r\n",
+            "createdDate": "2016-07-13T21:45:37Z",
+            "lastUpdateDate": "2024-05-09T21:37:59Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b995536-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b995536-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b995536-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b995536-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b995536-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b995536-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U833675",
+                    "rewardName": "Dick's Sporting Goods Online Gift Certificate",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 25,
+                    "maxValue": 500,
+                    "createdDate": "2020-11-20T00:32:03.211Z",
+                    "lastUpdateDate": "2026-04-10T17:24:28.663Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>Click on the Redemption URL to access your reward. Save reward details for redemption.</p>\n<p><strong>To redeem In-Store:</strong></p>\n<ol>\n<li>Print landing page or save to mobile device.</li>\n<li>At checkout, provide the reward credentials to the cashier.</li>\n<li>The amount spent will be deducted from your gift certificate balance.</li>\n</ol>\n<p><strong>Please note:</strong>&nbsp;This reward can be redeemed at all DICK'S locations, Golf Galaxy, and Field &amp; Stream stores.</p>\n<p><strong>To redeem online</strong>:</p>\n<ol>\n<li>Select the items you wish to purchase online at&nbsp;<a href=\"http://dicks.com/\">DICKS.com</a>,&nbsp;<a href=\"http://fieldandstreamshop.com/\">FieldandStreamShop.com</a>&nbsp;and&nbsp;<a href=\"http://golfgalaxy.com/\">GolfGalaxy.com</a>.</li>\n<li>When you're ready to checkout online, click \"Shopping Cart\" and proceed through the checkout.</li>\n<li>Select &ldquo;GIFT CARD&rdquo; under the Select Payments Options.</li>\n<li>Enter the gift card number, and security PIN located on the gift card, then click &lsquo;Apply.&rsquo;</li>\n<li>The amount spent will be deducted from your gift certificate balance.</li>\n</ol>\n<p><strong>IMPORTANT NOTE:</strong>&nbsp;Make sure to keep all gift cards and online gift certificates used for your purchase until your order arrives, and you are certain you will be keeping your purchase. If your order cannot be completed or you decide to make a return, your refund will be issued back to the online gift certificate used for purchase.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "3cf07af1-d84c-4b09-b1be-c26e52f9ed25",
+                    "description": "Sporting Goods"
+                }
+            ]
+        },
+        {
+            "brandKey": "B902104",
+            "brandName": "Fanatics",
+            "disclaimer": "<p>Fanatics is not a sponsor of the rewards or promotion or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Fanatics offers the world's largest collection of officially licensed sports merchandise. We are the official partner of NFL, NBA, MLB, NHL, NASCAR, and hundreds of professional and collegiate teams. We also produce Fanatics branded fan-friendly jerseys and apparel. We are fans just like you, and always put the fan first in everything we do.</p>",
+            "shortDescription": "<p>Fanatics offers the world's largest collection of officially licensed sports merchandise. We are the official partner of NFL, NBA, MLB, NHL, NASCAR, and hundreds of professional and collegiate teams. We also produce Fanatics branded fan-friendly jerseys and apparel. We are fans just like you, and always put the fan first in everything we do.</p>",
+            "terms": "<p>Valid only at <a href=\"http://www.fanatics.com\">Fanatics.com</a> for in-stock merchandise only. Except where required by law, cannot be redeemed for cash or cash equivalent, returned, reproduced, modified, sold, traded, refunded or replaced if lost or stolen. Not valid for any other gift cards, codes or certificates or on previous purchases or returns. No cash back. If the value of your purchase exceeds the available gift card / gift certificate balance, you must pay the excess at the time of purchase. Any unused amount will be applied when you re-enter your gift card / gift certificate during your next purchase. All purchases are subject to the Fanatics.com Terms of Use, which may change at any time. To check your gift card balance, please visit <a href=\"https://www.fanatics.com/gchelp\">https://www.fanatics.com/gchelp</a> or call 1-855-438-0679. Void where prohibited. Gift cards/gift certificates are issued by Fanatics Retail Group Fulfillment, LLC.</p>",
+            "createdDate": "2016-07-13T21:58:08Z",
+            "lastUpdateDate": "2024-02-20T18:42:51Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b171126-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b171126-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b171126-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b171126-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b171126-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b171126-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U789465",
+                    "rewardName": "Fanatics Online Gift Certificate $100.00",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 100.00,
+                    "createdDate": "2016-07-20T16:50:35.471Z",
+                    "lastUpdateDate": "2026-04-10T17:22:28.119Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "pin",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\r\n\t<li>Visit <a href=\"http://www.fanatics.com\">www.fanatics.com</a> and select items you wish to purchase.</li>\r\n\t<li>When you're ready to checkout, click \"Shopping Cart.\"</li>\r\n\t<li>Proceed through the Checkout.</li>\r\n\t<li>Enter your Card Number and PIN on the Payment page at the final step of Checkout in the field labeled \"Have a Gift Card or Gift Certificate?\"</li>\r\n\t<li>Click \"Apply\" and you will see your Online Gift Certificate amount deducted from your merchandise total.</li>\r\n</ol>\r\n\r\n<p><br />\r\nAny unused portion of your Online Gift Certificate will be placed in your account balance and automatically applied to your next purchase. You can view your account balance by logging in to your account.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                },
+                {
+                    "utid": "U080019",
+                    "rewardName": "Fanatics Online Gift Certificate $25.00",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 25.00,
+                    "createdDate": "2016-07-20T16:47:12.029Z",
+                    "lastUpdateDate": "2026-04-10T16:48:20.764Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "pin",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\r\n\t<li>Visit <a href=\"http://www.fanatics.com\">www.fanatics.com</a> and select items you wish to purchase.</li>\r\n\t<li>When you're ready to checkout, click \"Shopping Cart.\"</li>\r\n\t<li>Proceed through the Checkout.</li>\r\n\t<li>Enter your Card Number and PIN on the Payment page at the final step of Checkout in the field labeled \"Have a Gift Card or Gift Certificate?\"</li>\r\n\t<li>Click \"Apply\" and you will see your Online Gift Certificate amount deducted from your merchandise total.</li>\r\n</ol>\r\n\r\n<p><br />\r\nAny unused portion of your Online Gift Certificate will be placed in your account balance and automatically applied to your next purchase. You can view your account balance by logging in to your account.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                },
+                {
+                    "utid": "U883973",
+                    "rewardName": "Fanatics Online Gift Certificate $50.00",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "FIXED_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "faceValue": 50.00,
+                    "createdDate": "2016-07-20T16:48:55.702Z",
+                    "lastUpdateDate": "2026-04-10T17:27:03.198Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "pin",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\r\n\t<li>Visit <a href=\"http://www.fanatics.com\">www.fanatics.com</a> and select items you wish to purchase.</li>\r\n\t<li>When you're ready to checkout, click \"Shopping Cart.\"</li>\r\n\t<li>Proceed through the Checkout.</li>\r\n\t<li>Enter your Card Number and PIN on the Payment page at the final step of Checkout in the field labeled \"Have a Gift Card or Gift Certificate?\"</li>\r\n\t<li>Click \"Apply\" and you will see your Online Gift Certificate amount deducted from your merchandise total.</li>\r\n</ol>\r\n\r\n<p><br />\r\nAny unused portion of your Online Gift Certificate will be placed in your account balance and automatically applied to your next purchase. You can view your account balance by logging in to your account.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "b663267f-8b0c-4caa-acbc-40c87983d31e",
+                    "description": "Fashion"
+                }
+            ]
+        },
+        {
+            "brandKey": "B317391",
+            "brandName": "Google Play gift code",
+            "disclaimer": "<div lang=\"en-US\">\n\n<p>See <a href=\"http://www.play.google.com/us-card-terms\" rel=\"noopener noreferrer\" target=\"_blank\">play.google.com/us-card-terms</a> for full terms. Must be 13+ years of age, US resident. Google Play card is issued by Google Arizona LLC (\"GAZ\"). Requires Google Payments account and internet access to redeem. Redeemed balance is maintained by GAZ’s affiliate, Google Payment Corp. (\"GPC\"), in your Google Payments account. Usable for purchases of eligible items on Google Play only. Not usable for hardware and certain subscriptions. Other limits may apply. No fees or expiration dates. Except as required by law, card is not redeemable for cash or other cards; not reloadable or refundable; cannot be combined with other non-Google Play balances in your Google Payments account, resold, exchanged or transferred for value. User responsible for loss of card. For assistance or to view your Google Play card balance, visit <a href=\"http://www.support.google.com/googleplay/go/cardhelp\" rel=\"noopener noreferrer\" target=\"_blank\">support.google.com/googleplay/go/cardhelp</a>.</p>\n</div>",
+            "description": "<div lang=\"en-US\">\n\n<p>Google Play gift codes can be used on the Google Play Store, the official app store for Android, to purchase apps, games, and more.</p>\n</div>",
+            "shortDescription": "<div lang=\"en-US\">\n\n<p>Google Play gift codes can be used on the Google Play Store, the official app store for Android, to purchase apps, games, and more.</p>\n</div>",
+            "terms": "<div lang=\"en-US\">\n\n<p>See <a href=\"http://www.play.google.com/us-card-terms\" rel=\"noopener noreferrer\" target=\"_blank\">play.google.com/us-card-terms</a> for full terms. Must be 13+ years of age, US resident. Google Play card is issued by Google Arizona LLC (\"GAZ\"). Requires Google Payments account and internet access to redeem. Redeemed balance is maintained by GAZ’s affiliate, Google Payment Corp. (\"GPC\"), in your Google Payments account. Usable for purchases of eligible items on Google Play only. Not usable for hardware and certain subscriptions. Other limits may apply. No fees or expiration dates. Except as required by law, card is not redeemable for cash or other cards; not reloadable or refundable; cannot be combined with other non-Google Play balances in your Google Payments account, resold, exchanged or transferred for value. User responsible for loss of card. For assistance or to view your Google Play card balance, visit <a href=\"http://www.support.google.com/googleplay/go/cardhelp\" rel=\"noopener noreferrer\" target=\"_blank\">support.google.com/googleplay/go/cardhelp</a>. </p>\n\n<p><strong><u>Note</u></strong>: Only use this gift card's code on Google Play. Any other request for the code may be a scam. Visit <a href=\"http://play.google.com/giftcardscam\" rel=\"noopener noreferrer\" target=\"_blank\">play.google.com/giftcardscam</a>.</p>\n</div>",
+            "createdDate": "2016-07-13T22:01:57Z",
+            "lastUpdateDate": "2026-09-15T16:14:50Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b317391-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b317391-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b317391-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b317391-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b317391-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b317391-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U505722",
+                    "rewardName": "Google Play Gift Code",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 1,
+                    "maxValue": 200,
+                    "createdDate": "2018-11-21T19:13:33.218Z",
+                    "lastUpdateDate": "2026-04-10T17:08:49.64Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>Only use this gift card's code on Google Play. Any other request for the code may be a scam. </p>\n\n<p>To redeem in the Play Store:</p>\n\n<ol>\n<li>On your <strong>Android phone or tablet,</strong> open the Play Store app. Tap the menu icon and select Redeem. On your <strong>laptop</strong>, go to <a href=\"http://www.play.google.com/redeem\" rel=\"noopener noreferrer\" target=\"_blank\">play.google.com/redeem</a>.</li>\n<li>Enter gift code.</li>\n<li>Start shopping! Your gift code value will be added to your Google Play balance.To redeem, enter code in the Play Store app or <a href=\"http://www.play.google.com/redeem\" rel=\"noopener noreferrer\" target=\"_blank\">play.google.com/redeem</a>.</li>\n</ol>\n\n<p>Click <a href=\"https://g.co/play/giftcardissues\" rel=\"noopener noreferrer\" target=\"_blank\">here</a> to troubleshoot common problems users might have when trying to redeem.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "166dbd79-ebef-4f26-8e30-b79077c1d6c4",
+                    "description": "Digital Media"
+                }
+            ]
+        },{
+            "brandKey": "B001694",
+            "brandName": "Grubhub",
+            "disclaimer": "<p>*Grubhub is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company's website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Grubhub restaurant delivery gift cards make the tastiest present. Treat someone to the food they love with delivery from the best local restaurants.</p>\r\n",
+            "shortDescription": "<p>Grubhub restaurant delivery gift cards make the tastiest present. Treat someone to the food they love with delivery from the best local restaurants.</p>\r\n",
+            "terms": "<p>You can use your Digital Gift Card on your takeout and delivery favorites on <a href=\"https://www.grubhub.com/?utm_source=cashstar&utm_medium=content_owned&utm_campaign=product_giftcards\">www.grubhub.com</a>, or on Grubhub's iPhone®, iPad® and Android™ apps.</p>\r\n\r\n<p>To redeem, enter code at checkout. You must have a valid Grubhub account.</p>\r\n\r\n<p>Please safeguard this Digital Gift Card. This Digital Gift Card will not be replaced if lost or stolen. This Digital Gift Card does not expire or accrue fees. Except where required by law, this card cannot be refunded or redeemed for cash. This Digital Gift Card is subject to all state and federal laws and regulations, which may change from time to time. Use of this Digital Gift Card constitutes acceptance of these terms and conditions as well as those found at <a href=\"https://grubhub.semi.cashstar.com/\">https://grubhub.semi.cashstar.com</a> and <a href=\"https://www.grubhub.com/?utm_source=cashstar&utm_medium=content_owned&utm_campaign=product_giftcards\">www.grubhub.com</a>. To check your Digital Gift Card balance, go to <a href=\"https://www.grubhub.com/?utm_source=cashstar&utm_medium=content_owned&utm_campaign=product_giftcards\">www.grubhub.com</a> or call 555-321-9876.</p>\r\n",
+            "createdDate": "2020-02-25T18:48:20Z",
+            "lastUpdateDate": "2024-06-24T21:46:50Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b001694-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b001694-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b001694-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b001694-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b001694-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b001694-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U407739",
+                    "rewardName": "Grubhub Gift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 500,
+                    "createdDate": "2020-02-25T18:49:30.73Z",
+                    "lastUpdateDate": "2026-04-10T17:04:02.767Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\r\n\t<li>Click the Redemption URL to access your gift card code.</li>\r\n\t<li>Visit&nbsp;<a href=\"https://www.grubhub.com/\">www.grubhub.com</a>&nbsp;and select food.</li>\r\n\t<li>Redeem your Gift Card at Checkout by clicking the &quot;Add gift cards and promo codes&quot; link.</li>\r\n\t<li>Enter your Gift Card code.</li>\r\n\t<li>Click the &quot;Apply&quot; link.</li>\r\n\t<li>Your Gift Card balance will be deducted from your order total. You may use multiple Gift Cards per order.</li>\r\n</ol>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        },
+        {
+            "brandKey": "B851729",
+            "brandName": "Home Chef ",
+            "disclaimer": "<p>*Home Chef is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Home Chef is a meal kit delivery service that delivers pre-portioned, fresh ingredients to customers each week. Delivery nationwide to virtually all households.</p>\r\n",
+            "shortDescription": "<p>Home Chef is a meal kit delivery service that delivers pre-portioned, fresh ingredients to customers each week. Delivery nationwide to virtually all households.</p>\r\n",
+            "terms": "<p>Use of code constitutes acceptance of the following terms and conditions: Code may be used only for Home Chef meals and not for any other goods or services. Unless required by law, card is not redeemable for cash. Code is not valid if altered or illegible, and lost or stolen codes cannot be replaced. Code is not for resale by consumer. Code may be deactivated or rejected if issuer, in its sole discretion, suspects fraud. This card does not expire and there are no associated fees. If you have questions about your code, including the account balance, visit <a href=\"https://support.homechef.com/hc/en-us/requests/new\">https://support.homechef.com/hc/en-us/requests/new</a> and submit your question.</p>\r\n",
+            "createdDate": "2020-02-25T21:04:16Z",
+            "lastUpdateDate": "2024-02-27T18:11:05Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b851729-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b851729-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b851729-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b851729-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b851729-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b851729-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U275469",
+                    "rewardName": "Home Chef eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 50,
+                    "maxValue": 250,
+                    "createdDate": "2022-10-13T19:07:35.945Z",
+                    "lastUpdateDate": "2026-04-10T16:57:40.365Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>Click the Redemption URL to access your gift card.</p>\r\n\r\n<p>Visit <a href=\"https://www.Homechef.com\">www.Homechef.com</a>. If you&#39;re signing up with Home Chef for the first time, you&#39;ll be able to enter your gift card code during the registration process to redeem it.</p>\r\n\r\n<p>If you&#39;re an existing customer, you can apply your gift card by clicking &#39;My Account&#39; in the upper right corner and then selecting &#39;Redeem a Gift Card&#39; or by clicking <a href=\"https://www.homechef.com/account/settings/redemption/new\">here</a>. Keep in mind, promotions intended for first time customers will not be eligible for redemption here.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        },{
+            "brandKey": "B866005",
+            "brandName": "Kroger",
+            "disclaimer": "<p>Kroger is not a sponsor of the rewards or otherwise affiliated with this reward program. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company's website for additional terms and conditions.</p>\n<p><strong>Please note</strong>: rewards may only be redeemed in store.</p>\n<p><strong>Egift (digital) card</strong> cannot be redeem for fuel or products at Kroger Family of Companies' Fuel Centers or fuel kiosks. Cannot redeem for Kroger Family of Companies' Pickup, Delivery or Ship purchases. Cannot redeem at Fred Meyer Jewelers and Littman Jewelers stores. <strong>Physical gift cards</strong> can be used at fuel kiosks.</p>\n<p><strong>Good at Food 4 Less stores in So. CA, IN and IL only.</strong></p>",
+            "description": "<p>The Kroger Co. Family of Stores spans many states with store formats that include grocery and multi-department stores, discount, convenience stores and jewelry stores. We operate under nearly two dozen banners, all of which share the same belief in building strong local ties and brand loyalty with our customers.</p>",
+            "shortDescription": "<p>The Kroger Co. Family of Stores spans many states with store formats that include grocery and multi-department stores, discount, convenience stores and jewelry stores. We operate under nearly two dozen banners, all of which share the same belief in building strong local ties and brand loyalty with our customers.</p>",
+            "terms": "<p>Protect this card and treat it as you would cash. For card balance, check your sales receipt, visit <a class=\"sc-itybZL iLAMzb\" title=\"http://www.gcbalance.com\" href=\"http://www.gcbalance.com/\" data-renderer-mark=\"true\">www.gcbalance.com</a>, call 1-866-822-6252, or use your Kroger Family of Companies’ mobile app. Use of this card constitutes acceptance of the terms and conditions of this Gift Card. The card represents a prepayment for goods and, in case of physical giftcards, for fuel available at The Kroger Family of Companies (for a complete list of where card is redeemable visit <a class=\"sc-itybZL iLAMzb\" title=\"http://www.kroger.com/giftcardterms\" href=\"http://www.kroger.com/giftcardterms\" data-renderer-mark=\"true\">www.kroger.com/giftcardterms</a>). The card cannot be used for lottery, money orders, any stored value prepaid cards or gift cards, or other products prohibited by law. The card cannot be exchanged for cash, except where required by law. Funds do not expire. No fees. If your card is lost, stolen, damaged or destroyed, it will not be replaced and the value remaining lost. Issued by The Kroger Co., an Ohio corporation. Good at Food 4 Less stores in So. CA, IN and IL only. Kroger Family of Companies' gift cards do not earn fuel points at purchase.</p>\n<p><strong>Please note</strong>: rewards may only be redeemed in store.</p>",
+            "createdDate": "2021-04-20T22:06:23Z",
+            "lastUpdateDate": "2024-06-24T23:06:38Z",
+            "brandRequirements": {
+                "displayInstructions": null,
+                "termsAndConditionsInstructions": null,
+                "disclaimerInstructions": null,
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b866005-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b866005-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b866005-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b866005-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b866005-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b866005-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U913958",
+                    "rewardName": "Kroger eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 500,
+                    "createdDate": "2021-04-20T22:47:20.007Z",
+                    "lastUpdateDate": "2026-04-10T17:28:35.491Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "bypassUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>1. Click on the URL above to print the page or save it to a mobile device.</p>\n<p>2. The cashier will need to manually enter the Card Number and PIN after selecting the payment method. Please note:<strong> </strong>Cashiers can use the EFT Payment or Gift Card Payment option where will need to manually enter the Card Number. Once entered, the cashier will then be prompted to enter PIN on the credit card keypad.<br /><br /><strong>3. Please note:</strong> one (or more) gift card(s) may be applied to the balance owed first and if there is a remaining balance customer will be asked to provide a secondary payment option to pay the remainder.</p>\n<p><strong>Egift (digital) cards</strong> cannot be used for fuel or products at Kroger Family of Companies' Fuel Centers or fuel kiosks. Cannot redeem for Kroger Family of Companies' Pickup, Delivery or Ship purchases. Cannot redeem at Fred Meyer Jewelers and Littman Jewelers stores. <strong>Physical gift cards</strong> can be used at fuel kiosks.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "48e88ff6-4b69-4da5-a1e7-b1c401d73c5c",
+                    "description": "Grocery"
+                }
+            ]
+        },
+        {
+            "brandKey": "B433461",
+            "brandName": "Lowe's",
+            "disclaimer": "<p>*LOWE&#39;S&reg; and the GABLE MANSARD DESIGN are registered trademarks and service marks of LF, LLC. Lowe&rsquo;s&reg; is not affiliated with this reward program.</p>\r\n",
+            "description": "<p>Find quality service, superior products and helpful advice for all your home improvement needs at Lowe&#39;s. Shop for appliances, paint, patio furniture, tools, flooring&nbsp; hardware and more.&nbsp;With 40,000 products in stock, 250,000 items available online at <a href=\"http://Lowes.com\">Lowes.com</a> and more than 500,000 more products available by Special Order, Lowe&rsquo;s exists to help you improve and maintain your biggest asset &ndash; your home.&nbsp; Lowe&rsquo;s &ndash; never stop improving.</p>\r\n",
+            "shortDescription": "<p>Lowe&rsquo;s offers everything from power tools and appliances to lighting and home d&eacute;cor. The Lowe&rsquo;s eGift Card can help start any home project large or small.</p>\r\n",
+            "terms": "<p>This is not a credit/debit card and has no implied warranties. This Gift Card is not redeemable for cash unless required by law and cannot be used to make payments on any charge account. Lowe&rsquo;s&reg; reserves the right to deactivate or reject any Gift Card issued or procured, directly or indirectly, in connection with fraudulent actions, unless prohibited by law. Lost or stolen Gift Cards can only be replaced upon presentation of original sales receipt for any remaining balance. It will be void if altered or defaced. To check your Lowe&rsquo;s&reg; Gift Card balance, visit&nbsp;<a href=\"http://www.lowes.com/cd_Gift+Cards_1377700830319_\">Lowes.com/GiftCards</a>, call 1-800-560-7172 or see the Customer Service Desk in any Lowe&rsquo;s&reg; store. &copy;2019 Lowe&rsquo;s, LOWE&rsquo;S and the Gable Mansard Design are registered trademarks of LF, LLC.</p>\r\n",
+            "createdDate": "2016-07-13T22:22:18Z",
+            "lastUpdateDate": "2024-04-26T22:20:18Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b433461-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b433461-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b433461-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b433461-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b433461-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b433461-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U589797",
+                    "rewardName": "Lowe's E-Gift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 1000,
+                    "createdDate": "2018-05-22T21:40:36.6Z",
+                    "lastUpdateDate": "2026-04-10T17:12:55.638Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p><strong>How to Redeem Online</strong></p>\n<ol>\n<li>After you have completed your shopping proceed to your cart to checkout.</li>\n<li>Input the eGift Card Number and PIN as method of payment at checkout.</li>\n<li>Press Apply.</li>\n</ol>\n<p><strong>How to Redeem in Stores</strong></p>\n<ol>\n<li>Print out this Lowe’s eGift Card.</li>\n<li>Make sure it includes the eGift Card number and PIN.</li>\n<li>Give this print-out to your cashier.</li>\n</ol>\n<p>Your Lowe's® e-Gift Card has no expiration date and no fees, and can be used at any Lowe's® location or online at <a href=\"http://www.lowes.com\">www.lowes.com</a> for merchandise or service that Lowe's® sells. Call 1-800-445-6937 or visit us at <a href=\"http://www.lowes.com\">www.lowes.com</a> to find the Lowe's store nearest you!</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "06472040-8fb1-4767-b8d4-ccfcd467a720",
+                    "description": "For The Home"
+                }
+            ]
+        },
+        {
+            "brandKey": "B300920",
+            "brandName": "Olive Garden®",
+            "disclaimer": "<p>*Darden Restaurants, Inc. is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Olive Garden delights guests with a genuine Italian dining experience, featuring a range of fresh, simple and delicious dishes, including many inspired by our Culinary Institute of Tuscany in Italy, and an award-winning wine list. For locations, visit us at <a href=\"http://www.olivegarden.com\">www.olivegarden.com</a>.</p>\r\n",
+            "shortDescription": "<p>Olive Garden delights guests with a genuine Italian dining experience, featuring a range of fresh, simple and delicious dishes, including many inspired by our Culinary Institute of Tuscany in Italy, and an award-winning wine list. For locations, visit us at <a href=\"http://www.olivegarden.com\">www.olivegarden.com</a>.</p>\r\n",
+            "terms": "<p>Your purchase, use or acceptance of this eGift Card constitutes acceptance of the following terms and conditions. This eGift Card is issued by and represents an obligation solely of Darden&reg; Restaurants SV, Inc. Each time you use it, we&#39;ll deduct that amount from the balance until you&#39;ve used the full balance of the card. (1) Except where required by law, this gift card is not redeemable for cash. (2) We can&#39;t replace the value on this card if it&#39;s lost or stolen. (3) It may be redeemed at any Olive Garden&reg;, LongHorn Steakhouse&reg;, Bahama Breeze&reg;, Seasons 52&reg;, Yard House&reg;, Cheddar&#39;s&reg; or any other Darden-connected restaurant in the U.S, but is only valid in participating locations in the United States; (4) Approval is required to advertise this card; (5) This eGift Card may not be used to purchase alcohol where prohibited by law; (6) eGift Card does not expire; (7) This eGift Card deemed purchase from and issued in the State of Florida; (8) Risk of loss and title to the eGift Card passes to the purchaser upon electronic transmission to the recipient; (9) eGift Card balance may not be transferred to a physical gift card; however, eGift Card may be printed or reprinted for redemption.<br />\r\nFor eGift Card balance, activity and complete terms and conditions (including agreement to arbitrate and waiver of jury trial) visit&nbsp;www.darden.com&nbsp;or call toll-free 877-500-9706. &copy; 2019 Darden&reg; Concepts, Inc. PLEASE TREAT THIS EGIFTCARD LIKE CASH AND SAFEGUARD IT ACCORDINGLY</p>\r\n",
+            "createdDate": "2016-09-27T21:06:38Z",
+            "lastUpdateDate": "2024-04-26T22:38:39Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b402355-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b402355-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b402355-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b402355-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b402355-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b402355-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U009367",
+                    "rewardName": "Olive Garden® eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": true,
+                    "minValue": 5,
+                    "maxValue": 250,
+                    "createdDate": "2016-10-28T00:03:36.067Z",
+                    "lastUpdateDate": "2026-04-10T16:45:00.807Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\n<li class=\"p1\">Click on the Redemption URL provided above.</li>\n<li class=\"p1\">Print or save this eGift Card page.</li>\n<li class=\"p1\">Redeem in restaurant by presenting the eGift Card as your form of payment at the end of your meal.</li>\n</ol>\n<p class=\"p2\"> </p>\n<p class=\"p1\">Redemption Instructions for Server:</p>\n<p class=\"p1\">Manager swipe required for redemption. When redeeming the eGift Card, follow the same POS procedures used to redeem a plastic gift card. Instead of swiping a plastic card, you will need to manually key in the 16-digit eGift Card number into the POS to complete the transaction. If any balance remains on the eGift Card, return the printed page to the Guest and include a copy of their balance receipt.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        },
+        {
+            "brandKey": "B098328",
+            "brandName": "Saltgrass Steak House®",
+            "disclaimer": "<p>Saltgrass Steak House&reg; is not a sponsor of the rewards or promotion or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Texas to the Bone&trade;! We put the sizzle in our char-grilled steaks, serving the finest Certified Angus Beef&reg; with legendary Texas hospitality. The menu recaptures the flavor of the open campfire, recalling the era when millions of longhorn cattle were driven south each winter to graze on the Texas Gulf Coast&#39;s salt grasses. The trail was known for the best beef in Texas. Trail riders headed to the Houston Livestock Show and Rodeo still bring their horses down it &mdash; and along the way, they still pass the original Saltgrass Steak House.<br />\r\n<a href=\"http://www.saltgrass.com\">www.saltgrass.com</a></p>\r\n",
+            "shortDescription": "<p>There&rsquo;s something for everyone at Saltgrass. Whether it is our certified Angus Beef&reg;, fresh fish, poultry, pork or the countless other menu offerings, Saltgrass promises great food and legendary hospitality.</p>\r\n",
+            "terms": "<p>This Card is issued by MOCGC, Corp. and may be used to purchase goods and services at any Landry&rsquo;s, Inc. or affiliated location in the U.S. until the full balance is used.&nbsp; The Card has no cash value; except as required by law, it is not redeemable for cash.&nbsp; It will not be replaced if lost, stolen, altered or damaged. Any resale is strictly prohibited. For balance inquiries, call 1-855-328-5781.&nbsp; For more information:<a href=\"http://www.landrysinc.com\">www.landrysinc.com</a>.</p>\r\n",
+            "createdDate": "2016-07-13T23:01:37Z",
+            "lastUpdateDate": "2024-02-20T18:43:13Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b098328-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b098328-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b098328-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b098328-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b098328-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b098328-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U572674",
+                    "rewardName": "Saltgrass Steak House® eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 25,
+                    "maxValue": 500,
+                    "createdDate": "2016-07-21T16:54:48.987Z",
+                    "lastUpdateDate": "2026-04-10T17:12:00.974Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\r\n\t<li>Click the Redemption URL provided above.</li>\r\n\t<li>The resulting page will display your Card Number. Print this page.</li>\r\n\t<li>Bring the printed copy into any participating Saltgrass Steak House&reg; location and present at time of payment.</li>\r\n</ol>\r\n\r\n<p>Your eGift Card can be spent at any Landry&#39;s, Inc. location. To learn more, please visit <a href=\"http://www.landrysinc.com\">http://www.landrysinc.com</a>.</p>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        },{
+            "brandKey": "B881315",
+            "brandName": "Sonic",
+            "disclaimer": "<p>Sonic is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company's website for additional terms and conditions.</p>\n<p>The SONIC App eGift Card can only be redeemed for online orders placed through the SONIC App. Not redeemable for online orders placed through the SONIC website or directly at SONIC Drive-Ins.</p>",
+            "description": "<p>SONIC®, founded in 1953, is the largest drive-in restaurant brand in the UnitedStates with more than 3,500 restaurants in 46 states. Served by SONIC’s iconicCarhops, the restaurant’s expansive, award-winning menu offers unique breakfast, lunch, dinner, snack and drink options for the whole family. SONICis part of the Inspire Brands family of restaurants. For more information, visit <a href=\"http://www.sonicdrivein.com\">sonicdrivein.com</a> and <a href=\"http://www.inspirebrands.com\">inspirebrands.com</a></p>",
+            "shortDescription": "<p>SONIC®, founded in 1953, is the largest drive-in restaurant brand in the UnitedStates with more than 3,500 restaurants in 46 states. Served by SONIC’s iconicCarhops, the restaurant’s expansive, award-winning menu offers unique breakfast, lunch, dinner, snack and drink options for the whole family. SONICis part of the Inspire Brands family of restaurants. For more information, visit <a href=\"http://www.sonicdrivein.com\">sonicdrivein.com</a> and <a href=\"http://www.inspirebrands.com\">inspirebrands.com</a></p>",
+            "terms": "<p>Your Card never expires and there are no fees. To check Card balance, visit <a href=\"https://www.sonicdrivein.com/gift-cards\">sonicdrivein.com/gift-cards</a>. Purchase, use or acceptance of Card constitutes acceptance of Terms. Card is redeemable up to the balance to make online purchases at participating SONIC® locations in the U.S. eGift and digitized. Cards only redeemable for online orders placed via the SONIC® App. Not redeemable for online orders placed via the website. Card is not redeemable for cash or refundable unless required by law. Not usable to purchase gift cards. Sonic Value Card LLC (“Sonic”) is the Card issuer and sole obligor to Cardowner, and may delegate its issuer obligations to an assignee, without recourse. If delegated, the assignee, and not Sonic, will be sole obligor to Cardowner. Card may not be resold without authorization. It will not be replaced if lost, stolen, damaged or used without authorization.</p>\n<p>Other Terms apply: <a href=\"https://www.sonicdrivein.com/gift-cards\">sonicdrivein.com/gift-cards</a>. TM &amp; ©2021 America’s Drive-In Brand Properties LLC.</p>",
+            "createdDate": "2019-07-31T16:35:36Z",
+            "lastUpdateDate": "2024-06-25T05:38:35Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b881315-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b881315-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b881315-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b881315-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b881315-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b881315-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U311319",
+                    "rewardName": "Sonic eGift",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 100,
+                    "createdDate": "2022-09-13T18:14:35.831Z",
+                    "lastUpdateDate": "2026-04-10T16:59:24.527Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "barcodeNumber",
+                        "cardNumber",
+                        "pin",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p>This card cannot be directly redeemed at a SONIC®Drive-In and must be loaded into the SONIC®App to be used for mobile payment or mobile order ahead.</p>\n<ol>\n<li>From your mobile device, download and open the SONIC®App</li>\n<li>Tap the icon in the lower left corner of the screen to open the navigation bar</li>\n<li>Select “Payment Methods”, “Add new payment method” and “Enter a gift card number”</li>\n<li>Once you enter your 16-digit card number and PIN, you can use your gift card in the app the pay for mobile orders</li>\n</ol>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        
+        },
+        {
+            "brandKey": "B794292",
+            "brandName": "Subway",
+            "disclaimer": "<p>The Subway® Card can be loaded with a dollar value and used to purchase goods and services at participating Subway® restaurants in the U.S. and Canada, and certain online venues. The Card may not be used to purchase other Cards and is not redeemable for cash except where required by law. The prepaid card balance never expires, nor are any fees charged in connection with its use. Check your balance at <a href=\"http://www.mysubwaycard.com\">www.mysubwaycard.com</a> or call 1-877-697-8222. The remaining balance on lost, stolen, or damaged Cards will be replaced only if the Card has been registered and proof of purchase is provided. To register your Card, and for complete terms and conditions, visit <a href=\"http://www.mysubwaycard.com\">www.mysubwaycard.com</a>. Use of this Card constitutes acceptance of those terms and conditions. This SUBWAY® Card can also be used in conjunction with the SUBWAY® rewards program. For more information and applicable terms and conditions, visit <a href=\"http://www.mysubwaycard.com\">www.mysubwaycard.com</a>.</p>\n<p>SUBWAY® is a Registered Trademark of Subway IP Inc. ©2024 Subway IP Inc. (artwork) / Value Pay Services LLC (text).</p>\n<p>This reward is non-refundable. ©2024 Doctor’s Associates Inc. SUBWAY® is a registered trademark of Doctor’s Associates, Inc. (“DAI”). DAI is not a sponsor or co-sponsor of this program. All rights reserved.  DAI is not liable for actual or alleged claims related to this offer.  Use of the SUBWAY® logos or word-marks must be approved prior to use. Terms and conditions of the SUBWAY® Card apply and can be found at <a href=\"http://www.mysubwaycard.com\">www.mysubwaycard.com</a>.</p>",
+            "description": "<p>With a focus on fresh ingredients, affordable prices and an extensive menu of made-to-order sandwiches and salads; Subway&reg; restaurants have become the leading choice for people seeking quick, better for you meals that the whole family can enjoy. Having a Subway&reg; Card means always having a delicious meal right in your pocket. The Subway&reg; Card is redeemable in more than 30,000 convenient locations across the U.S. and Canada.</p>\r\n",
+            "shortDescription": "<p>With a focus on fresh ingredients, affordable prices and an extensive menu of made-to-order sandwiches and salads; Subway&reg; restaurants have become the leading choice for people seeking quick, better for you meals that the whole family can enjoy. Having a Subway&reg; Card means always having a delicious meal right in your pocket. The Subway&reg; Card is redeemable in more than 30,000 convenient locations across the U.S. and Canada.</p>\r\n",
+            "terms": "<p>The Subway® Card can be loaded with a dollar value and used to purchase goods and services at participating Subway® restaurants in the U.S. and Canada, and certain online venues. The Card may not be used to purchase other Cards and is not redeemable for cash except where required by law. The prepaid card balance never expires, nor are any fees charged in connection with its use. Check your balance at <a href=\"http://www.mysubwaycard.com\">www.mysubwaycard.com</a> or call 1-877-697-8222. The remaining balance on lost, stolen, or damaged Cards will be replaced only if the Card has been registered and proof of purchase is provided. To register your Card, and for complete terms and conditions, visit <a href=\"http://www.mysubwaycard.com\">www.mysubwaycard.com</a>. Use of this Card constitutes acceptance of those terms and conditions. This SUBWAY® Card can also be used in conjunction with the SUBWAY® rewards program. For more information and applicable terms and conditions, visit <a href=\"http://www.mysubwaycard.com\">www.mysubwaycard.com</a>.</p>\n<p>SUBWAY® is a Registered Trademark of Subway IP Inc. ©2024 Subway IP Inc. (artwork) / Value Pay Services LLC (text).</p>",
+            "createdDate": "2019-07-31T16:35:48Z",
+            "lastUpdateDate": "2026-04-10T19:12:17Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b794292-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b794292-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b794292-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b794292-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b794292-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b794292-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U835764",
+                    "rewardName": "Subway® eGift Card ",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 250,
+                    "createdDate": "2021-07-29T21:45:38.432Z",
+                    "lastUpdateDate": "2026-04-13T22:41:17.856Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p><strong>Using your Subway&reg; eGift Card is simple!</strong></p>\n<ol>\n<li>Click on the Redemption URL provided above.</li>\n<li>Display QR Code on your phone to pay in store or print out eGift Card and scan.&nbsp;</li>\n<li>Additionally, you can register your Subway&reg; eGift Card and use to pay for remote orders or use in the Subway&reg; App.</li>\n</ol>\n<p><strong>In-Store Mobile Redemption Instructions</strong></p>\n<ol>\n<li><strong>Recipient: </strong>To redeem your eGift Card from a mobile device display the gift card number and associated PIN (if applicable) to the cashier at the time of purchase.</li>\n<li><strong>Cashier: </strong>Hand key the gift card number and associated PIN (if applicable) into the POS.</li>\n</ol>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": "QRCODE",
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        },
+        {
+            "brandKey": "B312999",
+            "brandName": "Texas Roadhouse",
+            "disclaimer": "<p>*Texas Roadhouse&nbsp;is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Based in Louisville, Kentucky, Texas Roadhouse opened its doors in 1993 and has more than 611 locations in 49 states and 10 countries. The family-friendly restaurant is famous for hand-cut steaks, made-from-scratch sides, fresh-baked bread, and a lively atmosphere. In 2018, Texas Roadhouse was named one of America&rsquo;s Best Large Employers by Forbes. Texas Roadhouse was also recognized by Newsweek as one of America&rsquo;s Best Customer Service restaurants in the Casual Dining category in 2019. For more information, visit&nbsp;<a href=\"https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fs.bl-1.com%2Fh%2FGTsVXmw%3Furl%3Dhttp%3A%2F%2Fwww.texasroadhouse.com&amp;data=02%7C01%7CMandy.Morville%40texasroadhouse.com%7C7d2b29f2fd6f42ee03c708d4b8d56bb9%7C79c0f8d9f03344718268c49ae7dfa1b2%7C1%7C0%7C636336674166988273&amp;sdata=3orwKd%2B4Dj%2Fvwbp0Scyo9uNvbuj6wTg3BqEqYnjE%2FP0%3D&amp;reserved=0\" target=\"_blank\">www.texasroadhouse.com</a>.</p>\r\n",
+            "shortDescription": "<p>Based in Louisville, Kentucky, Texas Roadhouse opened its doors in 1993 and has more than 611 locations in 49 states and 10 countries. The family-friendly restaurant is famous for hand-cut steaks, made-from-scratch sides, fresh-baked bread, and a lively atmosphere. In 2018, Texas Roadhouse was named one of America&rsquo;s Best Large Employers by Forbes. Texas Roadhouse was also recognized by Newsweek as one of America&rsquo;s Best Customer Service restaurants in the Casual Dining category in 2019. For more information, visit&nbsp;<a href=\"https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fs.bl-1.com%2Fh%2FGTsVXmw%3Furl%3Dhttp%3A%2F%2Fwww.texasroadhouse.com&amp;data=02%7C01%7CMandy.Morville%40texasroadhouse.com%7C7d2b29f2fd6f42ee03c708d4b8d56bb9%7C79c0f8d9f03344718268c49ae7dfa1b2%7C1%7C0%7C636336674166988273&amp;sdata=3orwKd%2B4Dj%2Fvwbp0Scyo9uNvbuj6wTg3BqEqYnjE%2FP0%3D&amp;reserved=0\" target=\"_blank\">www.texasroadhouse.com</a>.</p>\r\n",
+            "terms": "<p><strong>For Balance Inquiries: Please call 1-800-964-0111.</strong></p>\n<p class=\"p1\">Redeemable only at U.S. Texas Roadhouse restaurants. No fees. No expiration date. Not a credit or debit card. Remaining value of damaged, lost, or stolen cards only replaced with proof of purchase. Not redeemable for cash, except as required by law. For balance inquiries, complete terms or questions, visit <a href=\"http://www.texasroadhouse.com\"><span class=\"s1\">www.texasroadhouse.com</span></a>. Armadillo, Inc. or its successor or designee is the card issuer and sole obligor to the card holder. Another party may be substituted as the card issuer and sole obligor without card holder’s consent. Purchase, use, or acceptance of card constitutes acceptance of these terms.  </p>\n<p class=\"p3\"><strong>For questions regarding Texas Roadhouse please contact 1-800-TEX-ROAD.</strong></p>",
+            "createdDate": "2017-07-07T21:06:42Z",
+            "lastUpdateDate": "2024-04-29T22:11:37Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b312999-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b312999-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b312999-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b312999-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b312999-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b312999-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U906484",
+                    "rewardName": "Texas Roadhouse eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": true,
+                    "minValue": 10,
+                    "maxValue": 100,
+                    "createdDate": "2017-07-07T21:33:36.017Z",
+                    "lastUpdateDate": "2026-04-10T17:28:13.844Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p><strong>To Redeem:</strong></p>\r\n\r\n<ol>\r\n\t<li>Click the Redemption URL provided above.</li>\r\n\t<li>Print the resulting page.</li>\r\n\t<li>Present your server or cashier with your eGift Card (or printed copy) from your smartphone or tablet.</li>\r\n</ol>\r\n\r\n<p><strong>Electronic Gift Card Redeeming Instructions for Server:</strong></p>\r\n\r\n<ul>\r\n\t<li>Bring up guest check.</li>\r\n\t<li>Hit Close button in bottom left.</li>\r\n\t<li>When you get to the payment screen, select New GC.</li>\r\n\t<li>This will bring up a screen that has the amount of the check listed in the Amount field. Hit Ok and that goes to the Card Number field.</li>\r\n\t<li>Now is the time to scan the barcode or manually enter in the 19 digit gift card number.</li>\r\n\t<li>Enter in the 4 digit pin. This will take from the card the amount listed on the check.</li>\r\n\t<li>If amount on the card is greater than the total check, there will be $ left and that should print on the receipt, otherwise the card funds are exhausted.</li>\r\n</ul>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        },
+        {
+            "brandKey": "B919357",
+            "brandName": "The Container Store",
+            "disclaimer": "<p>*The Container Store is not a sponsor of the rewards or otherwise affiliated with this reward program. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company's website for additional terms and conditions.</p>\r\n",
+            "description": "<p>The Container Store, the original storage and organization store, has thousands of products to help you get organized. From the closet and bathroom to the kitchen and the garage – anywhere you work or play – you’ll find solutions to help you save space and, ultimately, valuable time. And who couldn’t use a little more of that? Free design services with elfa, the premier shelving and drawer organization system. Locations nationwide. 1-800-733-3532.</p>\r\n",
+            "shortDescription": "<p>The Container Store, the original storage and organization store, has thousands of products to help you get organized. From the closet and bathroom to the kitchen and the garage – anywhere you work or play – you’ll find solutions to help you save space and, ultimately, valuable time. And who couldn’t use a little more of that? Free design services with elfa, the premier shelving and drawer organization system. Locations nationwide. 1-800-733-3532.</p>\r\n",
+            "terms": "<p>Use of the Gift Card constitutes acceptance of the following terms and conditions: The Gift Card is not redeemable for cash (except where required by law). The Gift Card has no value until purchased. The Gift Card may not be sold or bartered. We will not replace the remaining value on a lost, stolen, or damaged card unless presented with the original receipt. For balance information inquire at any store location, <a href=\"http://containerstore.com\">containerstore.com</a> or call 1-877-877-0032. This card will be honored until fully redeemed.</p>\r\n",
+            "createdDate": "2018-12-12T00:19:00Z",
+            "lastUpdateDate": "2024-06-25T06:11:35Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b919357-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b919357-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b919357-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b919357-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b919357-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b919357-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U939746",
+                    "rewardName": "The Container Store Gift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 100,
+                    "createdDate": "2018-12-12T19:34:57.499Z",
+                    "lastUpdateDate": "2026-04-10T17:29:44.746Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p><strong>Redeem Online:</strong></p>\r\n\r\n<ol>\r\n\t<li>Shop online at <a href=\"http://containerstore.com\">containerstore.com</a>.&nbsp;</li>\r\n\t<li>At checkout, enter the gift card number and PIN provided on landing page.</li>\r\n</ol>\r\n\r\n<p><strong>Redeem via Call Center:</strong></p>\r\n\r\n<ol>\r\n\t<li>Call 1-888-CONTAIN (266-8246).</li>\r\n\t<li>Provide the gift card number and PIN provided on landing page.</li>\r\n</ol>\r\n\r\n<p><strong>Redeem In-Store:</strong></p>\r\n\r\n<ol>\r\n\t<li>Print the landing page or save on mobile device and take it in to any of The Container Store locations&nbsp;to redeem for merchandise.</li>\r\n</ol>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "06472040-8fb1-4767-b8d4-ccfcd467a720",
+                    "description": "For The Home"
+                }
+            ]
+        },{
+            "brandKey": "B650822",
+            "brandName": "Topgolf",
+            "disclaimer": "<p>*Topgolf&nbsp;is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Topgolf offers an upscale and playful experience, featuring an impressive food and beverage menu, music, games, complimentary club rentals and HDTVs. Players hit golf balls containing computer microchips that track each shot&rsquo;s accuracy and distance while awarding points for hitting targets on the outfield. You can challenge your friends and family to several different point-scoring golf games that anyone - from beginner to the golf pro - can play. Plus, with climate-controlled hitting bays, Topgolf can be enjoyed in all seasons.</p>\r\n",
+            "shortDescription": "<p>Topgolf offers an upscale and playful experience, featuring an impressive food and beverage menu, music, games, complimentary club rentals and HDTVs. Players hit golf balls containing computer microchips that track each shot&rsquo;s accuracy and distance while awarding points for hitting targets on the outfield. You can challenge your friends and family to several different point-scoring golf games that anyone - from beginner to the golf pro - can play. Plus, with climate-controlled hitting bays, Topgolf can be enjoyed in all seasons.</p>\r\n",
+            "terms": "<p>This card is issued by and represents an obligation of Topgolf Pro, LLC. Purchase or use of this card constitutes acceptance of the following terms. Card cannot be redeemed until activated. Purchases made with the card will be deducted from the balance until it reaches $0.00. This card is redeemable at any Topgolf location in the United States and online at participating Topgolf sites. It cannot be redeemed for cash except where required by law. Treat this card as cash, as it will not be replaced if lost or stolen, except where required by law. This card has no expiration date and incurs no dormancy fees. Topgolf reserves the right to amend these terms from time to time, as provided at <a href=\"http://topgolf.com/\">topgolf.com</a>. For balance, visit <a href=\"http://www.topgolf.com/cardbalance\">topgolf.com/cardbalance</a>.</p>\n<p>Gift Cards may be redeemed online at checkout when reserving 1 bay for U.S. Topgolf locations (2 bay availability at select venues).</p>\n<p> </p>\n<p><strong>Please note:</strong> Gift cards cannot be used toward payment for Platinum Memberships and merchandise on shop.topgolf.com, as well as toward deposits for events of 2+ bays (can be used towards remaining balance day-of).</p>",
+            "createdDate": "2017-07-17T17:28:31Z",
+            "lastUpdateDate": "2024-02-20T18:43:19Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b650822-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b650822-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b650822-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b650822-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b650822-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b650822-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U364643",
+                    "rewardName": "Topgolf eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": true,
+                    "minValue": 20,
+                    "maxValue": 250,
+                    "createdDate": "2017-07-17T17:39:03.587Z",
+                    "lastUpdateDate": "2026-04-10T17:02:03.737Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\n<li>Click the Redemption URL provided above.</li>\n<li>Print this page.</li>\n<li>Bring it into any US location and present at the time of payment.</li>\n</ol>\n<p>Gift Cards may be redeemed online at checkout when reserving 1 bay for U.S. Topgolf locations (2 bay availability at select venues).</p>\n<p>Visit <a href=\"http://topgolf.com/\">Topgolf.com</a> to find the nearest location</p>\n<p> </p>\n<p><strong>Please note:</strong> Gift cards cannot be used toward payment for Platinum Memberships and merchandise on shop.topgolf.com, as well as toward deposits for events of 2+ bays (can be used towards remaining balance day-of).</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "67e5e327-4c96-4dd4-a60e-3ca6c2205da4",
+                    "description": "Entertainment"
+                }
+            ]
+        },{
+            "brandKey": "B359533",
+            "brandName": "Uber Eats",
+            "disclaimer": "<p>*Uber&nbsp;is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Gift Uber Eats to the people you care about, or add value to your Uber Eats account.<br />\r\n<br />\r\nThe Uber Eats app is the easy and reliable way to get the food you want, delivered fast and fresh. Tap the app and pick from hundreds of full menus from local restaurants and have your order delivered to you at Uber speed. Plus, payment is automatic&mdash;no cash, no card, no hassle.</p>\r\n",
+            "shortDescription": "<p>Get anything</p>",
+            "terms": "<p style=\"font-weight: 400;\">By using this gift card, you accept the following terms and conditions: This card is redeemable via the Uber®️ or Uber Eats app within the U.S. in cities where Uber or Uber Eats is available. Funds do not expire. The card is non-reloadable and, except where required by law, cannot be redeemed for cash, refunded, or returned. You may be required to add a secondary payment method to use this gift card with the Uber or Uber Eats app. The card is not redeemable outside the U.S. Issuer is not responsible for lost or stolen cards, or unauthorized use. This card is issued by The Bancorp Bank, N.A. For full terms and conditions and customer service, visit <a href=\"https://urldefense.com/v3/__http://uber.com/legal/gift.__;!!P1zPrpvPUg!pw1p512ttoNeabdd6T14NcDAMgpdMEWqYAvrJBjHulnJk38Zdl8G5PS_x_h-xr4IT2LdCozVcIYxCDHix42h1OFfhxXU$\" data-saferedirecturl=\"https://www.google.com/url?q=https://urldefense.com/v3/__http://uber.com/legal/gift.__;!!P1zPrpvPUg!pw1p512ttoNeabdd6T14NcDAMgpdMEWqYAvrJBjHulnJk38Zdl8G5PS_x_h-xr4IT2LdCozVcIYxCDHix42h1OFfhxXU$&amp;source=gmail&amp;ust=1706818564514000&amp;usg=AOvVaw3sY3RkCL7bP7m4DhJHuSwz\">uber.com/legal/gift.</a></p>\n<p style=\"font-weight: 400;\"> </p>",
+            "createdDate": "2020-04-22T15:52:03Z",
+            "lastUpdateDate": "2024-06-24T22:19:49Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "<p>Stackable: Multiple rewards can be applied to a single order. Single use only: cards can only be redeemed once.</p>\r\n",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b359533-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b359533-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b359533-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b359533-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b359533-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b359533-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U517295",
+                    "rewardName": "Uber Eats Gift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 5,
+                    "maxValue": 500,
+                    "createdDate": "2020-04-22T15:55:10.279Z",
+                    "lastUpdateDate": "2026-04-10T17:09:24.143Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "pin",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\n<li>Open the Account Menu and tap “Wallet”</li>\n<li>Tap on the \"+ Add funds\" button on the Uber Cash card</li>\n<li>Tap on the \"Redeem\" button next to Gift Cards</li>\n<li>Enter Gift Code and tap \"Add\"</li>\n</ol>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "07a20c2b-2ca7-4aa4-a99f-e7c6c6f87cd2",
+                    "description": "Dining"
+                }
+            ]
+        },
+        {
+            "brandKey": "B746076",
+            "brandName": "Under Armour®",
+            "disclaimer": "<p>*Under Armour&reg;&nbsp;is not a sponsor of the rewards or otherwise affiliated with this company. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Under Armour&reg; is one of the world&rsquo;s most technical performance apparel, footwear, and accessories brands. Founded in 1996 by former University of Maryland football player Kevin Plank, Under Armour&reg; is the originator of performance apparel&mdash;gear engineered to keep athletes cool, dry, and light as they power through a game, practice, or workout. From their beginning to today, Under Armour&#39;s mission has remained the same: make all athletes better through passion, design, and the relentless pursuit of innovation.</p>\r\n",
+            "shortDescription": "<p>Under Armour&reg; is one of the world&rsquo;s most technical performance apparel, footwear, and accessories brands. Our mission is to make all athletes better through passion, design, and the relentless pursuit of innovation.</p>\r\n",
+            "terms": "<p>Protect and treat your eGift Card as you would cash. Your eGift Card is redeemable for merchandise purchases at any Under Armour&reg; store location in the U.S., online at&nbsp;<a href=\"http://www.underarmour.com/\">www.underarmour.com</a>, or by phone at 1.888.7ARMOUR for catalog orders. To use your eGift Card online or by phone, provide the eGift Card number and the PIN. To use your eGift Card at an Under Armour store, print this email and present to the cashier during checkout. This eGift Card may not be redeemed for cash, unless required by law, and may not be used to purchase additional Under Armour Gift Cards. This eGift Card may not be redeemed at Under Armour resellers or at Under Armour store locations outside the U.S. If this eGift Card is lost, stolen or used without authorization, it cannot be replaced. This eGift Card does not expire, nor does Under Armour charge fees for any reason. For eGift Card balance, please call 1.800.269.5986 or go to&nbsp;<a href=\"http://www.underarmour.com/\">www.underarmour.com</a>. For all other inquiries, please call Customer Service at 1.888.7ARMOUR or visit any Under Armour store location. For the store nearest you, please visit&nbsp;<a href=\"http://www.underarmour.com/\">www.underarmour.com</a>.</p>\r\n",
+            "createdDate": "2017-02-02T22:35:43Z",
+            "lastUpdateDate": "2024-02-20T18:43:23Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b330529-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b330529-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b330529-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b330529-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b330529-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b330529-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U396551",
+                    "rewardName": "Under Armour® eGift Card",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": true,
+                    "minValue": 15,
+                    "maxValue": 500,
+                    "createdDate": "2017-02-02T22:51:14.68Z",
+                    "lastUpdateDate": "2026-04-10T17:03:30.634Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "redemptionUrl",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<p><strong>Redeem In-Store:</strong></p>\r\n\r\n<ol>\r\n\t<li>Click on the Redemption URL provided above.</li>\r\n\t<li>Print the eGift Card page.</li>\r\n\t<li>Bring your printed eGift Card into any Under Armour&reg; store location in the U.S.</li>\r\n</ol>\r\n\r\n<p><strong>Redeem Online:</strong></p>\r\n\r\n<ol>\r\n\t<li>Click on the Redemption URL provided above.</li>\r\n\t<li>Print or save the eGift Card page.</li>\r\n\t<li>Shop&nbsp;online at&nbsp;<a href=\"http://www.underarmour.com/\">www.underarmour.com</a>, or by phone at 1.888.7ARMOUR for catalog orders.</li>\r\n\t<li>To use your eGift Card online or by phone, provide the eGift Card Number and the PIN provided on the eGift Card page.</li>\r\n</ol>\r\n",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "b663267f-8b0c-4caa-acbc-40c87983d31e",
+                    "description": "Fashion"
+                }
+            ]
+        },
+        {
+            "brandKey": "B361069",
+            "brandName": "Virtual Promotional Prepaid Mastercard® USD",
+            "disclaimer": "<div lang=\"en-US\"><p>Virtual card is issued by Pathward®, N.A., Member FDIC, pursuant to license by Mastercard International Incorporated. Mastercard and the circles design are registered trademarks of Mastercard International Incorporated. No cash access or recurring payments. Can be used where Debit Mastercard is accepted online, for phone/mail orders, or in stores that accept mobile wallet. Valid for up to 6 months; unused funds will forfeit after the valid thru date. Terms and conditions apply.</p></div>",
+            "description": "<div lang=\"en-US\"><p>Your Virtual Promotional Prepaid Mastercard can be used online at U.S. merchants where Debit Mastercard is accepted. Or if you prefer, add the card to your mobile wallet and shop in-stores that accept mobile wallet. As an added bonus when you spend your card at the participating merchants listed on <a href=\"http://MyPrepaidCenter.com\">myprepaidcenter.com</a>, you get 5% back for additional spending! Card is valid for 6 months, unused funds will forfeit after valid thru date. Terms and conditions apply.</p></div>",
+            "shortDescription": "<div lang=\"en-US\"><p>Your Virtual Promotional Prepaid Mastercard can be used online at U.S. merchants where Debit Mastercard is accepted. Or if you prefer, add the card to your mobile wallet and shop in-stores that accept mobile wallet. As an added bonus when you spend your card at the participating merchants listed on <a href=\"http://myprepaidcenter.com\">myprepaidcenter.com</a>, you get 5% back for additional spending! Card is valid for 6 months, unused funds will forfeit after valid thru date. Terms and conditions apply.</p></div>",
+            "terms": "<div lang=\"en-US\"><p>For Terms and Conditions, please visit: <a href=\"https://bes-fenton-production-yourcardhub.s3-us-west-2.amazonaws.com/Cardholder_Agreement/1726173957923_CHA_MC_Promo_Sweep_NoATM_USOnly_NoReg_Virtual_1000528.pdf\">https://bes-fenton-production-yourcardhub.s3-us-west-2.amazonaws.com/Cardholder_Agreement/1726173957923_CHA_MC_Promo_Sweep_NoATM_USOnly_NoReg_Virtual_1000528.pdf</a></p></div>",
+            "createdDate": "2025-10-30T23:12:54Z",
+            "lastUpdateDate": "2026-08-25T13:28:42Z",
+            "brandRequirements": {
+                "displayInstructions": null,
+                "termsAndConditionsInstructions": null,
+                "disclaimerInstructions": null,
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b361069-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b361069-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b361069-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b361069-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b361069-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b361069-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U523031",
+                    "rewardName": "Virtual Promotional Prepaid Mastercard®      ",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "cash equivalent",
+                    "isExpirable": true,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 0.01,
+                    "maxValue": 1000,
+                    "createdDate": "2025-10-30T23:15:10.173Z",
+                    "lastUpdateDate": "2026-04-10T17:09:39.506Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "customUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\n</ol>\n\n<ol><strong>Please follow these steps to claim your reward:</strong></ol>\n\n<ol>1 - Click on \"Redeem Virtual Card\" above </ol>\n\n<ol>2 - Follow the onscreen instructions. To avoid being sent to fraudulent website, do not search online for the site.\n</ol>\n\n<p><strong>NOTE: </strong>Card is valid for 6 months, unused funds will forfeit after valid thru date.&nbsp;Terms and conditions apply. Visit <a href=\"http://www.MyPrepaidCenter.com\" rel=\"noopener noreferrer\" target=\"_blank\">MyPrepaidCenter.com</a> for card usage details. Recipient can request a plastic card once they have completed the card registration and activation at <a href=\"http://www.MyPrepaidCenter.com\" rel=\"noopener noreferrer\" target=\"_blank\">MyPrepaidCenter.com</a>.&nbsp;Requesting a plastic card will reduce the card’s value by $3.00 and can take 7-14 business days to arrive.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": []
+        },
+        {
+            "brandKey": "B737908",
+            "brandName": "Wayfair.com",
+            "disclaimer": "<p>*Wayfair is not a sponsor of the rewards or otherwise affiliated with this reward program. The logos and other identifying marks attached are trademarks of and owned by each represented company and/or its affiliates. Please visit each company&#39;s website for additional terms and conditions.</p>\r\n",
+            "description": "<p>Wayfair Gift Cards are the perfect way to let someone know you care without all the hassle of finding the perfect item.&nbsp;With one of the world&#39;s largest online selections of furniture, home furnishings, d&eacute;cor and goods, including more than ten million products from over 10,000 suppliers, Wayfair helps people find the perfect product at the right price. Our extensive selection and superior customer service coupled with the convenience of online shopping, make it easier than ever before to find exactly what you want for your home at a price you can afford.</p>\r\n",
+            "shortDescription": "<p>Wayfair Gift Cards are the perfect way to let someone know you care without all the hassle of finding the perfect item.&nbsp;With one of the world's largest online selections of furniture, home furnishings, d&eacute;cor and goods, including more than ten million products from over 10,000 suppliers, Wayfair helps people find the perfect product at the right price. Our extensive selection and superior customer service coupled with the convenience of online shopping, make it easier than ever before to find exactly what you want for your home at a price you can afford.</p>",
+            "terms": "<p>Gift cards do not expire. Can only be redeemed at a Wayfair website (<a href=\"http://wayfair.com\">wayfair.com</a>, <a href=\"http://jossandmain.com\">jossandmain.com</a>, <a href=\"http://birchlane.com\">birchlane.com</a>, <a href=\"http://allmodern.com\">allmodern.com</a>, and <a href=\"http://perigold.com\">perigold.com</a>). Only valid in the U.S. Cannot be used to purchase additional gift cards. Not redeemable for cash and cannot be returned for a cash refund, except to the extent required by law. Wayfair is not responsible for and will not replace lost or stolen gift cards. For complete Terms &amp; Conditions, see <a href=\"http://www.wayfair.com/giftcardterms\">www.wayfair.com/giftcardterms</a>.</p>\r\n",
+            "createdDate": "2017-05-09T17:46:45Z",
+            "lastUpdateDate": "2024-06-24T22:26:58Z",
+            "brandRequirements": {
+                "displayInstructions": "",
+                "termsAndConditionsInstructions": "",
+                "disclaimerInstructions": "",
+                "alwaysShowDisclaimer": false
+            },
+            "imageUrls": {
+                "80w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b737908-80w-326ppi.png",
+                "130w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b737908-130w-326ppi.png",
+                "200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b737908-200w-326ppi.png",
+                "278w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b737908-278w-326ppi.png",
+                "300w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b737908-300w-326ppi.png",
+                "1200w-326ppi": "https://dwwvg90koz96l.cloudfront.net/images/brands/b737908-1200w-326ppi.png"
+            },
+            "status": "active",
+            "items": [
+                {
+                    "utid": "U335404",
+                    "rewardName": "Wayfair.com eGift Card  ",
+                    "currencyCode": "USD",
+                    "status": "active",
+                    "valueType": "VARIABLE_VALUE",
+                    "rewardType": "gift card",
+                    "isExpirable": false,
+                    "quantityConstraints": {
+                        "minQuantity": 1,
+                        "maxQuantity": 5000
+                    },
+                    "isWholeAmountValueRequired": false,
+                    "minValue": 10,
+                    "maxValue": 500,
+                    "createdDate": "2023-05-16T01:26:29.557Z",
+                    "lastUpdateDate": "2026-04-10T17:00:33.248Z",
+                    "countries": [
+                        "US"
+                    ],
+                    "credentialTypes": [
+                        "cardNumber",
+                        "rewardSecurityCode",
+                        "rewardSecurityUrl"
+                    ],
+                    "redemptionInstructions": "<ol>\n<li>Visit <a href=\"http://wayfair.com/redeem\">wayfair.com/redeem</a>.</li>\n<li>Enter the gift card code and click “Redeem”.</li>\n<li>Start shopping for your next favorite find.</li>\n</ol>\n<p>Your reward is valid for use at <a href=\"http://wayfair.com/\">wayfair.com</a>, <a href=\"http://jossandmain.com/\">jossandmain.com</a>, <a href=\"http://birchlane.com/\">birchlane.com</a>, <a href=\"http://allmodern.com/\">allmodern.com</a>, and <a href=\"http://perigold.com/\">perigold.com</a>.</p>",
+                    "fulfillmentType": "DIGITAL",
+                    "attributes": [
+                        "PHONE",
+                        "EMBEDDED",
+                        "WHATSAPP",
+                        "EMAIL",
+                        "NONE"
+                    ]
+                }
+            ],
+            "barcodeType": null,
+            "categories": [
+                {
+                    "identifier": "e1a13abc-be00-4ff3-bb19-36d68b57cda0",
+                    "description": "Online & Retail"
+                }
+            ]
+}
+ 
+    ]
+}

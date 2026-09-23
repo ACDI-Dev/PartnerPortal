@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ catalog_name }} - ACDI Partner Perks{% endblock %}
+
+{% block content %}
+<!-- Title Section -->
+<section class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+            <h2 class="text-2xl font-bold text-gray-900 font-sans">Available Reward Options</h2>
+        </div>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700 border border-gray-200">
+            {{ catalog_name }}
+        </span>
+    </div>
+
+    <!-- Search & Filter Control -->
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="relative w-full md:w-96">
+            <input type="text" id="cardSearch" placeholder="Search brands or categories..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:border-acdi-green focus:ring-acdi-green outline-none bg-gray-50">
+            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+        <div class="text-sm font-medium text-gray-500">
+            Showing <span id="visibleCount" class="font-bold text-gray-900">{{ brands|length }}</span> options
+        </div>
+    </div>
+</section>
+
+<!-- Card Options Grid -->
+<section class="mb-12">
+    {% if brands %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="brandGrid">
+        {% for brand in brands %}
+        {% set img_url = brand.get('imageUrls', {}).get('130w-326ppi', '') %}
+        {% set categories = brand.get('categories', []) %}
+        {% set cat_name = categories[0].get('description', '') if categories else '' %}
+        
+        <div class="brand-card bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-acdi-green transition-all duration-200 overflow-hidden flex flex-col"
+             data-name="{{ brand.get('brandName', '')|lower }}"
+             data-category="{{ cat_name|lower }}">
+            
+<!-- Brand Logo Header -->
+<div class="p-6 bg-gray-50 border-b border-gray-100 flex items-center justify-center min-h-[160px]">
+    {% if img_url %}
+    <img src="{{ img_url }}" alt="{{ brand.get('brandName') }}" class="max-h-28 w-auto object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-105" loading="lazy">
+    {% else %}
+    <span class="text-base font-bold text-gray-400">{{ brand.get('brandName') }}</span>
+    {% endif %}
+</div>
+
+            <!-- Card Content Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                    <!-- Category Pill -->
+                    {% if cat_name %}
+                    <span class="inline-block px-2 py-0.5 text-[10px] font-bold text-acdi-green bg-green-50 border border-green-100 rounded-full mb-2 uppercase tracking-wide">
+                        {{ cat_name }}
+                    </span>
+                    {% endif %}
+                    
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight">{{ brand.get('brandName') }}</h3>
+                    
+                    <!-- Short Description -->
+                    <div class="text-xs text-gray-500 leading-relaxed line-clamp-3 mb-4">
+                        {{ brand.get('shortDescription', '') | safe }}
+                    </div>
+                </div>
+
+                <!-- Values / Denominations Footer -->
+                <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
+                    <span class="text-gray-400 font-medium">Values</span>
+                    <span class="font-bold text-gray-700">
+                        {% set items = brand.get('items', []) %}
+                        {% if items %}
+                            {% set item = items[0] %}
+                            {% if item.get('valueType') == 'VARIABLE_VALUE' %}
+                                ${{ "%.0f"|format(item.get('minValue', 0)) }} - ${{ "%.0f"|format(item.get('maxValue', 0)) }}
+                            {% elif item.get('faceValue') %}
+                                ${{ "%.0f"|format(item.get('faceValue', 0)) }}
+                            {% else %}
+                                Digital Gift
+                            {% endif %}
+                        {% else %}
+                            Available
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- No Results Search Fallback -->
+    <div id="noResults" class="hidden text-center py-16 bg-white rounded-xl border border-gray-200 p-8">
+        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <h4 class="text-base font-bold text-gray-700 mb-1">No reward options found</h4>
+        <p class="text-sm text-gray-500">Try searching for a different brand name or category.</p>
+    </div>
+
+    {% else %}
+    <div class="text-center py-16 bg-white rounded-xl border border-gray-200 p-8">
+        <p class="text-gray-500">No cards currently available in the catalog configuration.</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Client-side Instant Filter Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('cardSearch');
+    const cards = document.querySelectorAll('.brand-card');
+    const visibleCount = document.getElementById('visibleCount');
+    const noResults = document.getElementById('noResults');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            let visible = 0;
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name') || '';
+                const category = card.getAttribute('data-category') || '';
+                
+                if (name.includes(query) || category.includes(query)) {
+                    card.style.display = 'flex';
+                    visible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount) visibleCount.textContent = visible;
+            
+            if (noResults) {
+                if (visible === 0) {
+                    noResults.classList.remove('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

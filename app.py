@@ -97,7 +97,14 @@ def get_cached_claims(api_email):
     response.raise_for_status()
     return response.json()
 
-
+@cache.memoize(timeout=300) # Caches results per email for 4 hours
+def get_cached_rewards(api_email):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/pointslookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
 # --- AUTH ROUTES ---
 
 @app.route('/login')
@@ -273,7 +280,42 @@ def ace_portal(user):
 
 
 # --- PERKS ROUTES ---
+# --- PERKS REWARD OPTIONS ROUTE ---
 
+@app.route('/perks/options')
+@login_required
+def perks_options(user):
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Partner Perks' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+
+    cards_path = os.path.join(app.root_path, 'cards.json')
+    brands = []
+    catalog_name = "Reward Link Options"
+
+    if os.path.exists(cards_path):
+        try:
+            with open(cards_path, 'r', encoding='utf-8') as f:
+                cards_data = json.load(f)
+                catalog_name = cards_data.get('catalogName', catalog_name)
+                brands = cards_data.get('brands', [])
+        except Exception as e:
+            print(f"Error reading cards.json: {e}")
+
+    return render_template(
+        'perks/options.html',
+        catalog_name=catalog_name,
+        brands=brands,
+        first_name=session.get('first_name', user.get('first_name', 'Partner')),
+        last_name=session.get('last_name', user.get('last_name', '')),
+        user=user.get('email'),
+        email=user.get('email'),
+        reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
+        tier=session.get('tier', user.get('tier', 'Standard')),
+        authorized_apps=authorized_apps,
+        permissions=session.get('permissions', user.get('permissions', []))
+    )
+    
 @app.route('/perks/home')
 @login_required
 def perks_home(user):
@@ -348,6 +390,57 @@ def perks_contact(user):
             authorized_apps=user.get('authorized_apps'),
             permissions=session.get('permissions', user.get('permissions', [])))
 
+@app.route('/perks/rewards')
+@login_required
+def perks_rewards(user):
+    authorized_apps = user.get('authorized_apps', [])
+    if 'Partner Perks' not in authorized_apps:
+        return redirect(url_for('dashboard'))
+        
+    user_email = user.get('email') 
+    
+    # Test logic: override the email for the API call if it's an internal ACDI address
+    api_email = user_email
+    if user_email and '@acd-inc.com' in user_email.lower():
+        api_email = 'eknight@tomorrowsoffice.com'
+    
+    try:
+        # Check if the user clicked "Force Refresh"
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_cached_rewards, api_email)
+
+        # Fetch from cache (or API if we just cleared the cache)
+        data = get_cached_rewards(api_email)
+        
+        # Safely parse stringified details from Zoho
+        points = 0
+        rewards_user = ""
+        
+        if data.get("code") == "success" and "details" in data and "output" in data["details"]:
+            raw_output = data["details"]["output"]
+            parsed_data = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
+            
+            points = parsed_data.get("Points", 0)
+            rewards_user = parsed_data.get("UserName", "")
+            
+        return render_template(
+            'perks/rewards.html', 
+            points=points,
+            rewards_user=rewards_user,
+            first_name=session.get('first_name', user.get('first_name', 'Partner')),
+            last_name=session.get('last_name', user.get('last_name', '')),
+            user=user_email,
+            email=user_email,
+            reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
+            tier=session.get('tier', user.get('tier', 'Standard')),
+            authorized_apps=authorized_apps,
+            permissions=session.get('permissions', user.get('permissions', []))
+        )
+            
+    except requests.RequestException as e:
+        return f"Error fetching rewards data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing the rewards data from the API.", 500
 
 @app.route('/perks/claim', methods=['GET', 'POST'])
 @login_required

@@ -24,6 +24,12 @@
        class="px-4 py-2 rounded-lg text-sm font-bold transition-colors whitespace-nowrap {% if request.endpoint == 'perks_claims' %}bg-green-50 text-acdi-green{% else %}text-gray-600 hover:bg-green-50 hover:text-acdi-green{% endif %}">
        Claims Roster
     </a>
+
+    <!-- NEW: Rewards Tab -->
+    <a href="{{ url_for('perks_rewards') }}" 
+       class="px-4 py-2 rounded-lg text-sm font-bold transition-colors whitespace-nowrap {% if request.endpoint == 'perks_rewards' %}bg-green-50 text-acdi-green{% else %}text-gray-600 hover:bg-green-50 hover:text-acdi-green{% endif %}">
+       Rewards
+    </a>
     
     <a href="{{ url_for('perks_contact') }}" 
        class="px-4 py-2 rounded-lg text-sm font-bold transition-colors whitespace-nowrap {% if request.endpoint == 'perks_contact' %}bg-green-50 text-acdi-green{% else %}text-gray-600 hover:bg-green-50 hover:text-acdi-green{% endif %}">
@@ -48,14 +54,12 @@
         
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
-                // Ensure we only show the loader if it's a standard left-click (not opening in a new tab)
                 if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
                     overlay.classList.remove('hidden');
                 }
             });
         });
         
-        // Safeguard: Hide overlay if the user clicks the browser's "Back" button to return to this page
         window.addEventListener('pageshow', function(e) {
             if (e.persisted && overlay) {
                 overlay.classList.add('hidden');
