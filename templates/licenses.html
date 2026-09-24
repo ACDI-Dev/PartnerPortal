@@ -43,13 +43,13 @@
             <div class="flex divide-x divide-gray-200 flex-1">
                 <!-- Active Box -->
                 <div class="p-5 flex-1 hover:bg-gray-50 transition-colors">
-                    <span class="text-xs font-semibold text-gray-400 uppercase block mb-1">Active</span>
+                    <span class="text-xs font-semibold text-acdi-green uppercase block mb-1">Active</span>
                     <h3 class="text-3xl font-bold text-gray-900">{{ prod.get('Active Support', 0) }}</h3>
                 </div>
-                <!-- Expired Box (Red Highlighted) -->
-                <div class="p-5 flex-1 bg-red-50 hover:bg-red-100 transition-colors border-l-4 border-l-red-500">
+                <!-- Expired Box (Subtle Gray Background) -->
+                <div class="p-5 flex-1 bg-gray-50 hover:bg-gray-100 transition-colors border-l border-gray-200">
                     <span class="text-xs font-semibold text-red-500 uppercase block mb-1">Expired</span>
-                    <h3 class="text-3xl font-bold text-red-700">{{ prod.get('Expired Support', 0) }}</h3>
+                    <h3 class="text-3xl font-bold text-gray-900">{{ prod.get('Expired Support', 0) }}</h3>
                 </div>
             </div>
         </div>

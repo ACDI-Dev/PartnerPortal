@@ -204,11 +204,20 @@
         const overlay = document.getElementById('licenseLoadingOverlay');
         
         if (licenseLink && overlay) {
-            licenseLink.addEventListener('click', function() {
-                // Show the overlay when clicked
-                overlay.classList.remove('hidden');
+            licenseLink.addEventListener('click', function(e) {
+                // Show the overlay when clicked, unless they open it in a new tab
+                if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                    overlay.classList.remove('hidden');
+                }
             });
         }
+        
+        // Safeguard: Hide overlay if the user clicks the browser's "Back" button
+        window.addEventListener('pageshow', function(e) {
+            if (overlay && !overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
+            }
+        });
     });
 </script>
 
