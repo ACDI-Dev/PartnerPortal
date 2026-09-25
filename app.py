@@ -66,13 +66,56 @@ def get_user_identity():
     """Extracts the user identity from the Flask session."""
     return session.get('user')
 
+@cache.memoize(timeout=300) # Caches results per token for 5 minutes
+def is_token_valid(token):
+    """Verifies the access token against FusionAuth to ensure it hasn't been revoked or expired."""
+    print("Executing FusionAuth API validation (Cache Miss)", flush=True)
+    
+    if not token:
+        print("Token validation failed: No token provided in session.", flush=True)
+        return False
+        
+    fusionauth_url = os.environ.get('FUSIONAUTH_URL')
+    if not fusionauth_url:
+        print("Token validation failed: FUSIONAUTH_URL environment variable is missing.", flush=True)
+        return False
+        
+    validate_url = f"{fusionauth_url}/api/jwt/validate"
+    headers = {"Authorization": f"Bearer {token}"}
+    
+    print(f"Validating token starting with: {token[:15]}...", flush=True)
+    
+    try:
+        response = requests.get(validate_url, headers=headers)
+        
+        if response.status_code == 200:
+            print("FusionAuth validation successful (200 OK). Token is valid.", flush=True)
+            return True
+        else:
+            print(f"FusionAuth validation rejected the token. Status: {response.status_code}, Response: {response.text}", flush=True)
+            return False
+            
+    except requests.RequestException as e:
+        print(f"Network error during FusionAuth validation: {str(e)}", flush=True)
+        return False
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = get_user_identity()
+        
+        # 1. Check if the user exists in the local session
         if not user:
-            # Redirect to the login route if no session exists
             return redirect(url_for('login'))
+            
+        # 2. Extract the stored access token
+        token = user.get('token')
+        
+        # 3. Validate the token with FusionAuth (using the 5-minute cache)
+        if not is_token_valid(token):
+            session.clear()  # Purge the invalid local session
+            return redirect(url_for('login'))
+            
         return f(user=user, *args, **kwargs)
     return decorated_function
 
@@ -97,7 +140,7 @@ def get_cached_claims(api_email):
     response.raise_for_status()
     return response.json()
 
-@cache.memoize(timeout=300) # Caches results per email for 4 hours
+@cache.memoize(timeout=300) # Caches results per email for 5 minutes
 def get_cached_rewards(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
     api_url = f"https://www.zohoapis.com/crm/v7/functions/pointslookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
@@ -105,6 +148,8 @@ def get_cached_rewards(api_email):
     response = requests.get(api_url)
     response.raise_for_status()
     return response.json()
+
+
 # --- AUTH ROUTES ---
 
 @app.route('/login')
@@ -145,7 +190,6 @@ def auth_callback():
     }
     
     return redirect(url_for('dashboard'))
-
 
 @app.route('/logout')
 def logout():
@@ -280,7 +324,6 @@ def ace_portal(user):
 
 
 # --- PERKS ROUTES ---
-# --- PERKS REWARD OPTIONS ROUTE ---
 
 @app.route('/perks/options')
 @login_required
@@ -334,7 +377,6 @@ def perks_home(user):
             authorized_apps=user.get('authorized_apps'),
             permissions=session.get('permissions', user.get('permissions', [])))
 
-
 @app.route('/perks/rules')
 @login_required
 def perks_rules(user):
@@ -352,7 +394,6 @@ def perks_rules(user):
             tier=user.get('tier'),
             authorized_apps=user.get('authorized_apps'),
             permissions=session.get('permissions', user.get('permissions', [])))
-
 
 @app.route('/perks/terms')
 @login_required
