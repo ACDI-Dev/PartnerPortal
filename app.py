@@ -2,6 +2,8 @@ import os
 import base64
 import json
 import requests
+import time
+import jwt
 from functools import wraps
 from flask import Flask, render_template, session, redirect, request, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -20,15 +22,12 @@ app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a-very-secure-local-secret')
 
 # --- CACHING SETUP ---
-# Use an environment variable for the Redis URL (e.g., redis://10.0.0.5:6379)
 redis_url = os.environ.get('REDIS_URL')
 
 if redis_url:
-    # Production: Unified Redis Cache across all Google Cloud Run instances
     app.config['CACHE_TYPE'] = 'RedisCache'
     app.config['CACHE_REDIS_URL'] = redis_url
 else:
-    # Local Development: Fall back to simple RAM cache if no Redis URL is found
     app.config['CACHE_TYPE'] = 'SimpleCache'
 
 app.config['CACHE_DEFAULT_TIMEOUT'] = 14400 # 4 hours
@@ -63,17 +62,20 @@ AUTHORIZED_APP_MAP = {
 }
 
 def get_user_identity():
-    """Extracts the user identity from the Flask session."""
     return session.get('user')
 
-@cache.memoize(timeout=300) # Caches results per token for 5 minutes
 def is_token_valid(token):
-    """Verifies the access token against FusionAuth to ensure it hasn't been revoked or expired."""
-    print("Executing FusionAuth API validation (Cache Miss)", flush=True)
-    
     if not token:
         print("Token validation failed: No token provided in session.", flush=True)
         return False
+        
+    cache_key = f"token_valid:{token}"
+    cached_result = cache.get(cache_key)
+    
+    if cached_result is not None:
+        return cached_result
+
+    print("Executing FusionAuth API validation (Cache Miss)", flush=True)
         
     fusionauth_url = os.environ.get('FUSIONAUTH_URL')
     if not fusionauth_url:
@@ -90,9 +92,26 @@ def is_token_valid(token):
         
         if response.status_code == 200:
             print("FusionAuth validation successful (200 OK). Token is valid.", flush=True)
+            
+            try:
+                unverified_claims = jwt.decode(token, options={"verify_signature": False})
+                exp_timestamp = unverified_claims.get("exp")
+                
+                if exp_timestamp:
+                    time_to_live = int(exp_timestamp) - int(time.time())
+                    cache_timeout = max(0, time_to_live)
+                else:
+                    cache_timeout = 300 
+                    
+            except Exception as e:
+                print(f"Failed to decode token for expiration calculation: {e}", flush=True)
+                cache_timeout = 300 
+                
+            cache.set(cache_key, True, timeout=cache_timeout)
             return True
         else:
             print(f"FusionAuth validation rejected the token. Status: {response.status_code}, Response: {response.text}", flush=True)
+            cache.set(cache_key, False, timeout=60)
             return False
             
     except requests.RequestException as e:
@@ -106,23 +125,27 @@ def login_required(f):
         
         # 1. Check if the user exists in the local session
         if not user:
+            # Store the requested URL before redirecting
+            session['next'] = request.url
             return redirect(url_for('login'))
             
         # 2. Extract the stored access token
         token = user.get('token')
         
-        # 3. Validate the token with FusionAuth (using the 5-minute cache)
+        # 3. Validate the token with FusionAuth 
         if not is_token_valid(token):
-            session.clear()  # Purge the invalid local session
+            # Store the requested URL BEFORE clearing the session
+            next_url = request.url
+            session.clear()  
+            session['next'] = next_url
             return redirect(url_for('login'))
             
         return f(user=user, *args, **kwargs)
     return decorated_function
 
-
 # --- CACHED API HELPERS ---
 
-@cache.memoize(timeout=14400) # Caches results per email for 4 hours
+@cache.memoize(timeout=14400) 
 def get_cached_licenses(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
     api_url = f"https://www.zohoapis.com/crm/v7/functions/vfresellerlicenselookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
@@ -131,7 +154,7 @@ def get_cached_licenses(api_email):
     response.raise_for_status()
     return response.json()
 
-@cache.memoize(timeout=14400) # Caches results per email for 4 hours
+@cache.memoize(timeout=14400) 
 def get_cached_claims(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
     api_url = f"https://www.zohoapis.com/crm/v7/functions/perks_claims_list/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
@@ -140,7 +163,7 @@ def get_cached_claims(api_email):
     response.raise_for_status()
     return response.json()
 
-@cache.memoize(timeout=300) # Caches results per email for 5 minutes
+@cache.memoize(timeout=300) 
 def get_cached_rewards(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
     api_url = f"https://www.zohoapis.com/crm/v7/functions/pointslookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
@@ -154,7 +177,6 @@ def get_cached_rewards(api_email):
 
 @app.route('/login')
 def login():
-    """Redirects the user to the FusionAuth login page."""
     redirect_uri = url_for('auth_callback', _external=True)
     return fusionauth.authorize_redirect(redirect_uri)
 
@@ -164,14 +186,11 @@ def auth_callback():
     user_info = token.get('userinfo')
     print(user_info)
     id_token = token.get('access_token')
-    # 1. Get the raw list of UUIDs from the JWT
+    
     raw_app_ids = user_info.get('authorized_apps', [])
     
-    # 2. Map the UUIDs to human-friendly names using our dictionary
     friendly_apps = []
     for app_id in raw_app_ids:
-        # If the ID exists in our map, grab the friendly name. 
-        # If it's a new ID we haven't mapped yet, just use 'Unknown Application'
         name = AUTHORIZED_APP_MAP.get(app_id, f'Unknown Application ({app_id})')
         friendly_apps.append(name)
     
@@ -184,27 +203,23 @@ def auth_callback():
         'reseller_account': user_info.get('reseller_account', ''),
         'tier': user_info.get('tier', 'Standard'),
         'permissions': user_info.get('permissions', []),
-        # 3. Store the clean, human-readable list in the session
         'authorized_apps': friendly_apps,
         'token': id_token
     }
     
-    return redirect(url_for('dashboard'))
+    # Extract the next URL and clear it from the session, default to dashboard
+    next_url = session.pop('next', url_for('dashboard'))
+    return redirect(next_url)
 
 @app.route('/logout')
 def logout():
-    """Clears the local session and redirects to FusionAuth to kill the SSO session."""
-    # 1. Clear the local Flask session
     session.clear()
     
-    # 2. Build the FusionAuth logout URL
     client_id = os.environ.get('FUSIONAUTH_CLIENT_ID')
     fusionauth_url = os.environ.get('FUSIONAUTH_URL')
     
-    # Where FusionAuth should send the user AFTER they are logged out
     post_logout_redirect_uri = url_for('login', _external=True) 
     
-    # 3. Redirect the user to FusionAuth
     params = {
         'client_id': client_id,
         'post_logout_redirect_uri': post_logout_redirect_uri
@@ -220,10 +235,7 @@ def logout():
 @login_required
 def dashboard(user):
     combined_str = json.dumps(user)
-    # 2. Convert string to UTF-8 bytes, then encode to Base64
     encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
-
-    # 3. Convert bytes back to a clean string for transport
     final_string = encoded_bytes.decode('utf-8')
 
     return render_template('dashboard.html', 
@@ -248,12 +260,9 @@ def reseller_licenses(user):
         api_email = 'eknight@tomorrowsoffice.com'
     
     try:
-        # Check if the user clicked "Force Refresh"
         if request.args.get('refresh') == 'true':
-            # This deletes the specific cached entry for this email
             cache.delete_memoized(get_cached_licenses, api_email)
             
-        # Fetch from cache (or API if we just cleared the cache)
         data = get_cached_licenses(api_email)
         
         if data.get("code") == "success":
@@ -263,14 +272,13 @@ def reseller_licenses(user):
             licenses = parsed_data.get("Licenses", [])
             summary = parsed_data.get("Summary", {})
             
-            # Render template and pass along the layout.html requirements
             return render_template(
                 'licenses.html', 
                 licenses=licenses, 
                 summary=summary,
                 first_name=session.get('first_name', user.get('first_name', 'Partner')),
                 last_name=session.get('last_name', user.get('last_name', '')),
-                user=user_email,  # Keeps their real email in the UI
+                user=user_email,  
                 reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
                 tier=session.get('tier', user.get('tier', 'Standard')),
                 authorized_apps=session.get('authorized_apps', user.get('authorized_apps', [])),
@@ -299,20 +307,15 @@ def training(user):
 @app.route('/ace')
 @login_required
 def ace_portal(user):
-    # Check if the user actually has the ACE_Access assertion
     if 'ACE' not in user.get('authorized_apps', []):
         return "Unauthorized - You do not have access to the ACE Portal.", 403
-    #1 json convert to string
-    combined_str = json.dumps(user)
-    # 2. Convert string to UTF-8 bytes, then encode to Base64
-    encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
 
-    # 3. Convert bytes back to a clean string for transport
-    final_string = encoded_bytes.decode('utf-8')
+    # Extract the raw JWT instead of base64 encoding the session object
+    raw_jwt = user.get('token')
 
     return render_template('hubace.html',
-                           user = user,
-                           token = final_string,
+                           user=user,
+                           token=raw_jwt,  
                            email=user.get('email'),
                            first_name=user.get('first_name'),
                            last_name=user.get('last_name'),
@@ -321,7 +324,6 @@ def ace_portal(user):
                            reseller_account=user.get('reseller_account'),
                            tier=user.get('tier'),
                            authorized_apps=user.get('authorized_apps'))
-
 
 # --- PERKS ROUTES ---
 
@@ -440,20 +442,16 @@ def perks_rewards(user):
         
     user_email = user.get('email') 
     
-    # Test logic: override the email for the API call if it's an internal ACDI address
     api_email = user_email
     if user_email and '@acd-inc.com' in user_email.lower():
         api_email = 'eknight@tomorrowsoffice.com'
     
     try:
-        # Check if the user clicked "Force Refresh"
         if request.args.get('refresh') == 'true':
             cache.delete_memoized(get_cached_rewards, api_email)
 
-        # Fetch from cache (or API if we just cleared the cache)
         data = get_cached_rewards(api_email)
         
-        # Safely parse stringified details from Zoho
         points = 0
         rewards_user = ""
         
@@ -521,14 +519,11 @@ def perks_claims(user):
         api_email = 'eknight@tomorrowsoffice.com'
     
     try:
-        # Check if the user clicked "Force Refresh"
         if request.args.get('refresh') == 'true':
             cache.delete_memoized(get_cached_claims, api_email)
 
-        # Fetch from cache (or API if we just cleared the cache)
         data = get_cached_claims(api_email)
 
-        # Safely parse stringified details from Zoho
         if data.get("code") == "success" and "details" in data and "output" in data["details"]:
             raw_output = data["details"]["output"]
             parsed_data = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
