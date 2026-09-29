@@ -20,7 +20,7 @@
                 ACDI <strong class="text-acdi-green">Resource Hub 2.0</strong>
             </h1>
             <p class="text-lg text-gray-300 mb-6 font-sans leading-relaxed">
-                Powered by AI. Click a product below to set your search context, or type directly into the search bar to find deployment guides, battlecards, and marketing assets.
+                Powered by AI. Type directly into the search bar to find deployment guides, battlecards, and marketing assets.
             </p>
         </div>
         
@@ -33,46 +33,7 @@
 
 <!-- AI Search & Filter Section -->
 <section class="mb-12">
-    <!-- Product Logo Grid -->
-    <div class="mb-8">
-        <h3 class="text-sm font-medium text-gray-700 mb-3 uppercase tracking-wide">Select a Product to Search</h3>
-        
-        <div class="flex flex-wrap gap-4 py-2 items-center" id="logoCarousel">
-            <button data-product="" class="product-btn h-16 px-6 bg-white border-2 border-acdi-green rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center min-w-[120px]">
-                <span class="font-bold text-gray-800">Clear</span>
-            </button>
-            <button data-product="ACDI" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='ACDI.webp') }}" alt="ACDI" class="max-h-full object-contain">
-            </button>
-            <button data-product="PaperCut" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='PaperCut.webp') }}" alt="PaperCut" class="max-h-full object-contain">
-            </button>
-            <button data-product="Scanshare" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='Scanshare.webp') }}" alt="Scanshare" class="max-h-full object-contain">
-            </button>
-            <button data-product="KPAX" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='KPAX.webp') }}" alt="KPAX" class="max-h-full object-contain">
-            </button>
-            <button data-product="Intuitive" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='Intuitive.webp') }}" alt="Intuitive" class="max-h-full object-contain">
-            </button>
-            <button data-product="Hardware" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='ACDI Hardware.webp') }}" alt="ACDI Hardware" class="max-h-full object-contain">
-            </button>
-            <button data-product="Elatec" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='Elatec.webp') }}" alt="Elatec" class="max-h-full object-contain">
-            </button>
-            <button data-product="rf IDEAS" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='RFIdeas.webp') }}" alt="rf IDEAS" class="max-h-full object-contain">
-            </button>
-            <button data-product="Energy" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='ACDI Energy.webp') }}" alt="ACDI Energy" class="max-h-full object-contain">
-            </button>
-            <button data-product="EZ Meter" class="product-btn h-16 w-32 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-acdi-green transition-all flex items-center justify-center p-2">
-                <img src="{{ url_for('static', filename='EZ Meter.webp') }}" alt="EZ Meter" class="max-h-full object-contain">
-            </button>
-        </div>
-    </div>
+
 
     <!-- AI Search Input -->
     <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -93,35 +54,5 @@
     </div>
 </section>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchWidgetTrigger');
-    const productBtns = document.querySelectorAll('.product-btn');
 
-    productBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Manage visual active state
-            productBtns.forEach(b => {
-                b.classList.remove('border-2', 'border-acdi-green');
-                b.classList.add('border', 'border-gray-200');
-            });
-            btn.classList.remove('border', 'border-gray-200');
-            btn.classList.add('border-2', 'border-acdi-green');
-
-            // Get product name from data attribute
-            const product = btn.getAttribute('data-product');
-            
-            // Set the search input value to the product name
-            searchInput.value = product;
-            
-            // Dispatch input and click events to ensure the Gen App Builder 
-            // widget registers the change and opens appropriately.
-            searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-            searchInput.dispatchEvent(new Event('change', { bubbles: true }));
-            searchInput.click(); 
-            searchInput.focus();
-        });
-    });
-});
-</script>
 {% endblock %}
