@@ -287,6 +287,19 @@ def resource_hub(user):
                            permissions=user.get('permissions'),
                            authorized_apps=user.get('authorized_apps'))
 
+@app.route('/resources2')
+@login_required
+def resource_hub_2(user):
+    return render_template('resource_hub_2.html', 
+                           email=user.get('email'),
+                           first_name=user.get('first_name'),
+                           last_name=user.get('last_name'),
+                           reseller_account=user.get('reseller_account'),
+                           tier=user.get('tier'),
+                           permissions=user.get('permissions'),
+                           authorized_apps=user.get('authorized_apps'))
+
+
 @app.route('/rep/accounts')
 @login_required
 def rep_accounts(user):
