@@ -146,14 +146,29 @@ def login_required(f):
 # --- CACHED API HELPERS ---
 
 @cache.memoize(timeout=14400) 
-def get_cached_licenses(api_email):
+def get_cached_rep_accounts(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
-    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfresellerlicenselookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfreselleraccounts/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
     
     response = requests.get(api_url)
     response.raise_for_status()
     return response.json()
 
+# Modify your existing get_cached_licenses to accept an optional account_id
+@cache.memoize(timeout=14400) 
+def get_cached_licenses(api_email, account_id=None):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    
+    # Base URL
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfresellerlicenselookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    
+    # Append account_id to the Zoho function if provided by the rep's selection
+    if account_id:
+        api_url += f"&account_id={account_id}"
+        
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
 @cache.memoize(timeout=14400) 
 def get_cached_claims(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
@@ -174,6 +189,16 @@ def get_cached_rewards(api_email):
 
 
 # --- AUTH ROUTES ---
+
+
+@app.route('/rep/set_account/<account_id>')
+@login_required
+def set_active_account(user, account_id):
+    # Store the account_id securely in the user's session
+    session['active_account_id'] = account_id
+    
+    # Redirect to the licenses page (the URL will just be /licenses)
+    return redirect(url_for('reseller_licenses'))
 
 @app.route('/login')
 def login():
@@ -250,20 +275,76 @@ def dashboard(user):
                            authorized_apps=user.get('authorized_apps'),                   
                            token = user.get('token'))
 
+@app.route('/resources')
+@login_required
+def resource_hub(user):
+    return render_template('resource_hub.html', 
+                           email=user.get('email'),
+                           first_name=user.get('first_name'),
+                           last_name=user.get('last_name'),
+                           reseller_account=user.get('reseller_account'),
+                           tier=user.get('tier'),
+                           permissions=user.get('permissions'),
+                           authorized_apps=user.get('authorized_apps'))
+
+@app.route('/rep/accounts')
+@login_required
+def rep_accounts(user):
+    user_email = user.get('email') 
+    permissions=user.get('permissions')
+   # Use the rep's email for the API call (or override for testing as you did previously)
+    api_email = user_email
+    if 'Admin' in permissions:
+        api_email = '@acd-inc.com'
+    
+    try:
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_cached_rep_accounts, api_email)
+            
+        data = get_cached_rep_accounts(api_email)
+        
+        if data.get("code") == "success":
+            raw_output = data["details"]["output"]
+            parsed_data = json.loads(raw_output)
+            
+            accounts = parsed_data.get("Accounts", [])
+            total_accounts = parsed_data.get("Total_Number_of_Accounts", 0)
+            
+            return render_template(
+                'rep_accounts.html', 
+                accounts=accounts,
+                total_accounts=total_accounts,
+                first_name=session.get('first_name', user.get('first_name', 'Sales Rep')),
+                last_name=session.get('last_name', user.get('last_name', '')),
+                user=user_email,  
+                tier=session.get('tier', user.get('tier', 'Standard')),
+                authorized_apps=session.get('authorized_apps', user.get('authorized_apps', [])),
+                permissions=session.get('permissions', user.get('permissions', []))
+            )
+        else:
+            return "API returned an error.", 400
+            
+    except requests.RequestException as e:
+        return f"Error fetching data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing the accounts data from the API.", 500
+
+# Modify your existing licenses route to read the account_id from the URL query params
 @app.route('/licenses')
 @login_required
 def reseller_licenses(user):
     user_email = user.get('email') 
     
-    api_email = user_email
-    if user_email and '@acd-inc.com' in user_email.lower():
-        api_email = 'eknight@tomorrowsoffice.com'
+    # Pull the account_id from the session instead of the URL
+    account_id = session.get('active_account_id')
     
+    api_email = user_email
+
     try:
         if request.args.get('refresh') == 'true':
-            cache.delete_memoized(get_cached_licenses, api_email)
+            cache.delete_memoized(get_cached_licenses, api_email, account_id)
             
-        data = get_cached_licenses(api_email)
+        data = get_cached_licenses(api_email, account_id)
         
         if data.get("code") == "success":
             raw_output = data["details"]["output"]
@@ -276,6 +357,7 @@ def reseller_licenses(user):
                 'licenses.html', 
                 licenses=licenses, 
                 summary=summary,
+                account=user.get('account'),
                 first_name=session.get('first_name', user.get('first_name', 'Partner')),
                 last_name=session.get('last_name', user.get('last_name', '')),
                 user=user_email,  

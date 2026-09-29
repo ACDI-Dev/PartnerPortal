@@ -42,7 +42,7 @@
 <section class="mb-12">
     <div class="flex items-center gap-2 mb-6">
         <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
-        <h2 class="text-2xl font-bold text-gray-900 font-sans">Quick Links</h2>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Dashboard</h2>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -58,7 +58,7 @@
         {% endif %}
 
         <!-- License Dashboard -->
-        <a href="/licenses" id="licenseLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+        <a href="{% if account == 'ACDI' %}/rep/accounts{% else %}/licenses{% endif %}" id="licenseLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             
             <!-- Loading Overlay (Hidden by default, triggered by JS) -->
             <div id="licenseLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
@@ -115,9 +115,9 @@
         {% endif %}
 
         <!-- Resource Hub (Visible to everyone) -->
-        <a href="https://page.acd-inc.com/acdi-resource-hub-home" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <a href="/resources" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Resource Hub</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Access battlecards, technical datasheets, and co-branded marketing assets.</p>

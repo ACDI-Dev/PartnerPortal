@@ -1,0 +1,304 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- Title Section -->
+<section class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+            <h2 class="text-2xl font-bold text-gray-900 font-sans">My Accounts ({{ total_accounts }})</h2>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <!-- Force Refresh Button -->
+            <a href="?refresh=true" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-acdi-green focus:outline-none transition-colors" onclick="this.innerHTML='<svg class=\'animate-spin h-4 w-4 text-acdi-green\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg> Refreshing...';">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Force Refresh
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Extract Unique Values for Filtering -->
+{% set unique_owners = [] %}
+{% set unique_categories = [] %}
+{% set unique_regions = [] %}
+
+{% for acc in accounts %}
+    {% if acc.get('Owner.email') %}
+        {% set formatted_owner = acc.get('Owner.email').split('@')[0] | replace('.', ' ') | title %}
+        {% if formatted_owner not in unique_owners %}
+            {% set _ = unique_owners.append(formatted_owner) %}
+        {% endif %}
+    {% endif %}
+    
+    {% set cat = acc.get('Reseller_Category', 'Unknown') %}
+    {% if cat not in unique_categories %}
+        {% set _ = unique_categories.append(cat) %}
+    {% endif %}
+
+    {% set region = acc.get('Owner.Team_Region') %}
+    {% if region and region not in unique_regions %}
+        {% set _ = unique_regions.append(region) %}
+    {% endif %}
+{% endfor %}
+
+<!-- Detailed Accounts Table -->
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900">Assigned Accounts</h3>
+            <p class="text-sm text-gray-500 mt-1">Select an account below to view their detailed license deployments.</p>
+        </div>
+
+        <div class="p-6 overflow-x-auto">
+            
+            <!-- Custom Filter Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
+                
+                <!-- Account View / Parent Filter -->
+                <div>
+                    <label for="parentFilter" class="block text-sm font-medium text-gray-700 mb-1">Account View</label>
+                    <select id="parentFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="parent" selected>Parent Accounts Only</option>
+                        <option value="all">All Accounts</option>
+                    </select>
+                </div>
+
+                <!-- Category Filter -->
+                <div>
+                    <label for="categoryFilter" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select id="categoryFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Categories</option>
+                        {% for c in unique_categories|sort %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Region Filter -->
+                <div>
+                    <label for="regionFilter" class="block text-sm font-medium text-gray-700 mb-1">Region</label>
+                    <select id="regionFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Regions</option>
+                        <option value="US">US (East & West)</option>
+                        {% for r in unique_regions|sort %}
+                        <option value="{{ r }}">{{ r }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Owner Filter -->
+                <div>
+                    <label for="ownerFilter" class="block text-sm font-medium text-gray-700 mb-1">Account Owner</label>
+                    <select id="ownerFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Owners</option>
+                        {% for o in unique_owners|sort %}
+                        <option value="{{ o }}">{{ o }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <table id="accountsTable" class="w-full text-left text-sm text-gray-600">
+                <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">Parent Account</th>
+                        <th class="px-4 py-3">Account Name</th>
+                        <th class="px-4 py-3">Category</th>
+                        <th class="px-4 py-3">City</th>
+                        <th class="px-4 py-3">State</th>
+                        <th class="px-4 py-3">Website</th>
+                        <th class="px-4 py-3">Region</th>
+                        <th class="px-4 py-3">Account Owner</th>
+                        <th class="px-4 py-3 rounded-tr-lg text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for acc in accounts %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ acc.get('Parent_Account.Account_Name', 'N/A') }}</td>
+                        <td class="px-4 py-3 font-bold text-gray-900">{{ acc.get('Account_Name', 'N/A') }}</td>
+                        
+                        <td class="px-4 py-3">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#f0f9e8] text-green-700 border border-green-200 shadow-sm">{{ acc.get('Reseller_Category', 'Unknown') }}</span>
+                        </td>
+                        
+                        <td class="px-4 py-3">{{ acc.get('Shipping_City', 'N/A') }}</td>
+                        <td class="px-4 py-3">{{ acc.get('Shipping_State', 'N/A') }}</td>
+                        <td class="px-4 py-3">
+                            {% if acc.get('Website') %}
+                            <a href="https://{{ acc.get('Website') | replace('https://', '') | replace('http://', '') }}" target="_blank" class="text-blue-600 hover:underline">Visit Website</a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3">{{ acc.get('Owner.Team_Region', 'N/A') }}</td>
+                        <td class="px-4 py-3">
+                            {% if acc.get('Owner.email') %}
+                                {{ acc.get('Owner.email').split('@')[0] | replace('.', ' ') | title }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <a href="{{ url_for('set_active_account', account_id=acc.get('id')) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-acdi-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                View Licenses
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DataTables Core CSS -->
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<!-- DataTables Buttons CSS -->
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<style>
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        outline: none;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 1px #10b981;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+        border-radius: 0.375rem;
+    }
+    table.dataTable.no-footer { border-bottom: 1px solid #e5e7eb; }
+    .dataTables_wrapper > .flex.mt-4 { margin-top: 1rem; }
+    .dataTables_wrapper > .flex.mb-4.text-sm { margin-bottom: 1rem; }
+    button.dt-button.tailwind-btn {
+        background: none !important;
+        border: none !important;
+        margin-left: 0.5rem;
+    }
+</style>
+
+<!-- DataTables Core JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Buttons & Export JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+<script>
+    // Custom DataTables Search Function for the Parent Filter
+    $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+            var parentFilterValue = $('#parentFilter').val();
+            
+            // If "All Accounts" is selected, show the row
+            if (parentFilterValue === 'all') {
+                return true;
+            }
+            
+            // If "Parent Accounts Only" is selected, Column 0 (Parent) must match Column 1 (Account)
+            if (parentFilterValue === 'parent') {
+                // Remove whitespace just in case Jinja added spacing
+                var parentAcc = data[0].trim();
+                var accountName = data[1].trim();
+                
+                return parentAcc === accountName;
+            }
+            
+            return true;
+        }
+    );
+
+    $(document).ready(function() {
+        var table = $('#accountsTable').DataTable({
+            order: [[1, 'asc']], // Adjusted order to account name (index 1)
+            pageLength: 25,
+            language: { search: "Search Accounts:" },
+            dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                 '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                 'rt' +
+                 '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export CSV',
+                    filename: 'Rep_Accounts_Export',
+                    exportOptions: { 
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7],
+                        format: {
+                            // Extracts the actual href URL for export instead of the "Visit Website" text
+                            body: function ( data, row, column, node ) {
+                                if (column === 5 && data.indexOf('<a') !== -1) {
+                                    var temp = $('<div>').html(data);
+                                    return temp.find('a').attr('href');
+                                }
+                                return data;
+                            }
+                        }
+                    },
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export Excel',
+                    filename: 'Rep_Accounts_Export',
+                    exportOptions: { 
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7],
+                        format: {
+                            // Extracts the actual href URL for export instead of the "Visit Website" text
+                            body: function ( data, row, column, node ) {
+                                if (column === 5 && data.indexOf('<a') !== -1) {
+                                    var temp = $('<div>').html(data);
+                                    return temp.find('a').attr('href');
+                                }
+                                return data;
+                            }
+                        }
+                    },
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                }
+            ]
+        });
+
+        // Bind the Custom Dropdown to the DataTables Region Column (Column 6)
+        $('#regionFilter').on('change', function() {
+            var rawVal = $(this).val();
+            
+            if (rawVal === 'US') {
+                // If "US" is selected, match either East or West
+                table.column(6).search('^(East|West)$', true, false).draw();
+            } else {
+                // Otherwise, perform a standard exact match (or clear if empty)
+                var val = $.fn.dataTable.util.escapeRegex(rawVal);
+                table.column(6).search(val ? '^' + val + '$' : '', true, false).draw();
+            }
+        });
+
+        // Bind the Custom Dropdown to the DataTables Owner Column (Column 7)
+        $('#ownerFilter').on('change', function() {
+            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(7).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        // Bind the Custom Dropdown to the DataTables Category Column (Column 2)
+        $('#categoryFilter').on('change', function() {
+            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(2).search(val ? '^\\s*' + val + '\\s*$' : '', true, false).draw();
+        });
+
+        // Trigger table redraw when Parent Filter changes
+        $('#parentFilter').on('change', function() {
+            table.draw();
+        });
+    });
+</script>
+{% endblock %}
