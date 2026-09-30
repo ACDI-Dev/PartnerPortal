@@ -91,10 +91,20 @@ def is_token_valid(token):
         response = requests.get(validate_url, headers=headers)
         
         if response.status_code == 200:
-            print("FusionAuth validation successful (200 OK). Token is valid.", flush=True)
-            
             try:
+                # Decode claims from the token
                 unverified_claims = jwt.decode(token, options={"verify_signature": False})
+                
+                # --- NEW AUTHORIZATION CHECK ---
+                REQUIRED_APP_ID = '10ec4e31-10a5-417a-92e3-24b886e1c750'
+                if unverified_claims.get("applicationId") != REQUIRED_APP_ID:
+                    print(f"Token validation failed: User is not authorized for app {REQUIRED_APP_ID}.", flush=True)
+                    # Cache the failure to prevent repeatedly validating unauthorized tokens
+                    cache.set(cache_key, False, timeout=60)
+                    return False
+                
+                print("FusionAuth validation successful (200 OK) and applicationId matches.", flush=True)
+                
                 exp_timestamp = unverified_claims.get("exp")
                 
                 if exp_timestamp:
@@ -104,7 +114,7 @@ def is_token_valid(token):
                     cache_timeout = 300 
                     
             except Exception as e:
-                print(f"Failed to decode token for expiration calculation: {e}", flush=True)
+                print(f"Failed to decode token for claims extraction: {e}", flush=True)
                 cache_timeout = 300 
                 
             cache.set(cache_key, True, timeout=cache_timeout)
@@ -209,10 +219,15 @@ def login():
 def auth_callback():
     token = fusionauth.authorize_access_token()
     user_info = token.get('userinfo')
-    print(user_info)
     id_token = token.get('access_token')
     
     raw_app_ids = user_info.get('authorized_apps', [])
+    
+    # --- NEW: Deny access if they don't have the required app ---
+    REQUIRED_APP_ID = '10ec4e31-10a5-417a-92e3-24b886e1c750'
+    if REQUIRED_APP_ID not in raw_app_ids:
+        # Clear the FusionAuth SSO session on denial (optional but recommended)
+        return "Unauthorized: You are not registered for the ACDI Reseller Portal.", 403
     
     friendly_apps = []
     for app_id in raw_app_ids:
@@ -279,18 +294,6 @@ def dashboard(user):
 @login_required
 def resource_hub(user):
     return render_template('resource_hub.html', 
-                           email=user.get('email'),
-                           first_name=user.get('first_name'),
-                           last_name=user.get('last_name'),
-                           reseller_account=user.get('reseller_account'),
-                           tier=user.get('tier'),
-                           permissions=user.get('permissions'),
-                           authorized_apps=user.get('authorized_apps'))
-
-@app.route('/resources2')
-@login_required
-def resource_hub_2(user):
-    return render_template('resource_hub_2.html', 
                            email=user.get('email'),
                            first_name=user.get('first_name'),
                            last_name=user.get('last_name'),
