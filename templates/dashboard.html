@@ -46,8 +46,8 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-       {% if 'ACE' in user.authorized_apps %}
+
+        {% if 'ACE' in user.authorized_apps %}
         <a href="/ace" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
@@ -56,26 +56,16 @@
             <p class="text-sm text-gray-600 leading-relaxed">Connect with ACE, your ACDI Customer Support Expert, for instant technical assistance and resources.</p>
         </a>
         {% endif %}
-
-        <!-- License Dashboard -->
-        <a href="{% if user.account == 'ACDI' %}/rep/accounts{% else %}/licenses{% endif %}" id="licenseLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
-            
-            <!-- Loading Overlay (Hidden by default, triggered by JS) -->
-            <div id="licenseLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
-                <!-- Tailwind SVG Spinner -->
-                <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span class="text-sm font-bold text-gray-700 tracking-wide">Fetching Data...</span>
-            </div>
-
+        <!-- Sales Tools Hub -->
+        <a href="{{ url_for('sales_tools') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                <!-- Briefcase Icon -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">License Dashboard</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">View, sort, filter, and export your active and expired software deployments.</p>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Sales Tools</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Access your License Dashboard, Account Management, and other advanced sales utilities.</p>
         </a>
+  
 
         <!-- Partner Perks Home -->
         <a href="{{ url_for('perks_home') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
@@ -85,33 +75,33 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">Partner Perks Home</h3>
             <p class="text-sm text-gray-600 leading-relaxed">As a Partner Perks member, you will receive points based on a percentage of ACDI’s suggested retail price...</p>
         </a>
-        
+
         <!-- Quote Portal (Requires Authorization for the Quote Portal App) -->
         {% if 'Quote Portal' in user.authorized_apps %}
-            <!-- ACTIVE STATE: User has access -->
-            <a href="https://acdidev.zohocreator.com/portal/qr" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-                <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
-                <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
-            </a>
+        <!-- ACTIVE STATE: User has access -->
+        <a href="https://acdidev.zohocreator.com/portal/qr" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
+        </a>
 
         {% else %}
-            <!-- LOCKED STATE: User does NOT have access -->
-            <div class="block p-6 bg-gray-50 rounded-xl border border-gray-200 opacity-75 cursor-not-allowed">
-                <div class="flex justify-between items-start mb-5">
-                    <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                        <!-- Lock Icon -->
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
-                    </div>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
-                        Access Required
-                    </span>
+        <!-- LOCKED STATE: User does NOT have access -->
+        <div class="block p-6 bg-gray-50 rounded-xl border border-gray-200 opacity-75 cursor-not-allowed">
+            <div class="flex justify-between items-start mb-5">
+                <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                    <!-- Lock Icon -->
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-500 mb-2">Quote Portal</h3>
-                <p class="text-sm text-gray-400 leading-relaxed">Contact your ACDI channel manager to request access to this application.</p>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
+                    Access Required
+                </span>
             </div>
+            <h3 class="text-xl font-bold text-gray-500 mb-2">Quote Portal</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">Contact your ACDI channel manager to request access to this application.</p>
+        </div>
         {% endif %}
 
         <!-- Resource Hub (Visible to everyone) -->
@@ -151,7 +141,7 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">Software Support</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Open priority tickets on behalf of your end-users or access the knowledge base.</p>
         </a>
- 
+
     </div>
 </section>
 

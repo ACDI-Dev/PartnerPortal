@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% include "sales_tools_nav.html" %}
 <!-- Title Section -->
 <section class="mb-8">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -8,7 +9,7 @@
             <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
             <h2 class="text-2xl font-bold text-gray-900 font-sans">License Dashboard</h2>
         </div>
-        
+
         <div class="flex items-center gap-3">
             <!-- Back to Rep Accounts Button (Only for ACDI) -->
             {% if account == 'ACDI' %}
@@ -212,18 +213,30 @@
         padding: 0.25rem 0.5rem;
         outline: none;
     }
-    .dataTables_wrapper .dataTables_filter input:focus {
-        border-color: #10b981;
-        box-shadow: 0 0 0 1px #10b981;
-    }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 1px #10b981;
+        }
+
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
         background: #f3f4f6 !important;
         border-color: #e5e7eb !important;
         border-radius: 0.375rem;
     }
-    table.dataTable.no-footer { border-bottom: 1px solid #e5e7eb; }
-    .dataTables_wrapper > .flex.mt-4 { margin-top: 1rem; }
-    .dataTables_wrapper > .flex.mb-4.text-sm { margin-bottom: 1rem; }
+
+    table.dataTable.no-footer {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .dataTables_wrapper > .flex.mt-4 {
+        margin-top: 1rem;
+    }
+
+    .dataTables_wrapper > .flex.mb-4.text-sm {
+        margin-bottom: 1rem;
+    }
+
     button.dt-button.tailwind-btn {
         background: none !important;
         border: none !important;
@@ -271,7 +284,7 @@
                 d.setDate(d.getDate() + days);
                 return formatDate(d);
             }
-            
+
             // Generate Dynamic Filename Function
             var getExportFileName = function() {
                 var accountName = "{{ summary.get('Reseller Account Name', 'Account') }}".replace(/[^a-zA-Z0-9]/g, '_');
@@ -298,7 +311,7 @@
                         extend: 'csv',
                         text: 'Export CSV',
                         filename: getExportFileName,
-                        title: null, 
+                        title: null,
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 6] // Excludes the UI's static 'Days Left' column (Index 5)
                         },
@@ -308,19 +321,19 @@
                         extend: 'excel',
                         text: 'Export Excel',
                         filename: getExportFileName,
-                        title: null, 
+                        title: null,
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 6] // Excludes the UI's static 'Days Left' column (Index 5)
                         },
                         className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500',
                         customize: function (xlsx) {
-                            
+
                             /* --- 1. Modify Sheet 1 (Append Dynamic Days Left Column) --- */
                             var sheet1 = xlsx.xl.worksheets['sheet1.xml'];
-                            
+
                             $('row', sheet1).each(function(index) {
                                 var rowNum = index + 1; // Excel rows are 1-indexed
-                                
+
                                 if (index === 0) {
                                     // Header Row: Append 'Days Left' at Column G
                                     $(this).append('<c t="inlineStr" r="G' + rowNum + '"><is><t>Days Left</t></is></c>');
@@ -350,7 +363,7 @@
                                 '</sheetData></worksheet>';
 
                             var filterSheetDOM = $.parseXML(filterSheetXML);
-                            
+
                             // Inject into the JSZip file structure
                             xlsx.xl.worksheets['sheet2.xml'] = filterSheetDOM;
 
@@ -360,7 +373,7 @@
                             var newSheet = workbook.createElement('sheet');
                             newSheet.setAttribute('name', 'Filter Details');
                             newSheet.setAttribute('sheetId', '2');
-                            newSheet.setAttribute('r:id', 'rId99'); 
+                            newSheet.setAttribute('r:id', 'rId99');
                             sheets.appendChild(newSheet);
 
                             // Add relationship to workbook.xml.rels

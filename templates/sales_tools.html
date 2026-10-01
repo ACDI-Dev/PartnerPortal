@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% include "sales_tools_nav.html" %}
+
+<!-- Title Section -->
+<section class="mb-8">
+    <div class="flex items-center gap-2 mb-2">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Sales Tools Hub</h2>
+    </div>
+    <p class="text-gray-600">Select a utility below to manage your accounts and software deployments.</p>
+</section>
+
+<!-- Tools Grid -->
+<section class="mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        {% if user.account == 'ACDI' %}
+        <!-- My Accounts (Visible only to ACDI) -->
+        <a href="/rep/accounts" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <!-- Users/Accounts Icon -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">My Accounts</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">View and manage your assigned reseller accounts and select them to view licenses.</p>
+        </a>
+        {% endif %}
+
+        <!-- License Dashboard (Visible to everyone) -->
+        <a href="/licenses" id="licenseLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+
+            <div id="licenseLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
+                <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-sm font-bold text-gray-700 tracking-wide">Fetching Data...</span>
+            </div>
+
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">License Dashboard</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">View, sort, filter, and export your active and expired software deployments.</p>
+        </a>
+
+    </div>
+</section>
+
+<!-- Open Deals Dashboard -->
+<a href="/open-deals" id="dealsLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+
+    <div id="dealsLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
+        <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="text-sm font-bold text-gray-700 tracking-wide">Fetching Data...</span>
+    </div>
+
+    <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    </div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Open Deals</h3>
+    <p class="text-sm text-gray-600 leading-relaxed">View, sort, filter, and track your open pipeline opportunities and quotes.</p>
+</a>
+
+<!-- Script for Loading Overlay -->
+<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const licenseLink = document.getElementById('licenseLink');
+                    const overlay = document.getElementById('licenseLoadingOverlay');
+
+                    if (licenseLink && overlay) {
+                        licenseLink.addEventListener('click', function(e) {
+                            if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                                overlay.classList.remove('hidden');
+                            }
+                        });
+                    }
+
+                    window.addEventListener('pageshow', function(e) {
+                        if (overlay && !overlay.classList.contains('hidden')) {
+                            overlay.classList.add('hidden');
+                        }
+                    });
+                });
+document.addEventListener('DOMContentLoaded', function () {
+    const dealsLink = document.getElementById('dealsLink');
+    const overlay = document.getElementById('dealsLoadingOverlay');
+
+    if (dealsLink && overlay) {
+        dealsLink.addEventListener('click', function (e) {
+            if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                overlay.classList.remove('hidden');
+            }
+        });
+    }
+
+    window.addEventListener('pageshow', function (e) {
+        if (overlay && !overlay.classList.contains('hidden')) {
+            overlay.classList.add('hidden');
+        }
+    });
+});
+</script>
+{% endblock %}

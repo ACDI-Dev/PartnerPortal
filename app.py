@@ -350,6 +350,45 @@ def reseller_licenses(user):
         return f"Error fetching data: {str(e)}", 500
     except json.JSONDecodeError:
         return "Error parsing the license data from the API.", 500
+@cache.memoize(timeout=14400) 
+def get_cached_open_deals(api_email):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/vf_open_deals/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
+
+@app.route('/open-deals')
+@login_required
+def open_deals(user):
+    user_email = user.get('email') 
+    api_email = user_email
+    
+    if user_email and '@acd-inc.com' in user_email.lower():
+        api_email = 'eknight@tomorrowsoffice.com'
+          
+    try:
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_cached_open_deals, api_email)
+            
+        data = get_cached_open_deals(api_email)
+        
+        if data.get("code") == "success":
+            raw_output = data["details"]["output"]
+            parsed_data = json.loads(raw_output)
+            
+            deals = parsed_data.get("Deals", [])
+            total_deals = parsed_data.get("Total_Number_of_Open_Deals", 0)
+            
+            return render_template('open_deals.html', user=user, deals=deals, total_deals=total_deals)
+        else:
+            return "API returned an error.", 400
+            
+    except requests.RequestException as e:
+        return f"Error fetching data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing the open deals data from the API.", 500
 
 @app.route('/training')
 @login_required
@@ -367,6 +406,10 @@ def ace_portal(user):
 
     return render_template('hubace.html',user=user,token=raw_jwt)
 
+@app.route('/sales-tools')
+@login_required
+def sales_tools(user):
+    return render_template('sales_tools.html', user=user)
 # --- PERKS ROUTES ---
 
 @app.route('/perks/options')

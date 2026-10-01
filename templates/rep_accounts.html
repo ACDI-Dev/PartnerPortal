@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% include "sales_tools_nav.html" %}
+
 <!-- Title Section -->
 <section class="mb-8">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -8,7 +10,7 @@
             <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
             <h2 class="text-2xl font-bold text-gray-900 font-sans">My Accounts ({{ total_accounts }})</h2>
         </div>
-        
+
         <div class="flex items-center gap-3">
             <!-- Force Refresh Button -->
             <a href="?refresh=true" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-acdi-green focus:outline-none transition-colors" onclick="this.innerHTML='<svg class=\'animate-spin h-4 w-4 text-acdi-green\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg> Refreshing...';">
@@ -31,7 +33,7 @@
             {% set _ = unique_owners.append(formatted_owner) %}
         {% endif %}
     {% endif %}
-    
+
     {% set cat = acc.get('Reseller_Category', 'Unknown') %}
     {% if cat not in unique_categories %}
         {% set _ = unique_categories.append(cat) %}
@@ -52,10 +54,10 @@
         </div>
 
         <div class="p-6 overflow-x-auto">
-            
+
             <!-- Custom Filter Controls -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
-                
+
                 <!-- Account View / Parent Filter -->
                 <div>
                     <label for="parentFilter" class="block text-sm font-medium text-gray-700 mb-1">Account View</label>
@@ -119,11 +121,11 @@
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-4 py-3 font-medium text-gray-900">{{ acc.get('Parent_Account.Account_Name', 'N/A') }}</td>
                         <td class="px-4 py-3 font-bold text-gray-900">{{ acc.get('Account_Name', 'N/A') }}</td>
-                        
+
                         <td class="px-4 py-3">
                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#f0f9e8] text-green-700 border border-green-200 shadow-sm">{{ acc.get('Reseller_Category', 'Unknown') }}</span>
                         </td>
-                        
+
                         <td class="px-4 py-3">{{ acc.get('Shipping_City', 'N/A') }}</td>
                         <td class="px-4 py-3">{{ acc.get('Shipping_State', 'N/A') }}</td>
                         <td class="px-4 py-3">
@@ -136,9 +138,9 @@
                         <td class="px-4 py-3">{{ acc.get('Owner.Team_Region', 'N/A') }}</td>
                         <td class="px-4 py-3">
                             {% if acc.get('Owner.email') %}
-                                {{ acc.get('Owner.email').split('@')[0] | replace('.', ' ') | title }}
+                            {{ acc.get('Owner.email').split('@')[0] | replace('.', ' ') | title }}
                             {% else %}
-                                N/A
+                            N/A
                             {% endif %}
                         </td>
                         <td class="px-4 py-3 text-right">
@@ -167,23 +169,80 @@
         padding: 0.25rem 0.5rem;
         outline: none;
     }
-    .dataTables_wrapper .dataTables_filter input:focus {
-        border-color: #10b981;
-        box-shadow: 0 0 0 1px #10b981;
-    }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 1px #10b981;
+        }
+
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
         background: #f3f4f6 !important;
         border-color: #e5e7eb !important;
         border-radius: 0.375rem;
     }
-    table.dataTable.no-footer { border-bottom: 1px solid #e5e7eb; }
-    .dataTables_wrapper > .flex.mt-4 { margin-top: 1rem; }
-    .dataTables_wrapper > .flex.mb-4.text-sm { margin-bottom: 1rem; }
+
+    table.dataTable.no-footer {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .dataTables_wrapper > .flex.mt-4 {
+        margin-top: 1rem;
+    }
+
+    .dataTables_wrapper > .flex.mb-4.text-sm {
+        margin-bottom: 1rem;
+    }
+
     button.dt-button.tailwind-btn {
         background: none !important;
         border: none !important;
         margin-left: 0.5rem;
     }
+
+    /* ColVis Dropdown Styling & Background Fix */
+    div.dt-button-background {
+        background: transparent !important;
+        z-index: 2001 !important;
+    }
+
+    div.dt-button-collection {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        z-index: 2002 !important;
+    }
+
+        div.dt-button-collection button.dt-button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: #374151;
+            background: none;
+            border: none;
+            border-radius: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+            div.dt-button-collection button.dt-button:hover {
+                background-color: #f3f4f6;
+                color: #10b981;
+            }
+
+            div.dt-button-collection button.dt-button.active {
+                background-color: #f0f9e8;
+                color: #047857;
+                font-weight: 600;
+            }
+
+                div.dt-button-collection button.dt-button.active:hover {
+                    background-color: #e5f5da;
+                }
 </style>
 
 <!-- DataTables Core JS -->
@@ -193,112 +252,121 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<!-- Add this new script for Column Visibility -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
 
 <script>
-    // Custom DataTables Search Function for the Parent Filter
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var parentFilterValue = $('#parentFilter').val();
-            
-            // If "All Accounts" is selected, show the row
-            if (parentFilterValue === 'all') {
+        // Custom DataTables Search Function for the Parent Filter
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var parentFilterValue = $('#parentFilter').val();
+
+                // If "All Accounts" is selected, show the row
+                if (parentFilterValue === 'all') {
+                    return true;
+                }
+
+                // If "Parent Accounts Only" is selected, Column 0 (Parent) must match Column 1 (Account)
+                if (parentFilterValue === 'parent') {
+                    var parentAcc = data[0].trim();
+                    var accountName = data[1].trim();
+                    return parentAcc === accountName;
+                }
+
                 return true;
             }
-            
-            // If "Parent Accounts Only" is selected, Column 0 (Parent) must match Column 1 (Account)
-            if (parentFilterValue === 'parent') {
-                // Remove whitespace just in case Jinja added spacing
-                var parentAcc = data[0].trim();
-                var accountName = data[1].trim();
-                
-                return parentAcc === accountName;
-            }
-            
-            return true;
-        }
-    );
+        );
 
-    $(document).ready(function() {
-        var table = $('#accountsTable').DataTable({
-            order: [[1, 'asc']], // Adjusted order to account name (index 1)
-            pageLength: 25,
-            language: { search: "Search Accounts:" },
-            dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
-                 '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
-                 'rt' +
-                 '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
-            buttons: [
-                {
-                    extend: 'csv',
-                    text: 'Export CSV',
-                    filename: 'Rep_Accounts_Export',
-                    exportOptions: { 
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7],
-                        format: {
-                            // Extracts the actual href URL for export instead of the "Visit Website" text
-                            body: function ( data, row, column, node ) {
-                                if (column === 5 && data.indexOf('<a') !== -1) {
-                                    var temp = $('<div>').html(data);
-                                    return temp.find('a').attr('href');
-                                }
-                                return data;
-                            }
-                        }
+        $(document).ready(function() {
+            var table = $('#accountsTable').DataTable({
+                order: [[1, 'asc']], // Adjusted order to account name (index 1)
+                pageLength: 25,
+                language: { search: "Search Accounts:" },
+
+                // Hide City (3), State (4), and Website (5) by default
+                columnDefs: [
+                    { targets: [3, 4, 5], visible: false }
+                ],
+
+                dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                     '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                     'rt' +
+                     '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        text: 'Select Columns',
+                        // Exclude the last column (Actions) from the dropdown
+                        columns: ':not(:last-child)',
+                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                     },
-                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                },
-                {
-                    extend: 'excel',
-                    text: 'Export Excel',
-                    filename: 'Rep_Accounts_Export',
-                    exportOptions: { 
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7],
-                        format: {
-                            // Extracts the actual href URL for export instead of the "Visit Website" text
-                            body: function ( data, row, column, node ) {
-                                if (column === 5 && data.indexOf('<a') !== -1) {
-                                    var temp = $('<div>').html(data);
-                                    return temp.find('a').attr('href');
+                    {
+                        extend: 'csv',
+                        text: 'Export CSV',
+                        filename: 'Rep_Accounts_Export',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+                            format: {
+                                body: function ( data, row, column, node ) {
+                                    if (column === 5 && data.indexOf('<a') !== -1) {
+                                        var temp = $('<div>').html(data);
+                                        return temp.find('a').attr('href');
+                                    }
+                                    return data;
                                 }
-                                return data;
                             }
-                        }
+                        },
+                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                     },
-                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                    {
+                        extend: 'excel',
+                        text: 'Export Excel',
+                        filename: 'Rep_Accounts_Export',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+                            format: {
+                                body: function ( data, row, column, node ) {
+                                    if (column === 5 && data.indexOf('<a') !== -1) {
+                                        var temp = $('<div>').html(data);
+                                        return temp.find('a').attr('href');
+                                    }
+                                    return data;
+                                }
+                            }
+                        },
+                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                    }
+                ]
+            });
+
+            // Bind the Custom Dropdown to the DataTables Region Column (Column 6)
+            $('#regionFilter').on('change', function() {
+                var rawVal = $(this).val();
+
+                if (rawVal === 'US') {
+                    table.column(6).search('^(East|West)$', true, false).draw();
+                } else {
+                    var val = $.fn.dataTable.util.escapeRegex(rawVal);
+                    table.column(6).search(val ? '^' + val + '$' : '', true, false).draw();
                 }
-            ]
-        });
+            });
 
-        // Bind the Custom Dropdown to the DataTables Region Column (Column 6)
-        $('#regionFilter').on('change', function() {
-            var rawVal = $(this).val();
-            
-            if (rawVal === 'US') {
-                // If "US" is selected, match either East or West
-                table.column(6).search('^(East|West)$', true, false).draw();
-            } else {
-                // Otherwise, perform a standard exact match (or clear if empty)
-                var val = $.fn.dataTable.util.escapeRegex(rawVal);
-                table.column(6).search(val ? '^' + val + '$' : '', true, false).draw();
-            }
-        });
+            // Bind the Custom Dropdown to the DataTables Owner Column (Column 7)
+            $('#ownerFilter').on('change', function() {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                table.column(7).search(val ? '^' + val + '$' : '', true, false).draw();
+            });
 
-        // Bind the Custom Dropdown to the DataTables Owner Column (Column 7)
-        $('#ownerFilter').on('change', function() {
-            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-            table.column(7).search(val ? '^' + val + '$' : '', true, false).draw();
-        });
+            // Bind the Custom Dropdown to the DataTables Category Column (Column 2)
+            $('#categoryFilter').on('change', function() {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                table.column(2).search(val ? '^\\s*' + val + '\\s*$' : '', true, false).draw();
+            });
 
-        // Bind the Custom Dropdown to the DataTables Category Column (Column 2)
-        $('#categoryFilter').on('change', function() {
-            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-            table.column(2).search(val ? '^\\s*' + val + '\\s*$' : '', true, false).draw();
+            // Trigger table redraw when Parent Filter changes
+            $('#parentFilter').on('change', function() {
+                table.draw();
+            });
         });
-
-        // Trigger table redraw when Parent Filter changes
-        $('#parentFilter').on('change', function() {
-            table.draw();
-        });
-    });
 </script>
 {% endblock %}

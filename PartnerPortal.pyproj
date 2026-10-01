@@ -58,6 +58,7 @@ FLASK_SECRET_KEY=super-secret-key-for-local</Environment>
     <Content Include="templates\hubace.html" />
     <Content Include="templates\layout.html" />
     <Content Include="templates\licenses.html" />
+    <Content Include="templates\open_deals.html" />
     <Content Include="templates\perks\claim.html" />
     <Content Include="templates\perks\claims.html" />
     <Content Include="templates\perks\contact.html" />
@@ -70,6 +71,8 @@ FLASK_SECRET_KEY=super-secret-key-for-local</Environment>
     <Content Include="templates\rep_accounts.html" />
     <Content Include="templates\resource_hub.html" />
     <Content Include="templates\resource_hub_2.html" />
+    <Content Include="templates\sales_tools.html" />
+    <Content Include="templates\sales_tools_nav.html" />
     <Content Include="templates\training.html" />
   </ItemGroup>
   <ItemGroup>

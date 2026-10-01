@@ -1,0 +1,53 @@
+<!-- Sub-Navigation Menu -->
+<section class="mb-6">
+    <nav class="flex items-center gap-1 bg-white p-2 rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+        <!-- Back to Main Dashboard -->
+        <a href="/" class="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Dashboard
+        </a>
+
+        <div class="w-px h-6 bg-gray-200 mx-2"></div>
+
+        <!-- Sales Tools Home -->
+        <a href="/sales-tools" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'sales_tools' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            Sales Tools Home
+        </a>
+
+        {% if user.account == 'ACDI' %}
+        <!-- My Accounts (Visible only to ACDI) -->
+        <a href="/rep/accounts" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'rep_accounts' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            My Accounts
+        </a>
+        {% endif %}
+
+        <!-- License Dashboard -->
+        <a href="/licenses" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'reseller_licenses' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            License Dashboard
+        </a>
+        <!-- Open Deals -->
+        <a href="/open-deals" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'open_deals' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            Open Deals
+        </a>
+    </nav>
+</section>

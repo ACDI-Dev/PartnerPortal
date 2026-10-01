@@ -1,0 +1,361 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% include "sales_tools_nav.html" %}
+<!-- Title Section -->
+<section class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+            <h2 class="text-2xl font-bold text-gray-900 font-sans">Open Deals ({{ total_deals }})</h2>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Force Refresh Button -->
+            <a href="?refresh=true" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-acdi-green focus:outline-none transition-colors" onclick="this.innerHTML='<svg class=\'animate-spin h-4 w-4 text-acdi-green\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg> Refreshing...';">
+                <!-- Sync Icon -->
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Force Refresh
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Extract Unique Filters using Jinja -->
+{% set unique_stages = [] %}
+{% set unique_types = [] %}
+{% for deal in deals %}
+    {% if deal.get('Stage') and deal.get('Stage') not in unique_stages %}
+        {% set _ = unique_stages.append(deal.get('Stage')) %}
+    {% endif %}
+    {% if deal.get('Type') and deal.get('Type') not in unique_types %}
+        {% set _ = unique_types.append(deal.get('Type')) %}
+    {% endif %}
+{% endfor %}
+
+<!-- Detailed Open Deals Table -->
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900">Pipeline Roster</h3>
+            <p class="text-sm text-gray-500 mt-1">View, sort, filter, and export your open opportunities.</p>
+        </div>
+
+        <div class="p-6 overflow-x-auto">
+
+            <!-- Custom Filter Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
+                <!-- Type Filter -->
+                <div>
+                    <label for="typeFilter" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <select id="typeFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Types</option>
+                        {% for t in unique_types|sort %}
+                        <option value="{{ t }}">{{ t }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Stage Filter -->
+                <div>
+                    <label for="stageFilter" class="block text-sm font-medium text-gray-700 mb-1">Stage</label>
+                    <select id="stageFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Stages</option>
+                        {% for s in unique_stages|sort %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Quick Date Filter -->
+                <div>
+                    <label for="quickDateFilter" class="block text-sm font-medium text-gray-700 mb-1">Quick Dates</label>
+                    <select id="quickDateFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="all">All Dates</option>
+                        <option value="past">Past Due</option>
+                        <option value="custom">Custom...</option>
+                    </select>
+                </div>
+
+                <!-- Date Range Filters -->
+                <div>
+                    <label for="minDate" class="block text-sm font-medium text-gray-700 mb-1">Closing Date (Min)</label>
+                    <input type="date" id="minDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+                <div>
+                    <label for="maxDate" class="block text-sm font-medium text-gray-700 mb-1">Closing Date (Max)</label>
+                    <input type="date" id="maxDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+
+                <!-- Clear Dates Button -->
+                <div>
+                    <button type="button" id="clearDatesBtn" class="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-medium py-2 px-4 rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-300">
+                        Clear Dates
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <table id="dealsTable" class="w-full text-left text-sm text-gray-600">
+                <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">Deal Name</th>
+                        <th class="px-4 py-3">Contact</th>
+                        <th class="px-4 py-3">Amount</th>
+                        <th class="px-4 py-3">Type</th>
+                        <th class="px-4 py-3">Stage</th>
+                        <th class="px-4 py-3">Closing Date</th>
+                        <th class="px-4 py-3">Avg Embeds</th>
+                        <th class="px-4 py-3 rounded-tr-lg">Sales Rep</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for deal in deals %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 font-bold text-gray-900">{{ deal.get('Deal_Name', 'N/A') }}</td>
+
+                        <td class="px-4 py-3">
+                            {% set fname = deal.get('Contact_Name.First_Name', '') %}
+                            {% set lname = deal.get('Contact_Name.Last_Name', '') %}
+                            {{ fname }} {{ lname }}
+                        </td>
+
+                        <td class="px-4 py-3 font-medium text-gray-900" data-order="{{ deal.get('Amount', 0) }}">
+                            ${{ "{:,.2f}".format(deal.get('Amount', 0)|float) }}
+                        </td>
+
+                        <td class="px-4 py-3">{{ deal.get('Type', 'Unknown') }}</td>
+
+                        {% set stage = deal.get('Stage', 'Unknown') %}
+                        <td class="px-4 py-3">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#f0f9e8] text-green-700 border border-green-200 shadow-sm">
+                                {{ stage }}
+                            </span>
+                        </td>
+
+                        <td class="px-4 py-3">{{ deal.get('Closing_Date') or 'N/A' }}</td>
+
+                        <td class="px-4 py-3">{{ deal.get('Average_Quoted_Embeds') if deal.get('Average_Quoted_Embeds') != None else '0' }}</td>
+
+                        <td class="px-4 py-3">
+                            {% set ofname = deal.get('Sales_Rep_First_Name', '') %}
+                            {% set olname = deal.get('Sales_Rep_Last_Name', '') %}
+                            {{ ofname }} {{ olname }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DataTables Core CSS -->
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<!-- DataTables Buttons CSS -->
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<style>
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        outline: none;
+    }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 1px #10b981;
+        }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+        border-radius: 0.375rem;
+    }
+
+    table.dataTable.no-footer {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .dataTables_wrapper > .flex.mt-4 {
+        margin-top: 1rem;
+    }
+
+    .dataTables_wrapper > .flex.mb-4.text-sm {
+        margin-bottom: 1rem;
+    }
+
+    button.dt-button.tailwind-btn {
+        background: none !important;
+        border: none !important;
+        margin-left: 0.5rem;
+    }
+
+    /* ColVis Dropdown Styling & Background Fix */
+    div.dt-button-background {
+        background: transparent !important;
+        z-index: 2001 !important;
+    }
+
+    div.dt-button-collection {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        z-index: 2002 !important;
+    }
+
+        div.dt-button-collection button.dt-button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: #374151;
+            background: none;
+            border: none;
+            border-radius: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+            div.dt-button-collection button.dt-button:hover {
+                background-color: #f3f4f6;
+                color: #10b981;
+            }
+
+            div.dt-button-collection button.dt-button.active {
+                background-color: #f0f9e8;
+                color: #047857;
+                font-weight: 600;
+            }
+
+                div.dt-button-collection button.dt-button.active:hover {
+                    background-color: #e5f5da;
+                }
+</style>
+
+<!-- DataTables Core JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Buttons & Export JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<!-- Column Visibility JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+<script>
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var min = $('#minDate').val();
+                    var max = $('#maxDate').val();
+                    var dateStr = data[5]; // Column 5 is Closing Date
+
+                    if (!min && !max) { return true; }
+                    if (!dateStr || dateStr === 'N/A') { return false; }
+                    if (min && dateStr < min) { return false; }
+                    if (max && dateStr > max) { return false; }
+                    return true;
+                }
+            );
+
+            $(document).ready(function() {
+
+                // Format dates as YYYY-MM-DD
+                function formatDate(date) {
+                    var d = new Date(date),
+                        month = '' + (d.getMonth() + 1),
+                        day = '' + d.getDate(),
+                        year = d.getFullYear();
+                    if (month.length < 2) month = '0' + month;
+                    if (day.length < 2) day = '0' + day;
+                    return [year, month, day].join('-');
+                }
+
+                // Calculate date offsets
+                function addDaysToToday(days) {
+                    var d = new Date();
+                    d.setDate(d.getDate() + days);
+                    return formatDate(d);
+                }
+
+                var table = $('#dealsTable').DataTable({
+                    order: [[5, 'asc']], // Sort by Closing Date
+                    pageLength: 25,
+                    language: { search: "Search Deals:" },
+
+                    dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                         '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                         'rt' +
+                         '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+                    buttons: [
+                        {
+                            extend: 'colvis',
+                            text: 'Select Columns',
+                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        },
+                        {
+                            extend: 'csv',
+                            text: 'Export CSV',
+                            filename: 'Open_Deals_Export',
+                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'Export Excel',
+                            filename: 'Open_Deals_Export',
+                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        }
+                    ]
+                });
+
+                // Quick Date Filter Trigger
+                $('#quickDateFilter').on('change', function() {
+                    var val = $(this).val();
+
+                    if (val === 'past') {
+                        $('#minDate').val(''); // Open ended past
+                        $('#maxDate').val(addDaysToToday(-1)); // Anything prior to today
+                    } else if (val === 'all') {
+                        $('#minDate').val('');
+                        $('#maxDate').val('');
+                    }
+
+                    if (val !== 'custom') {
+                        table.draw();
+                    }
+                });
+
+                // Date Range Filters Trigger
+                $('#minDate, #maxDate').on('change', function() {
+                    $('#quickDateFilter').val('custom');
+                    table.draw();
+                });
+
+                // Clear Dates
+                $('#clearDatesBtn').on('click', function() {
+                    $('#minDate').val('');
+                    $('#maxDate').val('');
+                    $('#quickDateFilter').val('all');
+                    table.draw();
+                });
+
+                // Type Filter
+                $('#typeFilter').on('change', function() {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+                });
+
+                // Stage Filter
+                $('#stageFilter').on('change', function() {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
+                });
+            });
+</script>
+{% endblock %}
