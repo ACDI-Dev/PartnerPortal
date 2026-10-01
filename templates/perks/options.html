@@ -108,20 +108,20 @@
 <!-- Client-side Instant Filter Script -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('cardSearch');
+    const searchInput = document.getElementById('cardSearch') as HTMLInputElement | null;
     const cards = document.querySelectorAll('.brand-card');
     const visibleCount = document.getElementById('visibleCount');
     const noResults = document.getElementById('noResults');
 
     if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        // annotate `this` as HTMLInputElement so `this.value` is valid
+        searchInput.addEventListener('input', function(this: HTMLInputElement) {
             const query = this.value.toLowerCase().trim();
             let visible = 0;
-
             cards.forEach(card => {
                 const name = card.getAttribute('data-name') || '';
                 const category = card.getAttribute('data-category') || '';
-                
+
                 if (name.includes(query) || category.includes(query)) {
                     card.style.display = 'flex';
                     visible++;
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (visibleCount) visibleCount.textContent = visible;
-            
+
             if (noResults) {
                 if (visible === 0) {
                     noResults.classList.remove('hidden');

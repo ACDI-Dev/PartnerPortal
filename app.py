@@ -278,29 +278,12 @@ def dashboard(user):
     encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
     final_string = encoded_bytes.decode('utf-8')
 
-    return render_template('dashboard.html', 
-                           user = final_string,
-                           email=user.get('email'),
-                           first_name=user.get('first_name'),
-                           last_name=user.get('last_name'),
-                           account=user.get('account'),
-                           reseller_account=user.get('reseller_account'),
-                           tier=user.get('tier'),
-                           permissions=user.get('permissions'),
-                           authorized_apps=user.get('authorized_apps'),                   
-                           token = user.get('token'))
+    return render_template('dashboard.html',user = user)
 
 @app.route('/resources')
 @login_required
 def resource_hub(user):
-    return render_template('resource_hub.html', 
-                           email=user.get('email'),
-                           first_name=user.get('first_name'),
-                           last_name=user.get('last_name'),
-                           reseller_account=user.get('reseller_account'),
-                           tier=user.get('tier'),
-                           permissions=user.get('permissions'),
-                           authorized_apps=user.get('authorized_apps'))
+    return render_template('resource_hub.html', user = user)
 
 
 @app.route('/rep/accounts')
@@ -326,17 +309,7 @@ def rep_accounts(user):
             accounts = parsed_data.get("Accounts", [])
             total_accounts = parsed_data.get("Total_Number_of_Accounts", 0)
             
-            return render_template(
-                'rep_accounts.html', 
-                accounts=accounts,
-                total_accounts=total_accounts,
-                first_name=session.get('first_name', user.get('first_name', 'Sales Rep')),
-                last_name=session.get('last_name', user.get('last_name', '')),
-                user=user_email,  
-                tier=session.get('tier', user.get('tier', 'Standard')),
-                authorized_apps=session.get('authorized_apps', user.get('authorized_apps', [])),
-                permissions=session.get('permissions', user.get('permissions', []))
-            )
+            return render_template('rep_accounts.html', user=user,accounts=accounts,total_accounts=total_accounts)
         else:
             return "API returned an error.", 400
             
@@ -369,19 +342,7 @@ def reseller_licenses(user):
             licenses = parsed_data.get("Licenses", [])
             summary = parsed_data.get("Summary", {})
             
-            return render_template(
-                'licenses.html', 
-                licenses=licenses, 
-                summary=summary,
-                account=user.get('account'),
-                first_name=session.get('first_name', user.get('first_name', 'Partner')),
-                last_name=session.get('last_name', user.get('last_name', '')),
-                user=user_email,  
-                reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
-                tier=session.get('tier', user.get('tier', 'Standard')),
-                authorized_apps=session.get('authorized_apps', user.get('authorized_apps', [])),
-                permissions=session.get('permissions', user.get('permissions', []))
-            )
+            return render_template('licenses.html', user=user,licenses=licenses,summary=summary)
         else:
             return "API returned an error.", 400
             
@@ -393,14 +354,7 @@ def reseller_licenses(user):
 @app.route('/training')
 @login_required
 def training(user):
-    return render_template('training.html', 
-                           email=user.get('email'),
-                           first_name=user.get('first_name'),
-                           last_name=user.get('last_name'),
-                           reseller_account=user.get('reseller_account'),
-                           tier=user.get('tier'),
-                           permissions=user.get('permissions'),
-                           authorized_apps=user.get('authorized_apps'))
+    return render_template('training.html', user=user)
 
 @app.route('/ace')
 @login_required
@@ -411,17 +365,7 @@ def ace_portal(user):
     # Extract the raw JWT instead of base64 encoding the session object
     raw_jwt = user.get('token')
 
-    return render_template('hubace.html',
-                           user=user,
-                           token=raw_jwt,  
-                           email=user.get('email'),
-                           first_name=user.get('first_name'),
-                           last_name=user.get('last_name'),
-                           account=user.get('account'),
-                           account_category=user.get('account_category'),
-                           reseller_account=user.get('reseller_account'),
-                           tier=user.get('tier'),
-                           authorized_apps=user.get('authorized_apps'))
+    return render_template('hubace.html',user=user,token=raw_jwt)
 
 # --- PERKS ROUTES ---
 
@@ -446,18 +390,7 @@ def perks_options(user):
             print(f"Error reading cards.json: {e}")
 
     return render_template(
-        'perks/options.html',
-        catalog_name=catalog_name,
-        brands=brands,
-        first_name=session.get('first_name', user.get('first_name', 'Partner')),
-        last_name=session.get('last_name', user.get('last_name', '')),
-        user=user.get('email'),
-        email=user.get('email'),
-        reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
-        tier=session.get('tier', user.get('tier', 'Standard')),
-        authorized_apps=authorized_apps,
-        permissions=session.get('permissions', user.get('permissions', []))
-    )
+        'perks/options.html',catalog_name=catalog_name,brands=brands,user=user)
     
 @app.route('/perks/home')
 @login_required
@@ -466,16 +399,7 @@ def perks_home(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    return render_template('perks/home.html',
-            email=user.get('email'),
-            first_name=user.get('first_name'),
-            last_name=user.get('last_name'),
-            account=user.get('account'),
-            account_category=user.get('account_category'),
-            reseller_account=user.get('reseller_account'),
-            tier=user.get('tier'),
-            authorized_apps=user.get('authorized_apps'),
-            permissions=session.get('permissions', user.get('permissions', [])))
+    return render_template('perks/home.html',user=user)
 
 @app.route('/perks/rules')
 @login_required
@@ -484,16 +408,7 @@ def perks_rules(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    return render_template('perks/rules.html',
-            email=user.get('email'),
-            first_name=user.get('first_name'),
-            last_name=user.get('last_name'),
-            account=user.get('account'),
-            account_category=user.get('account_category'),
-            reseller_account=user.get('reseller_account'),
-            tier=user.get('tier'),
-            authorized_apps=user.get('authorized_apps'),
-            permissions=session.get('permissions', user.get('permissions', [])))
+    return render_template('perks/rules.html',user=user)
 
 @app.route('/perks/terms')
 @login_required
@@ -502,34 +417,8 @@ def perks_terms(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    return render_template('perks/terms.html',
-            email=user.get('email'),
-            first_name=user.get('first_name'),
-            last_name=user.get('last_name'),
-            account=user.get('account'),
-            account_category=user.get('account_category'),
-            reseller_account=user.get('reseller_account'),
-            tier=user.get('tier'),
-            authorized_apps=user.get('authorized_apps'),
-            permissions=session.get('permissions', user.get('permissions', [])))
+    return render_template('perks/terms.html',user=user)
 
-@app.route('/perks/contact')
-@login_required
-def perks_contact(user):
-    authorized_apps = user.get('authorized_apps', [])
-    if 'Partner Perks' not in authorized_apps:
-        return redirect(url_for('dashboard'))
-        
-    return render_template('perks/contact.html',
-            email=user.get('email'),
-            first_name=user.get('first_name'),
-            last_name=user.get('last_name'),
-            account=user.get('account'),
-            account_category=user.get('account_category'),
-            reseller_account=user.get('reseller_account'),
-            tier=user.get('tier'),
-            authorized_apps=user.get('authorized_apps'),
-            permissions=session.get('permissions', user.get('permissions', [])))
 
 @app.route('/perks/rewards')
 @login_required
@@ -560,20 +449,7 @@ def perks_rewards(user):
             points = parsed_data.get("Points", 0)
             rewards_user = parsed_data.get("UserName", "")
             
-        return render_template(
-            'perks/rewards.html', 
-            points=points,
-            rewards_user=rewards_user,
-            first_name=session.get('first_name', user.get('first_name', 'Partner')),
-            last_name=session.get('last_name', user.get('last_name', '')),
-            user=user_email,
-            email=user_email,
-            reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
-            tier=session.get('tier', user.get('tier', 'Standard')),
-            authorized_apps=authorized_apps,
-            permissions=session.get('permissions', user.get('permissions', []))
-        )
-            
+        return render_template('perks/rewards.html',points=points,rewards_user=rewards_user,user=user)
     except requests.RequestException as e:
         return f"Error fetching rewards data: {str(e)}", 500
     except json.JSONDecodeError:
@@ -589,19 +465,7 @@ def perks_claim(user):
     today = date.today()
     min_date = today + timedelta(days=-90)
     
-    return render_template('perks/claim.html',
-            email=user.get('email'),
-            first_name=user.get('first_name'),
-            last_name=user.get('last_name'),
-            account=user.get('account'),
-            account_category=user.get('account_category'),
-            reseller_account=user.get('reseller_account'),
-            tier=user.get('tier'),
-            user=user,
-            authorized_apps=user.get('authorized_apps'),
-            permissions=session.get('permissions', user.get('permissions', [])),
-            max_date=today.strftime("%Y-%m-%d"),
-            min_date=min_date.strftime("%Y-%m-%d"))
+    return render_template('perks/claim.html',user=user,max_date=today.strftime("%Y-%m-%d"),min_date=min_date.strftime("%Y-%m-%d"))
 
 @app.route('/perks/claims')
 @login_required
@@ -631,19 +495,7 @@ def perks_claims(user):
             claims = data.get("Claims", [])
             summary = {}
             
-        return render_template(
-            'perks/claims.html', 
-            claims=claims, 
-            summary=summary,
-            first_name=session.get('first_name', user.get('first_name', 'Partner')),
-            last_name=session.get('last_name', user.get('last_name', '')),
-            user=user,
-            email=user_email,
-            reseller_account=session.get('reseller_account', user.get('reseller_account', 'Unknown Account')),
-            tier=session.get('tier', user.get('tier', 'Standard')),
-            authorized_apps=authorized_apps,
-            permissions=session.get('permissions', user.get('permissions', []))
-        )
+        return render_template('perks/claims.html',claims=claims,summary=summary,user=user)
             
     except requests.RequestException as e:
         return f"Error fetching claims data: {str(e)}", 500

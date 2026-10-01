@@ -10,7 +10,7 @@
 
         <div class="max-w-2xl relative z-10">
             <h1 class="text-4xl font-bold text-white mb-4 font-sans tracking-tight">
-                Welcome, <strong class="text-acdi-green">{{ first_name|default('Partner') }} {{ last_name|default('') }}</strong>
+                Welcome, <strong class="text-acdi-green">{{ user.first_name|default('') }} {{ user.last_name|default('') }}</strong>
             </h1>
             <p class="text-lg text-gray-300 mb-6 font-sans leading-relaxed">
                 Access your exclusive resources, register new opportunities, and manage your deployments all from one centralized hub.
@@ -19,13 +19,13 @@
                 <div class="flex items-center gap-2">
                     <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Account:</span>
                     <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold bg-gray-700 text-white shadow-sm border border-gray-600">
-                        {{ reseller_account|default('Unknown Account') }}
+                        {{ user.reseller_account|default('Unknown Account') }}
                     </span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Tier:</span>
                     <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold bg-acdi-green text-acdi-dark shadow-sm">
-                        {{ tier|default('Standard') }}
+                        {{ user.tier|default('Standard') }}
                     </span>
                 </div>
             </div>
@@ -47,7 +47,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
-       {% if 'ACE' in authorized_apps %}
+       {% if 'ACE' in user.authorized_apps %}
         <a href="/ace" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
@@ -58,7 +58,7 @@
         {% endif %}
 
         <!-- License Dashboard -->
-        <a href="{% if account == 'ACDI' %}/rep/accounts{% else %}/licenses{% endif %}" id="licenseLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+        <a href="{% if user.account == 'ACDI' %}/rep/accounts{% else %}/licenses{% endif %}" id="licenseLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             
             <!-- Loading Overlay (Hidden by default, triggered by JS) -->
             <div id="licenseLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
@@ -87,7 +87,7 @@
         </a>
         
         <!-- Quote Portal (Requires Authorization for the Quote Portal App) -->
-        {% if 'Quote Portal' in authorized_apps %}
+        {% if 'Quote Portal' in user.authorized_apps %}
             <!-- ACTIVE STATE: User has access -->
             <a href="https://acdidev.zohocreator.com/portal/qr" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
                 <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
@@ -124,7 +124,7 @@
         </a>
 
         <!-- MDF Requests (Requires 'MDF_Request' permission) -->
-        {% if 'MDF_Request' in permissions %}
+        {% if 'MDF_Request' in user.permissions %}
         <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -155,7 +155,7 @@
     </div>
 </section>
 
-{% if 'ACE' in authorized_apps %}
+{% if 'ACE' in user.authorized_apps %}
 <!-- Debug UI for Claims passed via FusionAuth -->
 <section class="mt-16 hidden">
     <div class="p-6 bg-white border border-gray-200 shadow-sm rounded-xl">
@@ -165,13 +165,12 @@
         </h3>
         <div class="bg-gray-900 p-4 rounded-lg overflow-auto text-sm font-mono text-acdi-green">
             <ul class="space-y-1">
-                <li>[SYSTEM] Account Name: {{ reseller_account }}</li>
-                <li>[SYSTEM] Identity: {{ first_name }} {{ last_name }}</li>
-                <li>[SYSTEM] User: {{ user }} </li>
-                <li>[SYSTEM] token: {{ token }} </li>
+                <li>[SYSTEM] Account Name: {{ user.reseller_account }}</li>
+                <li>[SYSTEM] Identity: {{ user.first_name }} {{ user.last_name }}</li>
+                <li>[SYSTEM] token: {{ user.token }} </li>
                 <li class="pt-2 text-gray-400">--- Permissions ---</li>
-                {% if permissions %}
-                {% for perm in permissions %}
+                {% if user.permissions %}
+                {% for perm in user.permissions %}
                 <li>[SYSTEM] Permission granted: {{ perm }}</li>
                 {% endfor %}
                 {% else %}
@@ -179,8 +178,8 @@
                 {% endif %}
 
                 <li class="pt-2 text-gray-400">--- Authorized Apps ---</li>
-                {% if authorized_apps %}
-                {% for app_id in authorized_apps %}
+                {% if user.authorized_apps %}
+                {% for app_id in user.authorized_apps %}
                 <li>[SYSTEM] Authorized App ID: {{ app_id }}</li>
                 {% endfor %}
                 {% else %}
