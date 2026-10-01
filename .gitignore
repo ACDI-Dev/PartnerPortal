@@ -1,3 +1,5 @@
 .vs/
 .suo/
-.env
+env
+*.vsidx
+/.vs
