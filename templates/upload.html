@@ -1,0 +1,13 @@
+<!-- upload.html -->
+<form action="/upload-image" method="POST" enctype="multipart/form-data">
+    <!-- User inputs (these could also come from your Flask session/database) -->
+    <input type="hidden" name="user_id" value="12345">
+    <input type="text" name="first_name" placeholder="First Name" required>
+    <input type="text" name="last_name" placeholder="Last Name" required>
+    <input type="text" name="tag_name" placeholder="Tag Name" required>
+    
+    <!-- File upload -->
+    <input type="file" name="profile_image" accept="image/*" required>
+    
+    <button type="submit">Upload Image</button>
+</form>

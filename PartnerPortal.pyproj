@@ -58,6 +58,7 @@ FLASK_SECRET_KEY=super-secret-key-for-local</Environment>
     <Content Include="templates\hubace.html" />
     <Content Include="templates\layout.html" />
     <Content Include="templates\licenses.html" />
+    <Content Include="templates\employees.html" />
     <Content Include="templates\open_deals.html" />
     <Content Include="templates\perks\claim.html" />
     <Content Include="templates\perks\claims.html" />

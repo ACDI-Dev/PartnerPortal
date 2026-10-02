@@ -4,13 +4,17 @@ import json
 import requests
 import time
 import jwt
+import io
+import traceback
 from functools import wraps
-from flask import Flask, render_template, session, redirect, request, url_for
+from flask import Flask, render_template, session, redirect, request, url_for, jsonify, send_file
 from werkzeug.middleware.proxy_fix import ProxyFix
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlencode
-from datetime import date, timedelta
+import urllib.request
+from datetime import date, timedelta, datetime, timezone
 from flask_caching import Cache
+from google.cloud import storage
 
 app = Flask(__name__)
 
@@ -60,6 +64,13 @@ AUTHORIZED_APP_MAP = {
     'ca7f9e18-d00d-40f7-bc31-89012984199a': 'Zoho CRM Portal',
     '2e4da041-ed7f-478e-a01b-753c0a414f7a': 'Zoho Desk'
 }
+
+# --- GCS Configuration ---
+# Update this with the actual path to the JSON key file you downloaded
+GCS_KEY_PATH = 'acdifiles.json' 
+BUCKET_NAME = 'acdifiles'
+BLOB_NAME = 'ID/employees.json'
+
 
 def get_user_identity():
     return session.get('user')
@@ -545,6 +556,184 @@ def perks_claims(user):
     except json.JSONDecodeError:
         return "Error parsing the claims data from the API.", 500
 
+def get_gcs_client():
+    """Initializes and returns the authenticated GCS client."""
+    return storage.Client.from_service_account_json(GCS_KEY_PATH)
+
+def load_employee_data():
+    """Fetches employee data securely via the GCS SDK."""
+    try:
+        client = get_gcs_client()
+        bucket = client.bucket(BUCKET_NAME)
+        blob = bucket.blob(BLOB_NAME)
+        
+        # Download the file contents as a string
+        json_data = blob.download_as_string()
+        return json.loads(json_data)
+    except Exception as e:
+        print(f"Error fetching from GCS: {e}")
+        return []
+
+@app.route('/employees', methods=['GET'])
+def manage_employees():
+    """Renders the management dashboard populated with remote GCS data."""
+    employees = load_employee_data()
+    return render_template('employees.html', employees=employees)
+
+@app.route('/employees/save_cloud', methods=['POST'])
+def save_to_cloud():
+    """Formats the updated JSON, backs up the old version, and uploads the new one."""
+    try:
+        updated_data = request.get_json(force=True)
+        current_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        # Automatically update lastUpdateDate and synchronize Full Name
+        for emp in updated_data:
+            emp["lastUpdateDate"] = current_time
+            first = emp.get('First Name', '').strip()
+            last = emp.get('Last Name', '').strip()
+            emp["Full Name"] = f"{first} {last}".strip()
+
+        # Format JSON with indenting for clean human-readable output
+        json_output = json.dumps(updated_data, indent=4)
+
+        client = get_gcs_client()
+        bucket = client.bucket(BUCKET_NAME)
+        blob = bucket.blob(BLOB_NAME)
+        
+        # --- NEW: BACKUP EXISTING FILE ---
+        # Check if the master file already exists, and if so, copy it to the backup folder
+        if blob.exists():
+            timestamp_str = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+            backup_blob_name = f"ID/backup/employees_{timestamp_str}.json"
+            bucket.copy_blob(blob, bucket, backup_blob_name)
+        # ---------------------------------
+        
+        # Upload the new data to GCS
+        blob.upload_from_string(json_output, content_type='application/json')
+        
+        # Ensure cache control is set so edge servers fetch the fresh file
+        blob.cache_control = 'no-cache, max-age=0, must-revalidate'
+        blob.patch()
+
+        return jsonify({"status": "success", "message": "Successfully saved and backed up to Google Cloud!"}), 200
+
+    except Exception as e:
+        print("--- ERROR IN SAVE TO CLOUD ROUTE ---")
+        traceback.print_exc()
+        return jsonify({"status": "error", "message": str(e)}), 400
+
+@app.route('/employees/download', methods=['POST'])
+def download_updated_json():
+    """Receives edited JSON data from UI, updates timestamp, and sends file back."""
+    try:
+        # force=True ensures it parses the JSON even if headers get stripped
+        updated_data = request.get_json(force=True) 
+        current_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        # Automatically update lastUpdateDate and synchronize Full Name
+        for emp in updated_data:
+            emp["lastUpdateDate"] = current_time
+            first = emp.get('First Name', '').strip()
+            last = emp.get('Last Name', '').strip()
+            emp["Full Name"] = f"{first} {last}".strip()
+
+        # Format JSON with indenting for clean human-readable output
+        json_output = json.dumps(updated_data, indent=4)
+
+        # Create an in-memory file stream for browser download
+        buffer = io.BytesIO()
+        buffer.write(json_output.encode('utf-8'))
+        buffer.seek(0)
+
+        return send_file(
+            buffer,
+            as_attachment=True,
+            download_name='employees.json', # CHANGE TO attachment_filename='employees.json' IF ON FLASK 1.x
+            mimetype='application/json'
+        )
+    except Exception as e:
+        # This will print the exact line and error to your Python terminal
+        print("--- ERROR IN DOWNLOAD ROUTE ---")
+        traceback.print_exc() 
+        return jsonify({"status": "error", "message": str(e)}), 400
+@app.route('/employees/list_bucket_images', methods=['GET'])
+def list_bucket_images():
+    """Lists image files in a specific directory inside the GCS bucket."""
+    try:
+        # You can specify a prefix/subfolder here (e.g., 'ID/' or 'ID/images/')
+        prefix = request.args.get('prefix', 'ID/')
+        
+        client = get_gcs_client()
+        bucket = client.bucket(BUCKET_NAME)
+        
+        # Fetch blobs starting with the prefix
+        blobs = bucket.list_blobs(prefix=prefix)
+        
+        valid_extensions = ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg')
+        file_list = []
+        
+        for blob in blobs:
+            # Filter out folder placeholders and non-image files
+            if blob.name.lower().endswith(valid_extensions):
+                public_url = f"https://storage.googleapis.com/{BUCKET_NAME}/{blob.name}"
+                file_list.append({
+                    'path': blob.name,
+                    'filename': blob.name.split('/')[-1],
+                    'url': public_url
+                })
+                
+        return jsonify({'status': 'success', 'files': file_list}), 200
+    
+    except Exception as e:
+        print("--- ERROR LISTING BUCKET IMAGES ---")
+        traceback.print_exc()
+        return jsonify({'status': 'error', 'message': str(e)}), 400
+
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    """Receives a local image upload and saves it directly to the GCS bucket."""
+    try:
+        # Grab the file and form data sent by your new JS function
+        file = request.files.get('profile_image')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        tag_name = request.form.get('tag_name')
+
+        if not file:
+            return jsonify({"error": "No file part"}), 400
+
+        # Extract the file extension
+        extension = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'png'
+        
+        # Define the folder and the new specific file name format
+        folder_name = f"{first_name} {last_name}".strip()
+        
+        # NEW FORMAT: First Name_Last Name_tag.extension
+        file_name = f"{first_name}_{last_name}_{tag_name}.{extension}"
+        blob_path = f"ID/{folder_name}/{file_name}"
+        # Upload to Google Cloud Storage
+        client = get_gcs_client()
+        bucket = client.bucket(BUCKET_NAME)
+        blob = bucket.blob(blob_path)
+        
+        # Read the file from memory and upload it
+        blob.upload_from_file(file, content_type=file.content_type)
+        
+        # Ensure cache control is set so new images show up immediately
+        blob.cache_control = 'no-cache, max-age=0, must-revalidate'
+        blob.patch()
+
+        # Construct the public URL to return to the frontend
+        public_url = f"https://storage.googleapis.com/{BUCKET_NAME}/{blob_path}"
+
+        return jsonify({"status": "success", "public_path": public_url}), 200
+
+    except Exception as e:
+        print("--- ERROR UPLOADING FILE ---")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
