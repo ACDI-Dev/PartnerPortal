@@ -66,11 +66,25 @@ AUTHORIZED_APP_MAP = {
 }
 
 # --- GCS Configuration ---
-# Update this with the actual path to the JSON key file you downloaded
-GCS_KEY_PATH = 'acdifiles.json' 
 BUCKET_NAME = 'acdifiles'
 BLOB_NAME = 'ID/employees.json'
 
+def get_gcs_client():
+    """Initializes and returns the authenticated GCS client for both Cloud Run and Local."""
+    secret_manager_path = '/secrets/acdifiles.json'
+    local_key_path = 'acdifiles.json'
+
+    # 1. Cloud Run Secret Manager Mount
+    if os.path.exists(secret_manager_path):
+        return storage.Client.from_service_account_json(secret_manager_path)
+    
+    # 2. Local File in Project Root
+    if os.path.exists(local_key_path):
+        print("test")
+        return storage.Client.from_service_account_json(local_key_path)
+
+    # 3. Default Cloud Run Service Account Credentials
+    return storage.Client()
 
 def get_user_identity():
     return session.get('user')
@@ -556,9 +570,7 @@ def perks_claims(user):
     except json.JSONDecodeError:
         return "Error parsing the claims data from the API.", 500
 
-def get_gcs_client():
-    """Initializes and returns the authenticated GCS client."""
-    return storage.Client.from_service_account_json(GCS_KEY_PATH)
+
 
 def load_employee_data():
     """Fetches employee data securely via the GCS SDK."""

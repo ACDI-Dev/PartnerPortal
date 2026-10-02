@@ -3,3 +3,4 @@
 env
 *.vsidx
 /.vs
+acdifiles.json
