@@ -7,15 +7,15 @@
     <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-                tailwind.config = {
-                    theme: {
-                        extend: {
-                            colors: {
-                                'acdi-green': '#8cc540', // Matching standard green theme
+                        tailwind.config = {
+                            theme: {
+                                extend: {
+                                    colors: {
+                                        'acdi-green': '#8cc540', // Matching standard green theme
+                                    }
+                                }
                             }
                         }
-                    }
-                }
     </script>
     <style>
         /* Minimal overrides for native contenteditable elements */
@@ -118,6 +118,12 @@
                                 <input type="checkbox" class="col-toggle accent-emerald-600 rounded" data-col="col-dept" checked onchange="toggleColumnVisibility('col-dept', this.checked)"> Department
                             </label>
                             <label class="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                                <input type="checkbox" class="col-toggle accent-emerald-600 rounded" data-col="col-division" checked onchange="toggleColumnVisibility('col-division', this.checked)"> Division
+                            </label>
+                            <label class="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                                <input type="checkbox" class="col-toggle accent-emerald-600 rounded" data-col="col-team" checked onchange="toggleColumnVisibility('col-team', this.checked)"> Team
+                            </label>
+                            <label class="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
                                 <input type="checkbox" class="col-toggle accent-emerald-600 rounded" data-col="col-manager" onchange="toggleColumnVisibility('col-manager', this.checked)"> Manager Email
                             </label>
                             <label class="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
@@ -146,6 +152,8 @@
                             <th class="col-email hidden px-4 py-3.5 whitespace-nowrap">Email Address</th>
                             <th class="col-title px-4 py-3.5 whitespace-nowrap">Employee Title</th>
                             <th class="col-dept px-4 py-3.5 whitespace-nowrap">Department</th>
+                            <th class="col-division px-4 py-3.5 whitespace-nowrap">Division</th>
+                            <th class="col-team px-4 py-3.5 whitespace-nowrap">Team</th>
                             <th class="col-manager hidden px-4 py-3.5 whitespace-nowrap">Manager Email</th>
                             <th class="col-description hidden px-4 py-3.5 whitespace-nowrap">Description</th>
                             <th class="col-status px-4 py-3.5 whitespace-nowrap">Status</th>
@@ -163,6 +171,8 @@
                             <td contenteditable="true" class="col-email hidden editable px-4 py-3 whitespace-nowrap">{{ emp['Email Address'] }}</td>
                             <td contenteditable="true" class="col-title editable px-4 py-3 whitespace-nowrap">{{ emp['Employee Title'] }}</td>
                             <td contenteditable="true" class="col-dept editable px-4 py-3 whitespace-nowrap">{{ emp['Department'] }}</td>
+                            <td contenteditable="true" class="col-division editable px-4 py-3 whitespace-nowrap">{{ emp.Division or '' }}</td>
+                            <td contenteditable="true" class="col-team editable px-4 py-3 whitespace-nowrap">{{ emp.Team or '' }}</td>
                             <td contenteditable="true" class="col-manager hidden editable px-4 py-3 whitespace-nowrap">{{ emp['Manager Email'] }}</td>
                             <td contenteditable="true" class="col-description hidden editable px-4 py-3 whitespace-nowrap">{{ emp.description or '' }}</td>
                             <td class="col-status px-4 py-3">
@@ -246,497 +256,481 @@
     </div>
 
     <script>
-                let currentRowForImages = null;
+                        let currentRowForImages = null;
 
-                // --- Column Visibility Toggle Logic ---
-                function toggleColumnDropdown() {
-                    const dropdown = document.getElementById('columnDropdown');
-                    dropdown.classList.toggle('hidden');
-                }
-
-                // Close dropdown when clicking outside
-                window.addEventListener('click', function(e) {
-                    const dropdown = document.getElementById('columnDropdown');
-                    const button = e.target.closest('button[onclick="toggleColumnDropdown()"]');
-                    if (!dropdown.contains(e.target) && !button) {
-                        dropdown.classList.add('hidden');
-                    }
-                });
-
-                function toggleColumnVisibility(colClass, isVisible) {
-                    const elements = document.querySelectorAll(`.${colClass}`);
-                    elements.forEach(el => {
-                        if (isVisible) {
-                            el.classList.remove('hidden');
-                        } else {
-                            el.classList.add('hidden');
+                        // --- Column Visibility Toggle Logic ---
+                        function toggleColumnDropdown() {
+                            const dropdown = document.getElementById('columnDropdown');
+                            dropdown.classList.toggle('hidden');
                         }
-                    });
-                }
 
-                function filterTable() {
-                    const query = document.getElementById('searchInput').value.toLowerCase();
-                    const rows = document.querySelectorAll('#employeeTable tbody tr');
-                    rows.forEach(row => {
-                        const text = row.innerText.toLowerCase();
-                        row.style.display = text.includes(query) ? '' : 'none';
-                    });
-                }
-
-                function deleteRow(btn) {
-                    if (confirm('Are you sure you want to remove this employee record?')) {
-                        btn.closest('tr').remove();
-                    }
-                }
-
-                function addRow() {
-                    const tbody = document.querySelector('#employeeTable tbody');
-                    const now = new Date().toISOString();
-                    const tr = document.createElement('tr');
-
-                    tr.className = "hover:bg-gray-50 transition-colors";
-                    tr.setAttribute('data-created', now);
-                    tr.setAttribute('data-images', '{}');
-
-                    // Determine current visibility state based on checkboxes
-                    const isEmailHidden = !document.querySelector('[data-col="col-email"]').checked;
-                    const isManagerHidden = !document.querySelector('[data-col="col-manager"]').checked;
-                    const isDescHidden = !document.querySelector('[data-col="col-description"]').checked;
-                    const isFirstNameHidden = !document.querySelector('[data-col="col-firstname"]').checked;
-                    const isLastNameHidden = !document.querySelector('[data-col="col-lastname"]').checked;
-                    const isTitleHidden = !document.querySelector('[data-col="col-title"]').checked;
-                    const isDeptHidden = !document.querySelector('[data-col="col-dept"]').checked;
-                    const isStatusHidden = !document.querySelector('[data-col="col-status"]').checked;
-
-                    tr.innerHTML = `
-                        <td contenteditable="true" class="col-firstname editable px-4 py-3 font-medium text-gray-900 whitespace-nowrap ${isFirstNameHidden ? 'hidden' : ''}">First</td>
-                        <td contenteditable="true" class="col-lastname editable px-4 py-3 font-medium text-gray-900 whitespace-nowrap ${isLastNameHidden ? 'hidden' : ''}">Last</td>
-                        <td contenteditable="true" class="col-email editable px-4 py-3 whitespace-nowrap ${isEmailHidden ? 'hidden' : ''}">first.last@acd-inc.com</td>
-                        <td contenteditable="true" class="col-title editable px-4 py-3 whitespace-nowrap ${isTitleHidden ? 'hidden' : ''}">Title</td>
-                        <td contenteditable="true" class="col-dept editable px-4 py-3 whitespace-nowrap ${isDeptHidden ? 'hidden' : ''}">Department</td>
-                        <td contenteditable="true" class="col-manager editable px-4 py-3 whitespace-nowrap ${isManagerHidden ? 'hidden' : ''}">manager@acd-inc.com</td>
-                        <td contenteditable="true" class="col-description editable px-4 py-3 whitespace-nowrap ${isDescHidden ? 'hidden' : ''}">New employee description</td>
-                        <td class="col-status px-4 py-3 ${isStatusHidden ? 'hidden' : ''}">
-                            <select class="w-full border-gray-300 rounded-md shadow-sm focus:border-acdi-green focus:ring-acdi-green sm:text-xs p-1.5 border outline-none bg-white font-medium cursor-pointer">
-                                <option value="active" selected>Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </td>
-                        <td class="px-4 py-3 whitespace-nowrap">
-                            <div class="flex items-center gap-2">
-                                <button onclick="openImageModal(this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 shadow-sm text-xs font-semibold transition-colors">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    Images
-                                </button>
-                                <button onclick="deleteRow(this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 border border-red-200 rounded-md hover:bg-red-100 shadow-sm text-xs font-semibold transition-colors">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                    Delete
-                                </button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.prepend(tr);
-                }
-
-                // Modal Logic
-                function openImageModal(btn) {
-                    currentRowForImages = btn.closest('tr');
-
-                    const imagesRaw = currentRowForImages.getAttribute('data-images');
-                    let imagesData = {};
-
-                    try {
-                        if (imagesRaw && imagesRaw !== "null") {
-                            imagesData = JSON.parse(imagesRaw);
-                        }
-                    } catch (e) {
-                        console.error("Error parsing image JSON for row:", e);
-                        imagesData = {};
-                    }
-
-                    if (typeof imagesData !== 'object' || imagesData === null) {
-                        imagesData = {};
-                    }
-
-                    const imageList = document.getElementById('imageList');
-                    imageList.innerHTML = '';
-
-                    for (const [tag, url] of Object.entries(imagesData)) {
-                        addImageField(tag, url);
-                    }
-
-                    document.getElementById('imageModal').showModal();
-                }
-
-                let activeUrlInput = null;
-                let loadedBucketFiles = [];
-
-                function addImageField(tag = '', url = '') {
-                    const div = document.createElement('div');
-                    div.className = 'image-pair flex items-center gap-2 w-full';
-
-                    const tagInput = document.createElement('input');
-                    tagInput.type = 'text';
-                    tagInput.className = 'img-tag w-[25%] border-gray-300 rounded-md shadow-sm focus:border-acdi-green focus:ring-acdi-green sm:text-sm p-2 border outline-none bg-white placeholder-gray-400';
-                    tagInput.placeholder = 'Tag (e.g. 80w-326ppi)';
-                    tagInput.value = tag;
-
-                    const urlInput = document.createElement('input');
-                    urlInput.type = 'url';
-                    urlInput.className = 'img-url flex-1 border-gray-300 rounded-md shadow-sm focus:border-acdi-green focus:ring-acdi-green sm:text-sm p-2 border outline-none bg-white placeholder-gray-400';
-                    urlInput.placeholder = 'https://storage.googleapis.com/...';
-                    urlInput.value = url;
-
-                    // Upload Local File Button
-                    const uploadBtn = document.createElement('button');
-                    uploadBtn.type = 'button';
-                    uploadBtn.className = 'p-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md hover:bg-emerald-100 transition-colors shadow-sm';
-                    uploadBtn.title = 'Upload Local File';
-                    uploadBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>';
-
-                    const fileInput = document.createElement('input');
-                    fileInput.type = 'file';
-                    fileInput.accept = 'image/*';
-                    fileInput.style.display = 'none';
-
-                    uploadBtn.onclick = function() {
-                        if (!tagInput.value.trim()) {
-                            alert("Please enter an image tag first to use as the file name.");
-                            tagInput.focus();
-                            return;
-                        }
-                        fileInput.click();
-                    };
-
-                    fileInput.onchange = async function(event) {
-                        const file = event.target.files[0];
-                        if (!file) return;
-
-                        const firstName = currentRowForImages.querySelector('.col-firstname').innerText.trim();
-                        const lastName = currentRowForImages.querySelector('.col-lastname').innerText.trim();
-                        const currentTag = tagInput.value.trim();
-
-                        const formData = new FormData();
-                        formData.append('profile_image', file);
-                        formData.append('first_name', firstName);
-                        formData.append('last_name', lastName);
-                        formData.append('tag_name', currentTag);
-
-                        uploadBtn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>';
-                        uploadBtn.disabled = true;
-
-                        try {
-                            const response = await fetch('/upload-image', {
-                                method: 'POST',
-                                body: formData
-                            });
-                            const result = await response.json();
-
-                            if (response.ok) {
-                                urlInput.value = result.public_path;
-                            } else {
-                                alert('Upload failed: ' + (result.error || result.message));
+                        // Close dropdown when clicking outside
+                        window.addEventListener('click', function(e) {
+                            const dropdown = document.getElementById('columnDropdown');
+                            const button = e.target.closest('button[onclick="toggleColumnDropdown()"]');
+                            if (!dropdown.contains(e.target) && !button) {
+                                dropdown.classList.add('hidden');
                             }
-                        } catch(e) {
-                            alert('Network error during upload: ' + e.message);
-                        } finally {
-                            uploadBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>';
-                            uploadBtn.disabled = false;
-                            fileInput.value = '';
+                        });
+
+                        function toggleColumnVisibility(colClass, isVisible) {
+                            const elements = document.querySelectorAll(`.${colClass}`);
+                            elements.forEach(el => {
+                                if (isVisible) {
+                                    el.classList.remove('hidden');
+                                } else {
+                                    el.classList.add('hidden');
+                                }
+                            });
                         }
-                    };
 
-                    // Browse Bucket Button
-                    const browseBtn = document.createElement('button');
-                    browseBtn.type = 'button';
-                    browseBtn.className = 'p-2 bg-gray-50 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors shadow-sm';
-                    browseBtn.title = 'Browse Cloud Bucket';
-                    browseBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>';
+                        function filterTable() {
+                            const query = document.getElementById('searchInput').value.toLowerCase();
+                            const rows = document.querySelectorAll('#employeeTable tbody tr');
+                            rows.forEach(row => {
+                                const text = row.innerText.toLowerCase();
+                                row.style.display = text.includes(query) ? '' : 'none';
+                            });
+                        }
 
-                    browseBtn.onclick = function () {
-                        openBucketPicker(urlInput);
-                    };
+                        function deleteRow(btn) {
+                            if (confirm('Are you sure you want to remove this employee record?')) {
+                                btn.closest('tr').remove();
+                            }
+                        }
 
-                    // Preview Image Button
-                    const previewBtn = document.createElement('button');
-                    previewBtn.type = 'button';
-                    previewBtn.className = 'p-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors shadow-sm';
-                    previewBtn.title = 'Preview Image';
-                    previewBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>';
+                        function addRow() {
+                            const tbody = document.querySelector('#employeeTable tbody');
+                            const now = new Date().toISOString();
+                            const tr = document.createElement('tr');
 
-                    previewBtn.onclick = function () {
-                        const currentUrl = urlInput.value.trim();
-                        if (currentUrl) {
-                            const previewDialog = document.getElementById('previewModal');
-                            const previewImg = document.getElementById('previewImage');
+                            tr.className = "hover:bg-gray-50 transition-colors";
+                            tr.setAttribute('data-created', now);
+                            tr.setAttribute('data-images', '{}');
 
-                            previewImg.src = currentUrl;
-                            previewImg.style.display = 'block';
+                            // Determine current visibility state based on checkboxes
+                            const isEmailHidden = !document.querySelector('[data-col="col-email"]').checked;
+                            const isManagerHidden = !document.querySelector('[data-col="col-manager"]').checked;
+                            const isDescHidden = !document.querySelector('[data-col="col-description"]').checked;
+                            const isFirstNameHidden = !document.querySelector('[data-col="col-firstname"]').checked;
+                            const isLastNameHidden = !document.querySelector('[data-col="col-lastname"]').checked;
+                            const isTitleHidden = !document.querySelector('[data-col="col-title"]').checked;
+                            const isDeptHidden = !document.querySelector('[data-col="col-dept"]').checked;
+                            const isDivisionHidden = !document.querySelector('[data-col="col-division"]').checked;
+                            const isTeamHidden = !document.querySelector('[data-col="col-team"]').checked;
+                            const isStatusHidden = !document.querySelector('[data-col="col-status"]').checked;
 
-                            previewImg.onerror = function () {
-                                this.onerror = null;
-                                this.src = 'https://via.placeholder.com/400?text=Image+Not+Found';
+                            tr.innerHTML = `
+                                <td contenteditable="true" class="col-firstname editable px-4 py-3 font-medium text-gray-900 whitespace-nowrap ${isFirstNameHidden ? 'hidden' : ''}">First</td>
+                                <td contenteditable="true" class="col-lastname editable px-4 py-3 font-medium text-gray-900 whitespace-nowrap ${isLastNameHidden ? 'hidden' : ''}">Last</td>
+                                <td contenteditable="true" class="col-email editable px-4 py-3 whitespace-nowrap ${isEmailHidden ? 'hidden' : ''}">first.last@acd-inc.com</td>
+                                <td contenteditable="true" class="col-title editable px-4 py-3 whitespace-nowrap ${isTitleHidden ? 'hidden' : ''}">Title</td>
+                                <td contenteditable="true" class="col-dept editable px-4 py-3 whitespace-nowrap ${isDeptHidden ? 'hidden' : ''}">Department</td>
+                                <td contenteditable="true" class="col-division editable px-4 py-3 whitespace-nowrap ${isDivisionHidden ? 'hidden' : ''}">Division</td>
+                                <td contenteditable="true" class="col-team editable px-4 py-3 whitespace-nowrap ${isTeamHidden ? 'hidden' : ''}">Team</td>
+                                <td contenteditable="true" class="col-manager editable px-4 py-3 whitespace-nowrap ${isManagerHidden ? 'hidden' : ''}">manager@acd-inc.com</td>
+                                <td contenteditable="true" class="col-description editable px-4 py-3 whitespace-nowrap ${isDescHidden ? 'hidden' : ''}">New employee description</td>
+                                <td class="col-status px-4 py-3 ${isStatusHidden ? 'hidden' : ''}">
+                                    <select class="w-full border-gray-300 rounded-md shadow-sm focus:border-acdi-green focus:ring-acdi-green sm:text-xs p-1.5 border outline-none bg-white font-medium cursor-pointer">
+                                        <option value="active" selected>Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="openImageModal(this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 shadow-sm text-xs font-semibold transition-colors">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                            Images
+                                        </button>
+                                        <button onclick="deleteRow(this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 border border-red-200 rounded-md hover:bg-red-100 shadow-sm text-xs font-semibold transition-colors">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            `;
+                            tbody.prepend(tr);
+                        }
+
+                        // Modal Logic
+                        function openImageModal(btn) {
+                            currentRowForImages = btn.closest('tr');
+
+                            const imagesRaw = currentRowForImages.getAttribute('data-images');
+                            let imagesData = {};
+
+                            try {
+                                if (imagesRaw && imagesRaw !== "null") {
+                                    imagesData = JSON.parse(imagesRaw);
+                                }
+                            } catch (e) {
+                                console.error("Error parsing image JSON for row:", e);
+                                imagesData = {};
+                            }
+
+                            if (typeof imagesData !== 'object' || imagesData === null) {
+                                imagesData = {};
+                            }
+
+                            const imageList = document.getElementById('imageList');
+                            imageList.innerHTML = '';
+
+                            for (const [tag, url] of Object.entries(imagesData)) {
+                                addImageField(tag, url);
+                            }
+
+                            document.getElementById('imageModal').showModal();
+                        }
+
+                        let activeUrlInput = null;
+                        let loadedBucketFiles = [];
+
+                        function addImageField(tag = '', url = '') {
+                            const div = document.createElement('div');
+                            div.className = 'image-pair flex items-center gap-2 w-full';
+
+                            const tagInput = document.createElement('input');
+                            tagInput.type = 'text';
+                            tagInput.className = 'img-tag w-[25%] border-gray-300 rounded-md shadow-sm focus:border-acdi-green focus:ring-acdi-green sm:text-sm p-2 border outline-none bg-white placeholder-gray-400';
+                            tagInput.placeholder = 'Tag (e.g. 80w-326ppi)';
+                            tagInput.value = tag;
+
+                            const urlInput = document.createElement('input');
+                            urlInput.type = 'url';
+                            urlInput.className = 'img-url flex-1 border-gray-300 rounded-md shadow-sm focus:border-acdi-green focus:ring-acdi-green sm:text-sm p-2 border outline-none bg-white placeholder-gray-400';
+                            urlInput.placeholder = 'https://storage.googleapis.com/...';
+                            urlInput.value = url;
+
+                            // Upload Local File Button
+                            const uploadBtn = document.createElement('button');
+                            uploadBtn.type = 'button';
+                            uploadBtn.className = 'p-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md hover:bg-emerald-100 transition-colors shadow-sm';
+                            uploadBtn.title = 'Upload Local File';
+                            uploadBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>';
+
+                            const fileInput = document.createElement('input');
+                            fileInput.type = 'file';
+                            fileInput.accept = 'image/*';
+                            fileInput.style.display = 'none';
+
+                            uploadBtn.onclick = function() {
+                                if (!tagInput.value.trim()) {
+                                    alert("Please enter an image tag first to use as the file name.");
+                                    tagInput.focus();
+                                    return;
+                                }
+                                fileInput.click();
                             };
 
-                            previewDialog.showModal();
-                        } else {
-                            alert('Please enter an image URL first.');
-                        }
-                    };
+                            fileInput.onchange = async function(event) {
+                                const file = event.target.files[0];
+                                if (!file) return;
 
-                    // Remove Row Button
-                    const removeBtn = document.createElement('button');
-                    removeBtn.type = 'button';
-                    removeBtn.className = 'p-2 bg-red-50 text-red-700 border border-red-200 rounded-md hover:bg-red-100 transition-colors shadow-sm';
-                    removeBtn.title = 'Remove';
-                    removeBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                                const firstName = currentRowForImages.querySelector('.col-firstname').innerText.trim();
+                                const lastName = currentRowForImages.querySelector('.col-lastname').innerText.trim();
+                                const currentTag = tagInput.value.trim();
 
-                    removeBtn.onclick = function () { this.parentElement.remove(); };
+                                const formData = new FormData();
+                                formData.append('profile_image', file);
+                                formData.append('first_name', firstName);
+                                formData.append('last_name', lastName);
+                                formData.append('tag_name', currentTag);
 
-                    div.appendChild(tagInput);
-                    div.appendChild(urlInput);
-                    div.appendChild(uploadBtn);
-                    div.appendChild(fileInput);
-                    div.appendChild(browseBtn);
-                    div.appendChild(previewBtn);
-                    div.appendChild(removeBtn);
+                                uploadBtn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>';
+                                uploadBtn.disabled = true;
 
-                    document.getElementById('imageList').appendChild(div);
-                }
+                                try {
+                                    const response = await fetch('/upload-image', {
+                                        method: 'POST',
+                                        body: formData
+                                    });
+                                    const result = await response.json();
 
-                // --- Cloud Bucket Picker Logic ---
-                async function openBucketPicker(targetInput) {
-                    activeUrlInput = targetInput;
-                    const pickerModal = document.getElementById('bucketPickerModal');
-                    const fileListContainer = document.getElementById('bucketFileList');
-                    document.getElementById('bucketSearch').value = '';
+                                    if (response.ok) {
+                                        urlInput.value = result.public_path;
+                                    } else {
+                                        alert('Upload failed: ' + (result.error || result.message));
+                                    }
+                                } catch(e) {
+                                    alert('Network error during upload: ' + e.message);
+                                } finally {
+                                    uploadBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>';
+                                    uploadBtn.disabled = false;
+                                    fileInput.value = '';
+                                }
+                            };
 
-                    fileListContainer.innerHTML = '<div class="p-6 text-center text-sm text-gray-500"><svg class="animate-spin h-5 w-5 mx-auto mb-2 text-acdi-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Loading directory...</div>';
-                    pickerModal.showModal();
+                            // Browse Bucket Button
+                            const browseBtn = document.createElement('button');
+                            browseBtn.type = 'button';
+                            browseBtn.className = 'p-2 bg-gray-50 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors shadow-sm';
+                            browseBtn.title = 'Browse Cloud Bucket';
+                            browseBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>';
 
-                    try {
-                        const firstName = currentRowForImages.querySelector('.col-firstname').innerText.trim();
-                        const lastName = currentRowForImages.querySelector('.col-lastname').innerText.trim();
-                        const folderName = `${firstName} ${lastName}`;
+                            browseBtn.onclick = function () {
+                                openBucketPicker(urlInput);
+                            };
 
-                        const prefix = `ID/${folderName}/`;
+                            // Preview Image Button
+                            const previewBtn = document.createElement('button');
+                            previewBtn.type = 'button';
+                            previewBtn.className = 'p-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors shadow-sm';
+                            previewBtn.title = 'Preview Image';
+                            previewBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>';
 
-                        const response = await fetch(`/employees/list_bucket_images?prefix=${encodeURIComponent(prefix)}`);
-                        const data = await response.json();
+                            previewBtn.onclick = function () {
+                                const currentUrl = urlInput.value.trim();
+                                if (currentUrl) {
+                                    const previewDialog = document.getElementById('previewModal');
+                                    const previewImg = document.getElementById('previewImage');
 
-                        if (response.ok && data.files) {
-                            loadedBucketFiles = data.files;
-                            renderBucketFileList(loadedBucketFiles);
-                        } else {
-                            fileListContainer.innerHTML = `<p class="p-4 text-sm text-red-600 font-medium">Error: ${data.message || 'Failed to load files'}</p>`;
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        fileListContainer.innerHTML = '<p class="p-4 text-sm text-red-600 font-medium">Network error fetching bucket files.</p>';
-                    }
-                }
+                                    previewImg.src = currentUrl;
+                                    previewImg.style.display = 'block';
 
-                function renderBucketFileList(files) {
-                    const fileListContainer = document.getElementById('bucketFileList');
-                    fileListContainer.innerHTML = '';
+                                    previewImg.onerror = function () {
+                                        this.onerror = null;
+                                        this.src = 'https://via.placeholder.com/400?text=Image+Not+Found';
+                                    };
 
-                    if (files.length === 0) {
-                        fileListContainer.innerHTML = '<div class="p-6 text-center text-sm text-gray-500">No images found in this employee\'s directory.</div>';
-                        return;
-                    }
+                                    previewDialog.showModal();
+                                } else {
+                                    alert('Please enter an image URL first.');
+                                }
+                            };
 
-                    files.forEach(file => {
-                        const item = document.createElement('div');
-                        item.className = 'flex items-center justify-between p-2.5 border-b border-gray-100 hover:bg-white cursor-pointer rounded-lg transition-colors mb-1';
+                            // Remove Row Button
+                            const removeBtn = document.createElement('button');
+                            removeBtn.type = 'button';
+                            removeBtn.className = 'p-2 bg-red-50 text-red-700 border border-red-200 rounded-md hover:bg-red-100 transition-colors shadow-sm';
+                            removeBtn.title = 'Remove';
+                            removeBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
 
-                        item.innerHTML = `
-                            <div class="flex items-center gap-3 overflow-hidden">
-                                <img src="${file.url}" class="w-10 h-10 object-cover rounded shadow-sm border border-gray-200" onerror="this.src='https://via.placeholder.com/40';">
-                                <span class="text-sm font-medium text-gray-700 truncate">${file.filename}</span>
-                            </div>
-                            <button class="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-semibold hover:bg-blue-100 transition-colors shadow-sm ml-2">Select</button>
-                        `;
+                            removeBtn.onclick = function () { this.parentElement.remove(); };
 
-                        item.onclick = function () { selectCloudImage(file.url); };
-                        fileListContainer.appendChild(item);
-                    });
-                }
+                            div.appendChild(tagInput);
+                            div.appendChild(urlInput);
+                            div.appendChild(uploadBtn);
+                            div.appendChild(fileInput);
+                            div.appendChild(browseBtn);
+                            div.appendChild(previewBtn);
+                            div.appendChild(removeBtn);
 
-                function filterBucketFiles() {
-                    const query = document.getElementById('bucketSearch').value.toLowerCase();
-                    const filtered = loadedBucketFiles.filter(f => f.filename.toLowerCase().includes(query) || f.path.toLowerCase().includes(query));
-                    renderBucketFileList(filtered);
-                }
-
-                function selectCloudImage(url) {
-                    if (activeUrlInput) {
-                        activeUrlInput.value = url;
-                    }
-                    document.getElementById('bucketPickerModal').close();
-                }
-
-                function saveImages() {
-                    const pairs = document.querySelectorAll('#imageList .image-pair');
-                    const imagesObj = {};
-
-                    pairs.forEach(pair => {
-                        const tag = pair.querySelector('.img-tag').value.trim();
-                        const url = pair.querySelector('.img-url').value.trim();
-                        if (tag && url) {
-                            imagesObj[tag] = url;
-                        }
-                    });
-
-                    currentRowForImages.setAttribute('data-images', JSON.stringify(imagesObj));
-                    document.getElementById('imageModal').close();
-                }
-
-                function closePreview() {
-                    const previewDialog = document.getElementById('previewModal');
-                    const previewImg = document.getElementById('previewImage');
-                    previewDialog.close();
-
-                    setTimeout(() => {
-                        previewImg.removeAttribute('src');
-                        previewImg.style.display = 'none';
-                        previewImg.onerror = null;
-                    }, 200);
-                }
-
-                // Export Logic
-                async function downloadJSON() {
-                    const rows = document.querySelectorAll('#employeeTable tbody tr');
-                    const data = [];
-
-                    rows.forEach(row => {
-                        const firstName = row.querySelector('.col-firstname').innerText.trim();
-                        const lastName = row.querySelector('.col-lastname').innerText.trim();
-
-                        const imagesRaw = row.getAttribute('data-images');
-                        let parsedImages = {};
-                        try {
-                            parsedImages = imagesRaw ? JSON.parse(imagesRaw) : {};
-                        } catch(e) {
-                            parsedImages = {};
+                            document.getElementById('imageList').appendChild(div);
                         }
 
-                        data.push({
-                            "First Name": firstName,
-                            "Last Name": lastName,
-                            "Full Name": `${firstName} ${lastName}`.trim(),
-                            "Email Address": row.querySelector('.col-email').innerText.trim(),
-                            "Employee Title": row.querySelector('.col-title').innerText.trim(),
-                            "Manager Email": row.querySelector('.col-manager').innerText.trim(),
-                            "Department": row.querySelector('.col-dept').innerText.trim(),
-                            "status": row.querySelector('.col-status select').value,
-                            "description": row.querySelector('.col-description').innerText.trim(),
-                            "createdDate": row.getAttribute('data-created') || new Date().toISOString(),
-                            "lastUpdateDate": new Date().toISOString(),
-                            "imageUrls": parsedImages
-                        });
-                    });
+                        // --- Cloud Bucket Picker Logic ---
+                        async function openBucketPicker(targetInput) {
+                            activeUrlInput = targetInput;
+                            const pickerModal = document.getElementById('bucketPickerModal');
+                            const fileListContainer = document.getElementById('bucketFileList');
+                            document.getElementById('bucketSearch').value = '';
 
-                    const response = await fetch('/employees/download', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
+                            fileListContainer.innerHTML = '<div class="p-6 text-center text-sm text-gray-500"><svg class="animate-spin h-5 w-5 mx-auto mb-2 text-acdi-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Loading directory...</div>';
+                            pickerModal.showModal();
 
-                    if (response.ok) {
-                        const blob = await response.blob();
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = 'employees.json';
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
-                    } else {
-                        const errorData = await response.json();
-                        alert('Server Error: ' + (errorData.message || 'Unknown error occurred.'));
-                    }
-                }
+                            try {
+                                const firstName = currentRowForImages.querySelector('.col-firstname').innerText.trim();
+                                const lastName = currentRowForImages.querySelector('.col-lastname').innerText.trim();
+                                const folderName = `${firstName} ${lastName}`.replace(/'/g, '');
 
-                // Toast Notification Logic
-                function showNotification(message, isSuccess = true) {
-                    const toast = document.getElementById('toastNotification');
-                    const toastMessage = document.getElementById('toastMessage');
-                    const toastIcon = document.getElementById('toastIcon');
+                                const prefix = `ID/${folderName}/`;
 
-                    toastMessage.innerText = message;
+                                const response = await fetch(`/employees/list_bucket_images?prefix=${encodeURIComponent(prefix)}`);
+                                const data = await response.json();
 
-                    if (isSuccess) {
-                        toast.className = "fixed top-5 right-5 transform transition-all duration-300 z-50 flex items-center gap-3 px-5 py-3 rounded-lg shadow-xl text-white font-medium bg-acdi-green translate-y-0 opacity-100";
-                        toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
-                    } else {
-                        toast.className = "fixed top-5 right-5 transform transition-all duration-300 z-50 flex items-center gap-3 px-5 py-3 rounded-lg shadow-xl text-white font-medium bg-red-500 translate-y-0 opacity-100";
-                        toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
-                    }
-
-                    setTimeout(() => {
-                        toast.classList.remove('translate-y-0', 'opacity-100');
-                        toast.classList.add('-translate-y-20', 'opacity-0');
-                    }, 3500);
-                }
-
-                async function saveToCloud() {
-                    const btn = document.getElementById('saveCloudBtn');
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = '<svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Saving...';
-                    btn.disabled = true;
-
-                    const rows = document.querySelectorAll('#employeeTable tbody tr');
-                    const data = [];
-
-                    rows.forEach(row => {
-                        const firstName = row.querySelector('.col-firstname').innerText.trim();
-                        const lastName = row.querySelector('.col-lastname').innerText.trim();
-
-                        const imagesRaw = row.getAttribute('data-images');
-                        let parsedImages = {};
-                        try {
-                            parsedImages = imagesRaw ? JSON.parse(imagesRaw) : {};
-                        } catch (e) {
-                            parsedImages = {};
+                                if (response.ok && data.files) {
+                                    loadedBucketFiles = data.files;
+                                    renderBucketFileList(loadedBucketFiles);
+                                } else {
+                                    fileListContainer.innerHTML = `<p class="p-4 text-sm text-red-600 font-medium">Error: ${data.message || 'Failed to load files'}</p>`;
+                                }
+                            } catch (err) {
+                                console.error(err);
+                                fileListContainer.innerHTML = '<p class="p-4 text-sm text-red-600 font-medium">Network error fetching bucket files.</p>';
+                            }
                         }
 
-                        data.push({
-                            "First Name": firstName,
-                            "Last Name": lastName,
-                            "Full Name": `${firstName} ${lastName}`.trim(),
-                            "Email Address": row.querySelector('.col-email').innerText.trim(),
-                            "Employee Title": row.querySelector('.col-title').innerText.trim(),
-                            "Manager Email": row.querySelector('.col-manager').innerText.trim(),
-                            "Department": row.querySelector('.col-dept').innerText.trim(),
-                            "status": row.querySelector('.col-status select').value,
-                            "description": row.querySelector('.col-description').innerText.trim(),
-                            "createdDate": row.getAttribute('data-created') || new Date().toISOString(),
-                            "lastUpdateDate": new Date().toISOString(),
-                            "imageUrls": parsedImages
-                        });
-                    });
+                        function renderBucketFileList(files) {
+                            const fileListContainer = document.getElementById('bucketFileList');
+                            fileListContainer.innerHTML = '';
 
-                    try {
-                        const response = await fetch('/employees/save_cloud', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(data)
-                        });
+                            if (files.length === 0) {
+                                fileListContainer.innerHTML = '<div class="p-6 text-center text-sm text-gray-500">No images found in this employee\'s directory.</div>';
+                                return;
+                            }
 
-                        const resultData = await response.json();
+                            files.forEach(file => {
+                                const item = document.createElement('div');
+                                item.className = 'flex items-center justify-between p-2.5 border-b border-gray-100 hover:bg-white cursor-pointer rounded-lg transition-colors mb-1';
 
-                        if (response.ok) {
-                            showNotification(resultData.message, true);
-                        } else {
-                            showNotification('Server Error: ' + (resultData.message || 'Unknown error occurred.'), false);
+                                item.innerHTML = `
+                                    <div class="flex items-center gap-3 overflow-hidden">
+                                        <img src="${file.url}" class="w-10 h-10 object-cover rounded shadow-sm border border-gray-200" onerror="this.src='https://via.placeholder.com/40';">
+                                        <span class="text-sm font-medium text-gray-700 truncate">${file.filename}</span>
+                                    </div>
+                                    <button class="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-semibold hover:bg-blue-100 transition-colors shadow-sm ml-2">Select</button>
+                                `;
+
+                                item.onclick = function () { selectCloudImage(file.url); };
+                                fileListContainer.appendChild(item);
+                            });
                         }
-                    } catch (error) {
-                        showNotification('Network Error: Could not connect to the server.', false);
-                    } finally {
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    }
-                }
+
+                        function filterBucketFiles() {
+                            const query = document.getElementById('bucketSearch').value.toLowerCase();
+                            const filtered = loadedBucketFiles.filter(f => f.filename.toLowerCase().includes(query) || f.path.toLowerCase().includes(query));
+                            renderBucketFileList(filtered);
+                        }
+
+                        function selectCloudImage(url) {
+                            if (activeUrlInput) {
+                                activeUrlInput.value = url;
+                            }
+                            document.getElementById('bucketPickerModal').close();
+                        }
+
+                        function saveImages() {
+                            const pairs = document.querySelectorAll('#imageList .image-pair');
+                            const imagesObj = {};
+
+                            pairs.forEach(pair => {
+                                const tag = pair.querySelector('.img-tag').value.trim();
+                                const url = pair.querySelector('.img-url').value.trim();
+                                if (tag && url) {
+                                    imagesObj[tag] = url;
+                                }
+                            });
+
+                            currentRowForImages.setAttribute('data-images', JSON.stringify(imagesObj));
+                            document.getElementById('imageModal').close();
+                        }
+
+                        function closePreview() {
+                            const previewDialog = document.getElementById('previewModal');
+                            const previewImg = document.getElementById('previewImage');
+                            previewDialog.close();
+
+                            setTimeout(() => {
+                                previewImg.removeAttribute('src');
+                                previewImg.style.display = 'none';
+                                previewImg.onerror = null;
+                            }, 200);
+                        }
+
+                        // Helper to build payload matching standard structure
+                        function collectTableData() {
+                            const rows = document.querySelectorAll('#employeeTable tbody tr');
+                            const data = [];
+
+                            rows.forEach(row => {
+                                const firstName = row.querySelector('.col-firstname').innerText.trim();
+                                const lastName = row.querySelector('.col-lastname').innerText.trim();
+
+                                const imagesRaw = row.getAttribute('data-images');
+                                let parsedImages = {};
+                                try {
+                                    parsedImages = imagesRaw ? JSON.parse(imagesRaw) : {};
+                                } catch(e) {
+                                    parsedImages = {};
+                                }
+
+                                data.push({
+                                    "First Name": firstName,
+                                    "Last Name": lastName,
+                                    "Full Name": `${firstName} ${lastName}`.trim(),
+                                    "Email Address": row.querySelector('.col-email').innerText.trim(),
+                                    "Employee Title": row.querySelector('.col-title').innerText.trim(),
+                                    "Manager Email": row.querySelector('.col-manager').innerText.trim(),
+                                    "Department": row.querySelector('.col-dept').innerText.trim(),
+                                    "Division": row.querySelector('.col-division').innerText.trim(),
+                                    "Team": row.querySelector('.col-team').innerText.trim(),
+                                    "status": row.querySelector('.col-status select').value,
+                                    "description": row.querySelector('.col-description').innerText.trim(),
+                                    "createdDate": row.getAttribute('data-created') || new Date().toISOString(),
+                                    "lastUpdateDate": new Date().toISOString(),
+                                    "imageUrls": parsedImages
+                                });
+                            });
+
+                            return data;
+                        }
+
+                        // Export Logic
+                        async function downloadJSON() {
+                            const data = collectTableData();
+
+                            const response = await fetch('/employees/download', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            });
+
+                            if (response.ok) {
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'employees.json';
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                            } else {
+                                const errorData = await response.json();
+                                alert('Server Error: ' + (errorData.message || 'Unknown error occurred.'));
+                            }
+                        }
+
+                        // Toast Notification Logic
+                        function showNotification(message, isSuccess = true) {
+                            const toast = document.getElementById('toastNotification');
+                            const toastMessage = document.getElementById('toastMessage');
+                            const toastIcon = document.getElementById('toastIcon');
+
+                            toastMessage.innerText = message;
+
+                            if (isSuccess) {
+                                toast.className = "fixed top-5 right-5 transform transition-all duration-300 z-50 flex items-center gap-3 px-5 py-3 rounded-lg shadow-xl text-white font-medium bg-acdi-green translate-y-0 opacity-100";
+                                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                            } else {
+                                toast.className = "fixed top-5 right-5 transform transition-all duration-300 z-50 flex items-center gap-3 px-5 py-3 rounded-lg shadow-xl text-white font-medium bg-red-500 translate-y-0 opacity-100";
+                                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+                            }
+
+                            setTimeout(() => {
+                                toast.classList.remove('translate-y-0', 'opacity-100');
+                                toast.classList.add('-translate-y-20', 'opacity-0');
+                            }, 3500);
+                        }
+
+                        async function saveToCloud() {
+                            const btn = document.getElementById('saveCloudBtn');
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Saving...';
+                            btn.disabled = true;
+
+                            const data = collectTableData();
+
+                            try {
+                                const response = await fetch('/employees/save_cloud', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(data)
+                                });
+
+                                const resultData = await response.json();
+
+                                if (response.ok) {
+                                    showNotification(resultData.message, true);
+                                } else {
+                                    showNotification('Server Error: ' + (resultData.message || 'Unknown error occurred.'), false);
+                                }
+                            } catch (error) {
+                                showNotification('Network Error: Could not connect to the server.', false);
+                            } finally {
+                                btn.innerHTML = originalText;
+                                btn.disabled = false;
+                            }
+                        }
     </script>
 </body>
 </html>

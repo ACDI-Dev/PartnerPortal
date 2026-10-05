@@ -587,7 +587,8 @@ def load_employee_data():
         return []
 
 @app.route('/employees', methods=['GET'])
-def manage_employees():
+@login_required
+def manage_employees(user):
     """Renders the management dashboard populated with remote GCS data."""
     employees = load_employee_data()
     return render_template('employees.html', employees=employees)
@@ -746,6 +747,57 @@ def upload_image():
         import traceback
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
+@app.route('/directory')
+@login_required
+def employee_directory(user):
+    raw_employees = load_employee_data()
+    
+    # Map email to employee dict for quick manager lookup
+    emp_by_email = {
+        emp.get('Email Address', '').strip().lower(): emp 
+        for emp in raw_employees if emp.get('Email Address')
+    }
+    
+    # Nesting hierarchy: Division -> Department -> Team -> Manager -> Employees
+    divisions = {}
+    
+    for emp in raw_employees:
+        # Filter active employees only
+        if emp.get('status') != 'active':
+            continue
+            
+        division_name = emp.get('Division', '').strip() or 'General Operations'
+        dept_name = emp.get('Department', '').strip() or 'General Department'
+        team_name = emp.get('Team', '').strip() or 'Core Team'
+        
+        # Initialize nested structures
+        if division_name not in divisions:
+            divisions[division_name] = {}
+        if dept_name not in divisions[division_name]:
+            divisions[division_name][dept_name] = {}
+        if team_name not in divisions[division_name][dept_name]:
+            divisions[division_name][dept_name][team_name] = {}
+            
+        manager_email = emp.get('Manager Email', '').strip().lower()
+        
+        # Determine manager name & title
+        if manager_email and manager_email in emp_by_email:
+            mgr_obj = emp_by_email[manager_email]
+            manager_key = f"{mgr_obj.get('First Name', '')} {mgr_obj.get('Last Name', '')}".strip()
+            manager_title = mgr_obj.get('Employee Title', 'Manager')
+            manager_name = f"{manager_key} ({manager_title})"
+        elif manager_email:
+            manager_name = f"Manager ({manager_email})"
+        else:
+            manager_name = "Executive / Direct Leadership"
+            
+        if manager_name not in divisions[division_name][dept_name][team_name]:
+            divisions[division_name][dept_name][team_name][manager_name] = []
+            
+        divisions[division_name][dept_name][team_name][manager_name].append(emp)
+
+    return render_template('directory.html', user=user, divisions=divisions)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
