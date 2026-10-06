@@ -759,25 +759,33 @@ def employee_directory(user):
         for emp in raw_employees if emp.get('Email Address')
     }
     
+    # Track top-level leadership team members separately
+    leadership_team_members = []
+    
     # Nesting hierarchy: Division -> Department -> Team -> Manager -> Employees
-    divisions = {}
+    raw_divisions = {}
     
     for emp in raw_employees:
         # Filter active employees only
         if emp.get('status') != 'active':
             continue
+        
+        team_name = emp.get('Team', '').strip() or 'Core Team'
+        
+        # Collect top-level Leadership Team members
+        if team_name == 'Leadership Team':
+            leadership_team_members.append(emp)
             
         division_name = emp.get('Division', '').strip() or 'General Operations'
         dept_name = emp.get('Department', '').strip() or 'General Department'
-        team_name = emp.get('Team', '').strip() or 'Core Team'
         
         # Initialize nested structures
-        if division_name not in divisions:
-            divisions[division_name] = {}
-        if dept_name not in divisions[division_name]:
-            divisions[division_name][dept_name] = {}
-        if team_name not in divisions[division_name][dept_name]:
-            divisions[division_name][dept_name][team_name] = {}
+        if division_name not in raw_divisions:
+            raw_divisions[division_name] = {}
+        if dept_name not in raw_divisions[division_name]:
+            raw_divisions[division_name][dept_name] = {}
+        if team_name not in raw_divisions[division_name][dept_name]:
+            raw_divisions[division_name][dept_name][team_name] = {}
             
         manager_email = emp.get('Manager Email', '').strip().lower()
         
@@ -792,12 +800,43 @@ def employee_directory(user):
         else:
             manager_name = "Executive / Direct Leadership"
             
-        if manager_name not in divisions[division_name][dept_name][team_name]:
-            divisions[division_name][dept_name][team_name][manager_name] = []
+        if manager_name not in raw_divisions[division_name][dept_name][team_name]:
+            raw_divisions[division_name][dept_name][team_name][manager_name] = []
             
-        divisions[division_name][dept_name][team_name][manager_name].append(emp)
+        raw_divisions[division_name][dept_name][team_name][manager_name].append(emp)
 
-    return render_template('directory.html', user=user, divisions=divisions)
+    # Sort hierarchy:
+    # 1. Departments: "Leadership Team" first, then alphabetical
+    # 2. Teams: Teams containing "Manager" first, then alphabetical
+    divisions = {}
+    for div_name, departments in raw_divisions.items():
+        sorted_depts = {}
+        
+        # Sort department keys
+        sorted_dept_keys = sorted(
+            departments.keys(),
+            key=lambda d: (0 if d == 'Leadership Team' else 1, d)
+        )
+        
+        for dept_name in sorted_dept_keys:
+            teams = departments[dept_name]
+            
+            # Sort team keys: Teams with "Manager" in their name come first
+            sorted_team_keys = sorted(
+                teams.keys(),
+                key=lambda t: (0 if 'manager' in t.lower() else 1, t)
+            )
+            
+            sorted_depts[dept_name] = {t_name: teams[t_name] for t_name in sorted_team_keys}
+            
+        divisions[div_name] = sorted_depts
+
+    return render_template(
+        'directory.html', 
+        user=user, 
+        divisions=divisions,
+        leadership_team=leadership_team_members
+    )
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
