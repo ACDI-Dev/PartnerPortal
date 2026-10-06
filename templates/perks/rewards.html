@@ -13,7 +13,7 @@
             <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
             <h2 class="text-2xl font-bold text-gray-900 font-sans">Rewards</h2>
         </div>
-        
+
         <div class="flex items-center gap-3">
             <!-- Force Refresh Button -->
             <a href="?refresh=true" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-acdi-green focus:outline-none transition-colors" onclick="this.innerHTML='<svg class=\'animate-spin h-4 w-4 text-acdi-green\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg> Refreshing...';">
@@ -28,9 +28,9 @@
 <section class="mb-12">
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12 overflow-hidden relative">
         <div class="absolute -top-24 -right-24 w-64 h-64 bg-acdi-green opacity-10 rounded-full mix-blend-multiply filter blur-3xl"></div>
-        
+
         <div class="max-w-3xl mx-auto relative z-10 text-center">
-            
+
             <div class="mb-8">
                 <h3 class="text-3xl font-bold text-gray-900 mb-4">Your Partner Perks Rewards</h3>
                 <p class="text-lg text-gray-600 leading-relaxed">
@@ -54,16 +54,125 @@
                     Redeem Points
                 </a>
 
-                <!-- NEW: View Catalog Options Button (Opens in New Tab) -->
+                <!-- View Catalog Options Button (Opens in New Tab) -->
                 <a href="{{ url_for('perks_options') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 border border-gray-300 shadow-sm text-lg font-bold rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-acdi-green hover:text-acdi-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all w-full sm:w-auto">
                     <svg class="w-6 h-6 mr-3 text-gray-400 group-hover:text-acdi-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     Browse Reward Options
                 </a>
             </div>
-            
+
             <p class="text-sm text-gray-500 mt-6">Redeem your points for a wide selection of Reward Cards and more.</p>
 
         </div>
+    </div>
+</section>
+
+<!-- Reward Requests History Section -->
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 font-sans">Your Reward Requests</h3>
+                <p class="text-sm text-gray-500 mt-1">Track the status and details of your previous reward requests.</p>
+            </div>
+            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-gray-700">
+                Total: {{ reward_requests|length if reward_requests else 0 }}
+            </span>
+        </div>
+
+        {% if reward_requests %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+                <thead class="bg-gray-50 font-medium text-gray-500 uppercase tracking-wider text-xs">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Request ID</th>
+                        <th scope="col" class="px-6 py-3">Date</th>
+                        <th scope="col" class="px-6 py-3">Recipient</th>
+                        <th scope="col" class="px-6 py-3">Amount</th>
+                        <th scope="col" class="px-6 py-3">Points Used</th>
+                        <th scope="col" class="px-6 py-3">Status</th>
+                        <th scope="col" class="px-6 py-3">Fulfillment</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    {% for req in reward_requests %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <!-- Request ID -->
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            {{ req.Reward_Request_UID or 'N/A' }}
+                        </td>
+
+                        <!-- Date -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ req.Created_Time[:10] if req.Created_Time else 'N/A' }}
+                        </td>
+
+                        <!-- Recipient -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-800">
+                            {{ req.Reward_Recipient.name if req.Reward_Recipient and req.Reward_Recipient.name else 'N/A' }}
+                        </td>
+
+                        <!-- Amount -->
+                        <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-900">
+                            ${{ req.Request_Amount if req.Request_Amount is not none else (req.Tango_Amount or 0) }}
+                        </td>
+
+                        <!-- Points Used -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ "{:,}".format(req.Converted_Points) if req.Converted_Points is not none else '—' }}
+                        </td>
+
+                        <!-- Status Badge -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if req.Status == 'Reward Sent' or req.Status == 'Completed' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                {{ req.Status }}
+                            </span>
+                            {% elif req.Status == 'Pending' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                                {{ req.Status }}
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+                                {{ req.Status or 'Unknown' }}
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Tango Fulfillment Status -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if req.Tango_Status == 'COMPLETE' %}
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-green-700">
+                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                Complete
+                            </span>
+                            {% elif req.Tango_Error %}
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-red-600" title="{{ req.Tango_Error }}">
+                                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                Error
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500">
+                                <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                                {{ req.Tango_Status or 'Processing' }}
+                            </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-12 px-4">
+            <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+            </svg>
+            <h4 class="text-base font-semibold text-gray-900">No reward requests found</h4>
+            <p class="text-sm text-gray-500 mt-1">When you redeem points, your reward history will appear here.</p>
+        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

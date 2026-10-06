@@ -179,6 +179,15 @@ def login_required(f):
     return decorated_function
 
 # --- CACHED API HELPERS ---
+@cache.memoize(timeout=500)
+def get_cached_reward_requests(api_email):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/perks_reward_requests/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    print("Reward requests API response:", response.text, flush=True)
+    return response.json()
 
 @cache.memoize(timeout=14400) 
 def get_cached_rep_accounts(api_email):
@@ -498,13 +507,13 @@ def perks_rewards(user):
     user_email = user.get('email') 
     
     api_email = user_email
-    if user_email and '@acd-inc.com' in user_email.lower():
-        api_email = 'eknight@tomorrowsoffice.com'
-    
+
     try:
         if request.args.get('refresh') == 'true':
             cache.delete_memoized(get_cached_rewards, api_email)
+            cache.delete_memoized(get_cached_reward_requests, api_email)
 
+        # Fetch reward points
         data = get_cached_rewards(api_email)
         
         points = 0
@@ -516,8 +525,28 @@ def perks_rewards(user):
             
             points = parsed_data.get("Points", 0)
             rewards_user = parsed_data.get("UserName", "")
+
+        # Fetch reward requests
+        req_data = get_cached_reward_requests(api_email)
+        reward_requests = []
+
+        if req_data.get("code") == "success" and "details" in req_data and "output" in req_data["details"]:
+            raw_req_output = req_data["details"]["output"]
+            parsed_req_data = json.loads(raw_req_output) if isinstance(raw_req_output, str) else raw_req_output
             
-        return render_template('perks/rewards.html',points=points,rewards_user=rewards_user,user=user)
+            # Extract reward requests list from "Claims" key
+            if isinstance(parsed_req_data, dict):
+                reward_requests = parsed_req_data.get("Claims", parsed_req_data.get("Reward_Requests", parsed_req_data.get("requests", [])))
+            elif isinstance(parsed_req_data, list):
+                reward_requests = parsed_req_data
+            
+        return render_template(
+            'perks/rewards.html',
+            points=points,
+            rewards_user=rewards_user,
+            reward_requests=reward_requests,
+            user=user
+        )
     except requests.RequestException as e:
         return f"Error fetching rewards data: {str(e)}", 500
     except json.JSONDecodeError:
