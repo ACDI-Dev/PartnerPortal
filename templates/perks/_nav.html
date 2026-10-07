@@ -27,10 +27,15 @@
         Claims
     </a>
 
-    <!-- NEW: Rewards Tab -->
     <a href="{{ url_for('perks_rewards') }}"
        class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks_rewards' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
         Rewards
+    </a>
+
+    <!-- Learn More Tab -->
+    <a href="{{ url_for('perks_options') }}"
+       class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks_options' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
+        Learn More
     </a>
 </nav>
 
@@ -43,7 +48,6 @@
     <span class="text-lg font-bold text-gray-800 tracking-wide">Loading...</span>
 </div>
 
-<!-- Script to handle Nav Clicks -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
         const navLinks = document.querySelectorAll('#perks-nav a');

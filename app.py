@@ -186,7 +186,7 @@ def get_cached_reward_requests(api_email):
     
     response = requests.get(api_url)
     response.raise_for_status()
-    print("Reward requests API response:", response.text, flush=True)
+    #print("Reward requests API response:", response.text, flush=True)
     return response.json()
 
 @cache.memoize(timeout=14400) 
@@ -496,6 +496,40 @@ def perks_terms(user):
         
     return render_template('perks/terms.html',user=user)
 
+@app.route('/perks/redeem', methods=['POST'])
+@login_required
+def perks_redeem(user):
+    user_email = user.get('email')
+    data = request.get_json() or {}
+    points = data.get('points')
+
+    if not points:
+        return jsonify({'status': 'error', 'message': 'Points value is required.'}), 400
+
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/perkspointstoreward/actions/execute?auth_type=apikey&zapikey={api_key}&email={user_email}&points={points}"
+
+    try:
+        response = requests.get(api_url)
+        res_data = response.json()
+
+        # Invalidate caches so updated balance/requests reload
+        cache.delete_memoized(get_cached_rewards, user_email)
+        cache.delete_memoized(get_cached_reward_requests, user_email)
+
+        if res_data.get('code') == 'success':
+            output_str = res_data.get('details', {}).get('output', '{}')
+            parsed_output = json.loads(output_str) if isinstance(output_str, str) else output_str
+
+            if 'Status' in parsed_output and 'Error' in parsed_output['Status']:
+                return jsonify({'status': 'error', 'message': parsed_output['Status']}), 400
+
+            return jsonify({'status': 'success', 'data': parsed_output}), 200
+
+        return jsonify({'status': 'error', 'message': res_data.get('message', 'Failed to execute reward request.')}), 400
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/perks/rewards')
 @login_required
