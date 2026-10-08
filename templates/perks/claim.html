@@ -137,13 +137,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const poNumber = document.getElementById('distributor_po_number');
 
     function validateOrderNumbers() {
-        if (prmNumber.value.trim() === '' && poNumber.value.trim() === '') {
+        const prmVal = prmNumber.value.trim();
+        const poVal = poNumber.value.trim();
+
+        // 1. Reset custom validity
+        prmNumber.setCustomValidity('');
+        poNumber.setCustomValidity('');
+
+        // 2. Check at least one order number is provided
+        if (prmVal === '' && poVal === '') {
             const errorMsg = 'Please provide either an ACDI Sales Order Number or a Company PO Number.';
             prmNumber.setCustomValidity(errorMsg);
             poNumber.setCustomValidity(errorMsg);
-        } else {
-            prmNumber.setCustomValidity('');
-            poNumber.setCustomValidity('');
+            return;
+        }
+
+        // 3. Validate ACDI Sales Order Number if entered
+        if (prmVal !== '') {
+            const isNumeric = /^\d+$/.test(prmVal);
+            const num = Number(prmVal);
+
+            if (!isNumeric || num < 230000 || num > 250000) {
+                prmNumber.setCustomValidity('ACDI Sales Order Number must be numeric and between 230000 and 250000.');
+            }
         }
     }
 
