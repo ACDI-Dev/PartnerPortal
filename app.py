@@ -351,9 +351,70 @@ def logout():
 
 # --- MAIN APPLICATION ROUTES ---
 
+
+@app.route('/impersonate', methods=['POST'])
+@login_required
+def impersonate(user):
+    # Ensure only Admins can execute this
+    if 'Admin' not in user.get('permissions', []):
+        return jsonify({'status': 'error', 'message': 'Unauthorized. Admin access required.'}), 403
+
+    data = request.get_json()
+    target_email = data.get('email')
+
+    if not target_email:
+        return jsonify({'status': 'error', 'message': 'Email address is required.'}), 400
+
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfloginas/actions/execute?auth_type=apikey&zapikey={api_key}&emailString={target_email}"
+
+    try:
+        response = requests.get(api_url)
+        res_data = response.json()
+
+        if res_data.get("code") == "success":
+            raw_output = res_data.get("details", {}).get("output", "{}")
+            parsed_user = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
+
+            # Save the original admin user to the session if we aren't already impersonating someone
+            if 'original_admin_user' not in session:
+                session['original_admin_user'] = user
+
+            # Merge the new user data but KEEP the admin's original token.
+            # This ensures @login_required's FusionAuth validation continues to pass.
+            impersonated_user = {
+                'email': parsed_user.get('email'),
+                'first_name': parsed_user.get('first_name', ''),
+                'last_name': parsed_user.get('last_name', ''),
+                'account': parsed_user.get('account', ''),
+                'account_category': parsed_user.get('account_category', ''),
+                'reseller_account': parsed_user.get('reseller_account', ''),
+                'tier': parsed_user.get('tier', 'Standard'),
+                'permissions': parsed_user.get('permissions', []),
+                'authorized_apps': parsed_user.get('authorized_apps', []),
+                'token': user.get('token') 
+            }
+
+            session['user'] = impersonated_user
+            return jsonify({'status': 'success', 'message': f'Now impersonating {target_email}'}), 200
+        else:
+            return jsonify({'status': 'error', 'message': 'User not found or API error.'}), 400
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/stop-impersonating')
+@login_required
+def stop_impersonating(user):
+    # Restore the original admin user session
+    if 'original_admin_user' in session:
+        session['user'] = session.pop('original_admin_user')
+    return redirect(url_for('dashboard'))
+
 @app.route('/')
 @login_required
 def dashboard(user):
+    print(user)
     combined_str = json.dumps(user)
     encoded_bytes = base64.b64encode(combined_str.encode('utf-8'))
     final_string = encoded_bytes.decode('utf-8')
@@ -364,23 +425,27 @@ def dashboard(user):
 @login_required
 def resource_hub(user):
     return render_template('resource_hub.html', user = user)
+
 @app.route('/request-access', methods=['POST'])
-@login_required
-def request_access(user):
+def request_access():
+    user = session.get('user') or {}
     data = request.get_json() or {}
     service_name = data.get('service')
     
     if not service_name:
         return jsonify({'status': 'error', 'message': 'Service name required.'}), 400
 
-    user_email = user.get('email')
-    user_name = f"{user.get('first_name', '')} {user.get('last_name', '')}".strip()
+    # Fall back to user session details if present, otherwise default to anonymous/guest details
+    user_email = user.get('email', 'Guest User / Unauthenticated')
+    first_name = user.get('first_name', '')
+    last_name = user.get('last_name', '')
+    user_name = f"{first_name} {last_name}".strip() or 'Guest User'
     account_name = user.get('account') or user.get('reseller_account', 'N/A')
 
     # Target email address for the Sales Rep
     sales_rep_email = os.environ.get('SALES_REP_EMAIL', 'sales@yourcompany.com')
     from_email = os.environ.get('SENDGRID_FROM_EMAIL', 'noreply@yourcompany.com')
-    sendgrid_api_key = os.environ.get('SENDGRID_API_KEY').strip()
+    sendgrid_api_key = os.environ.get('SENDGRID_API_KEY', '').strip()
 
     if not sendgrid_api_key:
         print("ERROR: SENDGRID_API_KEY environment variable is missing.", flush=True)
@@ -408,8 +473,8 @@ def request_access(user):
         html_content=email_content
     )
 
-    # Optional: Set Reply-To so the sales rep can reply directly to the user
-    message.reply_to = user_email
+    if user.get('email'):
+        message.reply_to = user_email
 
     try:
         sg = SendGridAPIClient(sendgrid_api_key)
@@ -543,7 +608,6 @@ def ace_portal(user):
 
     # Extract the raw JWT instead of base64 encoding the session object
     raw_jwt = user.get('token')
-
     return render_template('hubace.html',user=user,token=raw_jwt)
 
 @app.route('/sales-tools')

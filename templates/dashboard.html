@@ -38,6 +38,21 @@
     </div>
 </section>
 
+<!-- Admin Tools Section -->
+{% if 'Admin' in user.permissions %}
+<section class="mb-10">
+    <div class="bg-red-50 rounded-2xl p-6 border border-red-200 flex items-center justify-between">
+        <div>
+            <h2 class="text-lg font-bold text-red-900">Admin Controls</h2>
+            <p class="text-sm text-red-700">Impersonate users to view their dashboard and troubleshoot issues.</p>
+        </div>
+        <button type="button" onclick="openImpersonateModal()" class="px-5 py-2.5 bg-red-600 text-white text-sm font-bold rounded-lg shadow-sm hover:bg-red-700 transition-colors">
+            Login As User
+        </button>
+    </div>
+</section>
+{% endif %}
+
 <!-- Tools Grid -->
 <section class="mb-12">
     <div class="flex items-center gap-2 mb-6">
@@ -247,6 +262,79 @@ function submitAccessRequest() {
         confirmBtn.disabled = false;
         confirmBtn.textContent = 'Send Request';
     });
+}
+</script>
+
+<!-- Impersonate Modal -->
+<div id="impersonateModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Impersonate User</h3>
+            <button type="button" onclick="closeImpersonateModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="mb-6">
+            <p class="text-sm text-gray-600 mb-4">Enter the email address of the user you wish to impersonate.</p>
+            <input type="email" id="impersonateEmail" placeholder="user@domain.com" class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none">
+        </div>
+
+        <div id="impersonateStatusMessage" class="hidden text-sm p-3 rounded-lg mb-4"></div>
+
+        <div class="flex justify-end gap-3">
+            <button type="button" onclick="closeImpersonateModal()" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
+                Cancel
+            </button>
+            <button type="button" id="confirmImpersonateBtn" onclick="submitImpersonate()" class="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors">
+                Impersonate
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openImpersonateModal() {
+        document.getElementById('impersonateModal').classList.remove('hidden');
+        document.getElementById('impersonateEmail').value = '';
+        document.getElementById('impersonateStatusMessage').classList.add('hidden');
+}
+
+function closeImpersonateModal() {
+        document.getElementById('impersonateModal').classList.add('hidden');
+}
+
+function submitImpersonate() {
+        const email = document.getElementById('impersonateEmail').value;
+        const confirmBtn = document.getElementById('confirmImpersonateBtn');
+        const statusMsg = document.getElementById('impersonateStatusMessage');
+
+        if (!email) return;
+
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Loading...';
+        statusMsg.classList.add('hidden');
+
+        fetch('/impersonate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Reload the page to apply the impersonated session
+                window.location.reload();
+            } else {
+                throw new Error(data.message || 'Failed to impersonate user.');
+            }
+        })
+        .catch(error => {
+            statusMsg.textContent = error.message;
+            statusMsg.className = 'text-sm p-3 rounded-lg mb-4 bg-red-100 text-red-800 block';
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Impersonate';
+        });
 }
 </script>
 {% endblock %}

@@ -10,21 +10,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom Tailwind Config for ACDI Branding -->
     <script>
-              tailwind.config = {
-                theme: {
-                  extend: {
-                    colors: {
-                      acdi: {
-                        green: '#8CC63F', /* ACDI Signature Green */
-                        dark: '#1e293b'
+                      tailwind.config = {
+                        theme: {
+                          extend: {
+                            colors: {
+                              acdi: {
+                                green: '#8CC63F', /* ACDI Signature Green */
+                                dark: '#1e293b'
+                              }
+                            }
+                          }
+                        }
                       }
-                    }
-                  }
-                }
-              }
     </script>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans antialiased">
+
+    <!-- Impersonation Banner -->
+    {% if session.get('original_admin_user') %}
+    <div class="bg-red-600 text-white px-4 py-2 flex items-center justify-center gap-4 text-sm font-bold shadow-md z-[60] relative">
+        <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+        <span>You are currently viewing the portal as {{ user.email }}</span>
+        <a href="{{ url_for('stop_impersonating') }}" class="bg-white text-red-600 px-3 py-1 rounded shadow-sm hover:bg-red-50 transition-colors ml-4">
+            Return to Admin
+        </a>
+    </div>
+    {% endif %}
+
     <!-- Clean, white navbar to highlight the green logo -->
     <nav class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
