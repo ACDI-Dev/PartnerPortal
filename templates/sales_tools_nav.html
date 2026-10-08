@@ -49,5 +49,15 @@
             {% endif %}">
             Open Deals
         </a>
+
+        <!-- Shipment Tracking -->
+        <a href="/shipment-tracking" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'shipment_tracking' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            Shipment Tracking
+        </a>
     </nav>
 </section>

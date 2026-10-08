@@ -15,6 +15,8 @@ import urllib.request
 from datetime import date, timedelta, datetime, timezone
 from flask_caching import Cache
 from google.cloud import storage
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 app = Flask(__name__)
 
@@ -234,6 +236,50 @@ def get_cached_rewards(api_email):
 
 # --- AUTH ROUTES ---
 
+# --- SHIPMENT TRACKING HELPERS & ROUTE ---
+
+@cache.memoize(timeout=1400)
+def get_cached_shipment_tracking(account_id):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/shipmenttrackingdetails/actions/execute?auth_type=apikey&zapikey={api_key}&Account_ID={account_id or ''}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
+
+@app.route('/shipment-tracking')
+@login_required
+def shipment_tracking(user):
+    # Pull active account_id from session (set when user picks an account)
+    account_id = session.get('active_account_id', '')
+    user_email = user.get('email') 
+    api_email = user_email
+    
+    if user_email and '@acd-inc.com' in user_email.lower():
+        account_id = 474481000000076079
+        
+       
+    try:
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_cached_shipment_tracking, account_id)
+
+        data = get_cached_shipment_tracking(account_id)
+
+        if data.get("code") == "success":
+            raw_output = data.get("details", {}).get("output", "{}")
+            parsed_data = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
+
+            shipments = parsed_data.get("Shipments", [])
+            total_shipments = parsed_data.get("Total_Number_of_Shipments", len(shipments))
+
+            return render_template('shipment_tracking.html', user=user, shipments=shipments, total_shipments=total_shipments)
+        else:
+            return "API returned an error.", 400
+
+    except requests.RequestException as e:
+        return f"Error fetching shipment data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing shipment tracking data from API.", 500
 
 @app.route('/rep/set_account/<account_id>')
 @login_required
@@ -318,7 +364,67 @@ def dashboard(user):
 @login_required
 def resource_hub(user):
     return render_template('resource_hub.html', user = user)
+@app.route('/request-access', methods=['POST'])
+@login_required
+def request_access(user):
+    data = request.get_json() or {}
+    service_name = data.get('service')
+    
+    if not service_name:
+        return jsonify({'status': 'error', 'message': 'Service name required.'}), 400
 
+    user_email = user.get('email')
+    user_name = f"{user.get('first_name', '')} {user.get('last_name', '')}".strip()
+    account_name = user.get('account') or user.get('reseller_account', 'N/A')
+
+    # Target email address for the Sales Rep
+    sales_rep_email = os.environ.get('SALES_REP_EMAIL', 'sales@yourcompany.com')
+    from_email = os.environ.get('SENDGRID_FROM_EMAIL', 'noreply@yourcompany.com')
+    sendgrid_api_key = os.environ.get('SENDGRID_API_KEY').strip()
+
+    if not sendgrid_api_key:
+        print("ERROR: SENDGRID_API_KEY environment variable is missing.", flush=True)
+        return jsonify({'status': 'error', 'message': 'Email service configuration error.'}), 500
+
+    # Build the Email Message
+    email_subject = f"ACDI Partner Portal Access Request: {service_name} - {user_email} - {account_name}"
+    email_content = f"""
+    <html>
+        <body style="font-family: Arial, sans-serif; color: #333;">
+            <h2>New Feature Access Request</h2>
+            <p><strong>User:</strong> {user_name} ({user_email})</p>
+            <p><strong>Account:</strong> {account_name}</p>
+            <p><strong>Requested Service:</strong> {service_name}</p>
+            <hr>
+            <p>Please review and grant access in the admin panel if approved.</p>
+        </body>
+    </html>
+    """
+
+    message = Mail(
+        from_email=from_email,
+        to_emails=sales_rep_email,
+        subject=email_subject,
+        html_content=email_content
+    )
+
+    # Optional: Set Reply-To so the sales rep can reply directly to the user
+    message.reply_to = user_email
+
+    try:
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
+
+        if response.status_code in [200, 201, 202]:
+            print(f"SUCCESS: Access request email sent for {user_email} -> {service_name}", flush=True)
+            return jsonify({'status': 'success', 'message': f'Access request submitted for {service_name}.'}), 200
+        else:
+            print(f"SendGrid API response status: {response.status_code}", flush=True)
+            return jsonify({'status': 'error', 'message': 'Failed to deliver request email.'}), 500
+
+    except Exception as e:
+        print(f"ERROR: Exception while sending email via SendGrid: {str(e)}", flush=True)
+        return jsonify({'status': 'error', 'message': 'Error sending request email.'}), 500
 
 @app.route('/rep/accounts')
 @login_required

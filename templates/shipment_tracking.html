@@ -1,0 +1,205 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% include "sales_tools_nav.html" %}
+
+<!-- Title Section -->
+<section class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+            <h2 class="text-2xl font-bold text-gray-900 font-sans">Shipment Tracking ({{ total_shipments }})</h2>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href="?refresh=true" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-acdi-green focus:outline-none transition-colors" onclick="this.innerHTML='<svg class=\'animate-spin h-4 w-4 text-acdi-green\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg> Refreshing...';">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Force Refresh
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Extract Carrier Options -->
+{% set unique_carriers = [] %}
+{% for s in shipments %}
+    {% if s.get('ShipVia') and s.get('ShipVia') not in unique_carriers %}
+        {% set _ = unique_carriers.append(s.get('ShipVia')) %}
+    {% endif %}
+{% endfor %}
+
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900">Shipments List</h3>
+            <p class="text-sm text-gray-500 mt-1">View, sort, filter, and export shipment details.</p>
+        </div>
+
+        <div class="p-6 overflow-x-auto">
+
+            <!-- Filter Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
+                <!-- Carrier Filter -->
+                <div>
+                    <label for="carrierFilter" class="block text-sm font-medium text-gray-700 mb-1">Carrier / ShipVia</label>
+                    <select id="carrierFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Carriers</option>
+                        {% for c in unique_carriers|sort %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Date Range Filters -->
+                <div>
+                    <label for="minDate" class="block text-sm font-medium text-gray-700 mb-1">Ship Date (Min)</label>
+                    <input type="date" id="minDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+                <div>
+                    <label for="maxDate" class="block text-sm font-medium text-gray-700 mb-1">Ship Date (Max)</label>
+                    <input type="date" id="maxDate" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                </div>
+
+                <!-- Clear Dates Button -->
+                <div>
+                    <button type="button" id="clearDatesBtn" class="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-medium py-2 px-4 rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-300">
+                        Clear Dates
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <table id="shipmentsTable" class="w-full text-left text-sm text-gray-600">
+                <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">Shipment Number</th>
+                        <th class="px-4 py-3">Ship Date</th>
+                        <th class="px-4 py-3">PO Number</th>
+                        <th class="px-4 py-3">ACDI SO Number</th>
+                        <th class="px-4 py-3">Carrier</th>
+                        <th class="px-4 py-3">Tracking Number</th>
+                        <th class="px-4 py-3">Qty</th>
+                        <th class="px-4 py-3">Inventory ID</th>
+                        <th class="px-4 py-3 rounded-tr-lg">Description</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for item in shipments %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 font-bold text-gray-900">{{ item.get('Shipment Number', 'N/A') }}</td>
+                        <td class="px-4 py-3">{{ item.get('ShipDate', 'N/A') }}</td>
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ item.get('Sales_Order.Purchase_Order', 'N/A') }}</td>
+                        <td class="px-4 py-3">{{ item.get('Sales_Order.ACDI_Sales_Order_Number', 'N/A') }}</td>
+                        <td class="px-4 py-3">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#f0f9e8] text-green-700 border border-green-200 shadow-sm">
+                                {{ item.get('ShipVia') or '' }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 font-mono text-xs">
+                            {% set tracking = item.get('Tracking_Number') %}
+                            {% set carrier = item.get('ShipVia') or '' %}
+                            {% if tracking %}
+                            {% if 'UPS' in carrier %}
+                            <a href="https://www.ups.com/track?tracknum={{ tracking }}" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
+                                {{ tracking }}
+                            </a>
+                            {% elif 'FedEx' in carrier %}
+                            <a href="https://www.fedex.com/fedextrack/?trknbr={{ tracking }}" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
+                                {{ tracking }}
+                            </a>
+                            {% else %}
+                            {{ tracking }}
+                            {% endif %}
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3 font-bold text-gray-900">{{ item.get('Shipped_QTY') if item.get('Shipped_QTY') != None else 0 }}</td>
+                        <td class="px-4 py-3 font-mono text-xs">{{ item.get('Inventory_ID', 'N/A') }}</td>
+                        <td class="px-4 py-3 text-xs max-w-xs truncate" title="{{ item.get('Inventory_Description', '') }}">
+                            {{ item.get('Inventory_Description', 'N/A') }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DataTables Scripts & Styles -->
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+<script>
+    $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+            var min = $('#minDate').val();
+            var max = $('#maxDate').val();
+            var dateStr = data[1]; // Column 1 is Ship Date
+
+            if (!min && !max) { return true; }
+            if (!dateStr || dateStr === 'N/A') { return false; }
+            if (min && dateStr < min) { return false; }
+            if (max && dateStr > max) { return false; }
+            return true;
+        }
+    );
+
+    $(document).ready(function() {
+        var table = $('#shipmentsTable').DataTable({
+            order: [[1, 'desc']], // Sort by Ship Date descending
+            pageLength: 25,
+            language: { search: "Search Shipments:" },
+            dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                 '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                 'rt' +
+                 '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+            buttons: [
+                {
+                    extend: 'colvis',
+                    text: 'Select Columns',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50'
+                },
+                {
+                    extend: 'csv',
+                    text: 'Export CSV',
+                    filename: 'Shipments_Export',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export Excel',
+                    filename: 'Shipments_Export',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50'
+                }
+            ]
+        });
+
+        // Carrier Filter
+        $('#carrierFilter').on('change', function() {
+            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        // Date Range Trigger
+        $('#minDate, #maxDate').on('change', function() {
+            table.draw();
+        });
+
+        // Clear Dates
+        $('#clearDatesBtn').on('click', function() {
+            $('#minDate').val('');
+            $('#maxDate').val('');
+            table.draw();
+        });
+    });
+</script>
+{% endblock %}

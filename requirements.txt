@@ -6,3 +6,4 @@ Flask-Caching==2.1.0
 redis==5.0.1
 PyJWT==2.10.0
 google-cloud-storage
+sendgrid>=6.11.0

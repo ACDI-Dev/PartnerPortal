@@ -47,6 +47,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
+        <!-- ACE Support -->
         {% if 'ACE' in user.authorized_apps %}
         <a href="/ace" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
@@ -55,12 +56,24 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">ACE Support</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Connect with ACE, your ACDI Customer Support Expert, for instant technical assistance and resources.</p>
         </a>
+        {% else %}
+        <button type="button" onclick="openRequestModal('ACE Support')" class="w-full text-left p-6 bg-gray-100 rounded-xl border border-gray-200 opacity-75 hover:opacity-100 hover:border-gray-400 transition-all duration-200 group relative">
+            <div class="flex justify-between items-start mb-5">
+                <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 p-2">
+                    <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain grayscale opacity-60">
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-600 group-hover:bg-acdi-green group-hover:text-acdi-dark transition-colors">
+                    Click to request access
+                </span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-500 mb-2">ACE Support</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">Connect with ACE, your ACDI Customer Support Expert, for instant technical assistance and resources.</p>
+        </button>
         {% endif %}
 
         <!-- Sales Tools Hub -->
         <a href="{{ url_for('sales_tools') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <!-- Briefcase Icon -->
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Sales Tools</h3>
@@ -68,6 +81,7 @@
         </a>
 
         <!-- Partner Perks -->
+        {% if 'Partner Perks' in user.authorized_apps %}
         <a href="{{ url_for('perks_home') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='icon-register.png') }}" alt="Partner Perks Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
@@ -75,10 +89,23 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">Partner Perks</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Partner Perks members are eligible to claim points on their sales made through ACDI.</p>
         </a>
+        {% else %}
+        <button type="button" onclick="openRequestModal('Partner Perks')" class="w-full text-left p-6 bg-gray-100 rounded-xl border border-gray-200 opacity-75 hover:opacity-100 hover:border-gray-400 transition-all duration-200 group relative">
+            <div class="flex justify-between items-start mb-5">
+                <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center p-2">
+                    <img src="{{ url_for('static', filename='icon-register.png') }}" alt="Partner Perks Icon" class="w-full h-full object-contain grayscale opacity-60">
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-600 group-hover:bg-acdi-green group-hover:text-acdi-dark transition-colors">
+                    Click to request access
+                </span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-500 mb-2">Partner Perks</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">Partner Perks members are eligible to claim points on their sales made through ACDI.</p>
+        </button>
+        {% endif %}
 
-        <!-- Quote Portal (Requires Authorization for the Quote Portal App) -->
+        <!-- Quote Portal -->
         {% if 'Quote Portal' in user.authorized_apps %}
-        <!-- ACTIVE STATE: User has access -->
         <a href="https://acdidev.zohocreator.com/portal/qr" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
@@ -86,22 +113,19 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">Quote Portal</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
         </a>
-
         {% else %}
-        <!-- LOCKED STATE: User does NOT have access -->
-        <div class="block p-6 bg-gray-50 rounded-xl border border-gray-200 opacity-75 cursor-not-allowed">
+        <button type="button" onclick="openRequestModal('Quote Portal')" class="w-full text-left p-6 bg-gray-100 rounded-xl border border-gray-200 opacity-75 hover:opacity-100 hover:border-gray-400 transition-all duration-200 group relative">
             <div class="flex justify-between items-start mb-5">
                 <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                    <!-- Lock Icon -->
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
                 </div>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
-                    Access Required
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-600 group-hover:bg-acdi-green group-hover:text-acdi-dark transition-colors">
+                    Click to request access
                 </span>
             </div>
             <h3 class="text-xl font-bold text-gray-500 mb-2">Quote Portal</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">Contact your ACDI channel manager to request access to this application.</p>
-        </div>
+            <p class="text-sm text-gray-400 leading-relaxed">Configure products, apply your tier discounts, and generate client-facing quotes.</p>
+        </button>
         {% endif %}
 
         <!-- Resource Hub (Visible to everyone) -->
@@ -113,17 +137,6 @@
             <p class="text-sm text-gray-600 leading-relaxed">Access battlecards, technical datasheets, and co-branded marketing assets.</p>
         </a>
 
-        <!-- MDF Requests (Requires 'MDF_Request' permission) -->
-        {% if 'MDF_Request' in user.permissions %}
-        <a href="#" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 0 0118 0z"></path></svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">MDF Requests</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">Apply for Market Development Funds to run joint webinars and live events.</p>
-        </a>
-        {% endif %}
-
         <!-- ACDI Academy Training (Visible to everyone) -->
         <a href="/training" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
@@ -133,7 +146,7 @@
             <p class="text-sm text-gray-600 leading-relaxed">Register for training, take certification exams, and increase your technical capability.</p>
         </a>
 
-        <!-- Software Support -->
+        <!-- Software Support (Visible to everyone) -->
         <a href="https://support.acd-inc.com/portal/en/signin" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -145,66 +158,95 @@
     </div>
 </section>
 
-{% if 'ACE' in user.authorized_apps %}
-<!-- Debug UI for Claims passed via FusionAuth -->
-<section class="mt-16 hidden">
-    <div class="p-6 bg-white border border-gray-200 shadow-sm rounded-xl">
-        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-            Debug: FusionAuth JWT Claims
-        </h3>
-        <div class="bg-gray-900 p-4 rounded-lg overflow-auto text-sm font-mono text-acdi-green">
-            <ul class="space-y-1">
-                <li>[SYSTEM] Account Name: {{ user.reseller_account }}</li>
-                <li>[SYSTEM] Identity: {{ user.first_name }} {{ user.last_name }}</li>
-                <li>[SYSTEM] token: {{ user.token }} </li>
-                <li class="pt-2 text-gray-400">--- Permissions ---</li>
-                {% if user.permissions %}
-                {% for perm in user.permissions %}
-                <li>[SYSTEM] Permission granted: {{ perm }}</li>
-                {% endfor %}
-                {% else %}
-                <li class="text-gray-500">[SYSTEM] No specific permissions asserted.</li>
-                {% endif %}
+<!-- Request Access Modal -->
+<div id="requestAccessModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Request Access</h3>
+            <button type="button" onclick="closeRequestModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
 
-                <li class="pt-2 text-gray-400">--- Authorized Apps ---</li>
-                {% if user.authorized_apps %}
-                {% for app_id in user.authorized_apps %}
-                <li>[SYSTEM] Authorized App ID: {{ app_id }}</li>
-                {% endfor %}
-                {% else %}
-                <li class="text-gray-500">[SYSTEM] No authorized applications found.</li>
-                {% endif %}
+        <div class="mb-6">
+            <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                You are not currently authorized to access <strong id="modalServiceName" class="text-gray-900"></strong>.
+            </p>
+            <p class="text-sm text-gray-600 leading-relaxed">
+                Would you like to send a request to your Sales Rep to gain access to this feature?
+            </p>
+        </div>
 
-                <li class="pt-4 text-gray-400">--- Complete Raw JWT Payload ---</li>
-                <li>
-                    <pre class="text-xs text-gray-300 mt-2 whitespace-pre-wrap">{{ raw_jwt }}</pre>
-                </li>
-            </ul>
+        <div id="modalStatusMessage" class="hidden text-sm p-3 rounded-lg mb-4"></div>
+
+        <div class="flex justify-end gap-3">
+            <button type="button" onclick="closeRequestModal()" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
+                Cancel
+            </button>
+            <button type="button" id="confirmRequestBtn" onclick="submitAccessRequest()" class="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-acdi-dark hover:bg-gray-800 transition-colors">
+                Send Request
+            </button>
         </div>
     </div>
-</section>
-{% endif %}
+</div>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const licenseLink = document.getElementById('licenseLink');
-            const overlay = document.getElementById('licenseLoadingOverlay');
+let currentTargetService = '';
 
-            if (licenseLink && overlay) {
-                licenseLink.addEventListener('click', function(e) {
-                    if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
-                        overlay.classList.remove('hidden');
-                    }
-                });
-            }
+function openRequestModal(serviceName) {
+    currentTargetService = serviceName;
+    document.getElementById('modalServiceName').textContent = serviceName;
 
-            window.addEventListener('pageshow', function(e) {
-                if (overlay && !overlay.classList.contains('hidden')) {
-                    overlay.classList.add('hidden');
-                }
-            });
-        });
+    const statusMsg = document.getElementById('modalStatusMessage');
+    statusMsg.classList.add('hidden');
+    statusMsg.className = 'hidden text-sm p-3 rounded-lg mb-4';
+
+    const confirmBtn = document.getElementById('confirmRequestBtn');
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Send Request';
+
+    document.getElementById('requestAccessModal').classList.remove('hidden');
+}
+
+function closeRequestModal() {
+    document.getElementById('requestAccessModal').classList.add('hidden');
+}
+
+function submitAccessRequest() {
+    const confirmBtn = document.getElementById('confirmRequestBtn');
+    const statusMsg = document.getElementById('modalStatusMessage');
+
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Sending...';
+
+    fetch("{{ url_for('request_access') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ service: currentTargetService })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            statusMsg.textContent = 'Your request has been sent to your Sales Rep!';
+            statusMsg.className = 'text-sm p-3 rounded-lg mb-4 bg-green-100 text-green-800';
+            statusMsg.classList.remove('hidden');
+
+            setTimeout(() => {
+                closeRequestModal();
+            }, 2000);
+        } else {
+            throw new Error(data.message || 'Failed to submit request.');
+        }
+    })
+    .catch(error => {
+        statusMsg.textContent = error.message || 'Something went wrong. Please try again.';
+        statusMsg.className = 'text-sm p-3 rounded-lg mb-4 bg-red-100 text-red-800';
+        statusMsg.classList.remove('hidden');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Send Request';
+    });
+}
 </script>
-
 {% endblock %}

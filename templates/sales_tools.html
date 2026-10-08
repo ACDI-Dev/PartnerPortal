@@ -66,44 +66,61 @@
     <h3 class="text-xl font-bold text-gray-900 mb-2">Open Deals</h3>
     <p class="text-sm text-gray-600 leading-relaxed">View, sort, filter, and track your open pipeline opportunities and quotes.</p>
 </a>
+<!-- Shipment Tracking Dashboard -->
+<a href="/shipment-tracking" id="shipmentsLink" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
 
+    <div id="shipmentsLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
+        <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="text-sm font-bold text-gray-700 tracking-wide">Fetching Data...</span>
+    </div>
+
+    <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+        <!-- Truck / Shipping Icon -->
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 011 1v2a1 1 0 01-1 1m-1-4h-2m8 0h1a1 1 0 001-1v-4a1 1 0 00-.293-.707l-2.828-2.828A1 1 0 0016.586 7H14"></path></svg>
+    </div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Shipment Tracking</h3>
+    <p class="text-sm text-gray-600 leading-relaxed">View, sort, filter, and track order shipment records and carrier tracking numbers.</p>
+</a>
 <!-- Script for Loading Overlay -->
 <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const licenseLink = document.getElementById('licenseLink');
-                    const overlay = document.getElementById('licenseLoadingOverlay');
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const licenseLink = document.getElementById('licenseLink');
+                        const overlay = document.getElementById('licenseLoadingOverlay');
 
-                    if (licenseLink && overlay) {
-                        licenseLink.addEventListener('click', function(e) {
-                            if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
-                                overlay.classList.remove('hidden');
+                        if (licenseLink && overlay) {
+                            licenseLink.addEventListener('click', function(e) {
+                                if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                                    overlay.classList.remove('hidden');
+                                }
+                            });
+                        }
+
+                        window.addEventListener('pageshow', function(e) {
+                            if (overlay && !overlay.classList.contains('hidden')) {
+                                overlay.classList.add('hidden');
                             }
                         });
-                    }
-
-                    window.addEventListener('pageshow', function(e) {
-                        if (overlay && !overlay.classList.contains('hidden')) {
-                            overlay.classList.add('hidden');
-                        }
                     });
-                });
 document.addEventListener('DOMContentLoaded', function () {
-    const dealsLink = document.getElementById('dealsLink');
-    const overlay = document.getElementById('dealsLoadingOverlay');
+        const dealsLink = document.getElementById('dealsLink');
+        const overlay = document.getElementById('dealsLoadingOverlay');
 
-    if (dealsLink && overlay) {
-        dealsLink.addEventListener('click', function (e) {
-            if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
-                overlay.classList.remove('hidden');
+        if (dealsLink && overlay) {
+            dealsLink.addEventListener('click', function (e) {
+                if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                    overlay.classList.remove('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('pageshow', function (e) {
+            if (overlay && !overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
             }
         });
-    }
-
-    window.addEventListener('pageshow', function (e) {
-        if (overlay && !overlay.classList.contains('hidden')) {
-            overlay.classList.add('hidden');
-        }
-    });
 });
 </script>
 {% endblock %}
