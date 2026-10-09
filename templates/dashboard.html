@@ -303,30 +303,35 @@ function openImpersonateModal() {
 function closeImpersonateModal() {
         document.getElementById('impersonateModal').classList.add('hidden');
 }
-
 function submitImpersonate() {
-        const email = document.getElementById('impersonateEmail').value;
-        const confirmBtn = document.getElementById('confirmImpersonateBtn');
-        const statusMsg = document.getElementById('impersonateStatusMessage');
+    const email = document.getElementById('impersonateEmail').value;
+    const confirmBtn = document.getElementById('confirmImpersonateBtn');
+    const statusMsg = document.getElementById('impersonateStatusMessage');
 
-        if (!email) return;
+    if (!email) return;
 
-        confirmBtn.disabled = true;
-        confirmBtn.textContent = 'Loading...';
-        statusMsg.classList.add('hidden');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Loading...';
+    statusMsg.classList.add('hidden');
 
-        fetch('/impersonate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Reload the page to apply the impersonated session
+    fetch('/impersonate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+    })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (body.status === 'success') {
+                // Reload page to apply the impersonated session
                 window.location.reload();
+            } else if (body.status === 'warning') {
+                // Render user-not-found warning box
+                statusMsg.textContent = body.message;
+                statusMsg.className = 'text-sm p-3 rounded-lg mb-4 bg-yellow-100 text-yellow-800 border border-yellow-300 block';
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Impersonate';
             } else {
-                throw new Error(data.message || 'Failed to impersonate user.');
+                throw new Error(body.message || 'Failed to impersonate user.');
             }
         })
         .catch(error => {

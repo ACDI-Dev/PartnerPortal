@@ -250,15 +250,14 @@ def get_cached_shipment_tracking(account_id):
 @app.route('/shipment-tracking')
 @login_required
 def shipment_tracking(user):
-    # Pull active account_id from session (set when user picks an account)
-    account_id = session.get('active_account_id', '')
-    user_email = user.get('email') 
-    api_email = user_email
+    # 1. Pull active account_id from session or fallback to user's direct account_id
+    account_id = session.get('active_account_id') or user.get('account_id', '')
+    user_email = user.get('email', '')
     
-    if user_email and '@acd-inc.com' in user_email.lower():
-        account_id = 474481000000076079
-        
-       
+    # 2. Default fallback for internal ACDI employees if no account is tied
+    if user_email and '@acd-inc.com' in user_email.lower() and not account_id:
+        account_id = '474481000000076079'
+
     try:
         if request.args.get('refresh') == 'true':
             cache.delete_memoized(get_cached_shipment_tracking, account_id)
@@ -372,16 +371,27 @@ def impersonate(user):
         response = requests.get(api_url)
         res_data = response.json()
 
+        # Save original admin session if not already set
+        if 'original_admin_user' not in session:
+            session['original_admin_user'] = user
+
         if res_data.get("code") == "success":
             raw_output = res_data.get("details", {}).get("output", "{}")
+            user_messages = res_data.get("details", {}).get("userMessage", [])
             parsed_user = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
 
-            # Save the original admin user to the session if we aren't already impersonating someone
-            if 'original_admin_user' not in session:
-                session['original_admin_user'] = user
+            # Check if record was not found
+            if not parsed_user or "No record found with that email address." in user_messages:
+                session['user'] = session.pop('original_admin_user', user)
+                warning_msg = user_messages[0] if user_messages else f"User record '{target_email}' could not be found."
+                return jsonify({
+                    'status': 'warning',
+                    'message': f"{warning_msg} Admin session restored."
+                }), 404
 
-            # Merge the new user data but KEEP the admin's original token.
-            # This ensures @login_required's FusionAuth validation continues to pass.
+            # Extract account_id from the parsed user payload
+            target_account_id = parsed_user.get('account_id', '')
+
             impersonated_user = {
                 'email': parsed_user.get('email'),
                 'first_name': parsed_user.get('first_name', ''),
@@ -389,6 +399,7 @@ def impersonate(user):
                 'account': parsed_user.get('account', ''),
                 'account_category': parsed_user.get('account_category', ''),
                 'reseller_account': parsed_user.get('reseller_account', ''),
+                'account_id': target_account_id,  # Saved in user dict
                 'tier': parsed_user.get('tier', 'Standard'),
                 'permissions': parsed_user.get('permissions', []),
                 'authorized_apps': parsed_user.get('authorized_apps', []),
@@ -396,19 +407,29 @@ def impersonate(user):
             }
 
             session['user'] = impersonated_user
+            
+            # Automatically set active_account_id to the impersonated user's account ID
+            if target_account_id:
+                session['active_account_id'] = target_account_id
+            else:
+                session.pop('active_account_id', None)
+
             return jsonify({'status': 'success', 'message': f'Now impersonating {target_email}'}), 200
         else:
-            return jsonify({'status': 'error', 'message': 'User not found or API error.'}), 400
+            session['user'] = session.pop('original_admin_user', user)
+            return jsonify({'status': 'error', 'message': 'User not found or API error. Admin session restored.'}), 400
 
     except Exception as e:
+        if 'original_admin_user' in session:
+            session['user'] = session.pop('original_admin_user')
         return jsonify({'status': 'error', 'message': str(e)}), 500
-
 @app.route('/stop-impersonating')
 @login_required
 def stop_impersonating(user):
     # Restore the original admin user session
     if 'original_admin_user' in session:
         session['user'] = session.pop('original_admin_user')
+        session.pop('active_account_id', None) # Clear it on the way back out, too
     return redirect(url_for('dashboard'))
 
 @app.route('/')
