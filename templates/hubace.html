@@ -13,7 +13,7 @@
             <img src="{{ url_for('static', filename='ACDI_Logosmall.png') }}" alt="ACDI Logo" height="20">
         </div>
         <div class="nav-links">
-            <a href="https://acd-inc.com/support/" target="_blank">Back to Main Site</a>
+            <a href="https://portal.oneacdi.com" target="_blank">Return to ACDI Portal</a>
         </div>
     </header>
 
@@ -21,50 +21,56 @@
         <main id="chat-container"></main>
     </div>
 
-    <script>
-	document.addEventListener('DOMContentLoaded', function() {
+  
+	<script>
+document.addEventListener('DOMContentLoaded', function() {
     (function(d, t) {
         var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-        
-        // 1. Get the query string from the current URL
-        const queryString = window.location.search;
 
-        // 2. Create a new URLSearchParams object
-        const urlParams = new URLSearchParams(queryString);
+        {% if is_impersonating %}
+        // Payload when in Impersonate Mode using the impersonated user's data
+        var launchPayload = {
+            Account_Category: {{ user.get('account_category', '') | tojson }},
+            Account_Sub_Category: {{ user.get('tier', 'Standard') | tojson }},
+            Email: {{ user.get('email', '') | tojson }},
+            First_Name: {{ user.get('first_name', '') | tojson }},
+            Last_Name: {{ user.get('last_name', '') | tojson }},
+            Account: {{ user.get('account', '') | tojson }},
+            Account_ID: {{ user.get('account_id', '') | tojson }}
+        };
+        {% else %}
+        // Default launch payload when NOT impersonating
+        var launchPayload = {
+            token: '{{ token }}'
+        };
+        {% endif %}
 
-        // 3. Extract the 'name' and 'email' properties
-        const name = urlParams.get('name');
-        const email = urlParams.get('email');
-        
         v.onload = function() {
-    window.voiceflow.chat.load({
-    verify: { projectID: '6a6909ff3629ffc3b501836a' },
-    url: 'https://general-runtime.voiceflow.com',
-    assistant: { 
-    persistence: 'memory' 
-  },
-    render: {
-        mode: 'embedded',
-        target: document.getElementById('chat-container')
-    },
-    autostart: true,
-    
-    // This is the correct way to pass frontend data in Voiceflow
-    launch: {
-        event: {
-            type: 'launch',
-            payload: {
-                token: '{{ token }}'
-            }
+            window.voiceflow.chat.load({
+                verify: { projectID: '6a6909ff3629ffc3b501836a' },
+                url: 'https://general-runtime.voiceflow.com',
+                assistant: {
+                    persistence: 'memory'
+                },
+                render: {
+                    mode: 'embedded',
+                    target: document.getElementById('chat-container')
+                },
+                autostart: true,
+                launch: {
+                    event: {
+                        type: 'launch',
+                        payload: launchPayload
+                    }
+                }
+            });
         }
-    }
-});
-        }
-        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; 
-        v.type = "text/javascript"; 
+        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+        v.type = "text/javascript";
         s.parentNode.insertBefore(v, s);
     })(document, 'script');
 });
-	</script>
+    </script>
+	
 </body>
 </html>

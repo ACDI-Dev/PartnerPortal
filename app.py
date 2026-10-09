@@ -627,9 +627,18 @@ def ace_portal(user):
     if 'ACE' not in user.get('authorized_apps', []):
         return "Unauthorized - You do not have access to the ACE Portal.", 403
 
-    # Extract the raw JWT instead of base64 encoding the session object
+    # Extract the raw JWT
     raw_jwt = user.get('token')
-    return render_template('hubace.html',user=user,token=raw_jwt)
+    
+    # Check if currently in impersonate mode
+    is_impersonating = 'original_admin_user' in session
+
+    return render_template(
+        'hubace.html',
+        user=user,
+        token=raw_jwt,
+        is_impersonating=is_impersonating
+    )
 
 @app.route('/sales-tools')
 @login_required
