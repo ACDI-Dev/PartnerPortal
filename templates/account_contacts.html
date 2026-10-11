@@ -1,0 +1,163 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% include "sales_tools_nav.html" %}
+
+<!-- Header & Back Navigation -->
+<section class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+            <a href="{{ url_for('rep_accounts') }}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-acdi-green mb-2 transition-colors">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                Back to My Accounts
+            </a>
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+                <h2 class="text-2xl font-bold text-gray-900 font-sans">Contacts: {{ account_name }} ({{ total_contacts }})</h2>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Force Refresh Button -->
+            <a href="?refresh=true&account_name={{ account_name | urlencode }}" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-acdi-green focus:outline-none transition-colors" onclick="this.innerHTML='<svg class=\'animate-spin h-4 w-4 text-acdi-green\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg> Refreshing...';">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Force Refresh
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Contacts Table Section -->
+<section class="mb-12">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Account Contact List</h3>
+                <p class="text-sm text-gray-500 mt-1">Manage and view all contacts associated with this account.</p>
+            </div>
+        </div>
+
+        <div class="p-6 overflow-x-auto">
+            <table id="contactsTable" class="w-full text-left text-sm text-gray-600">
+                <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">First Name</th>
+                        <th class="px-4 py-3">Last Name</th>
+                        <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">SSO Status</th>
+                        <th class="px-4 py-3 rounded-tr-lg text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for c in contacts %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ c.get('First_Name', '-') or '-' }}</td>
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ c.get('Last_Name', '-') or '-' }}</td>
+                        <td class="px-4 py-3">
+                            {% if c.get('Email') %}
+                            <a href="mailto:{{ c.get('Email') }}" class="text-blue-600 hover:underline">{{ c.get('Email') }}</a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {% if c.get('SSO_Status') == 'Not Enabled' %}bg-red-100 text-red-800 border border-red-200{% else %}bg-gray-100 text-gray-800 border border-gray-200{% endif %} shadow-sm">
+                                {{ c.get('SSO_Status', 'Default') or 'Default' }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                {% if is_admin and c.get('Email') %}
+                                <button type="button"
+                                        onclick="impersonateContact('{{ c.get('Email') }}', this)"
+                                        class="inline-flex items-center px-3 py-1.5 border border-red-200 text-xs font-medium rounded-md shadow-sm text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                                    Impersonate
+                                </button>
+                                {% endif %}
+
+                                {% if c.get('Email') %}
+                                <a href="mailto:{{ c.get('Email') }}" class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    Email Contact
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DataTables Scripts & CSS -->
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#contactsTable').DataTable({
+            order: [[1, 'asc']],
+            pageLength: 25,
+            language: { search: "Search Contacts:" },
+            dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                 '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                 'rt' +
+                 '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export CSV',
+                    filename: '{{ account_name | replace(" ", "_") }}_Contacts',
+                    exportOptions: { columns: [0, 1, 2, 3] },
+                    className: 'inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export Excel',
+                    filename: '{{ account_name | replace(" ", "_") }}_Contacts',
+                    exportOptions: { columns: [0, 1, 2, 3] },
+                    className: 'inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50'
+                }
+            ]
+        });
+    });
+
+    function impersonateContact(email, btnElement) {
+        if (!email) return;
+
+        const originalText = btnElement.textContent;
+        btnElement.disabled = true;
+        btnElement.textContent = 'Switching...';
+
+        fetch('/impersonate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (body.status === 'success') {
+                window.location.href = '/';
+            } else if (body.status === 'warning') {
+                alert(body.message);
+                btnElement.disabled = false;
+                btnElement.textContent = originalText;
+            } else {
+                throw new Error(body.message || 'Failed to impersonate user.');
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+            btnElement.disabled = false;
+            btnElement.textContent = originalText;
+        });
+    }
+</script>
+{% endblock %}

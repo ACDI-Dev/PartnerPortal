@@ -126,7 +126,6 @@ def is_token_valid(token):
                 REQUIRED_APP_ID = '10ec4e31-10a5-417a-92e3-24b886e1c750'
                 if unverified_claims.get("applicationId") != REQUIRED_APP_ID:
                     print(f"Token validation failed: User is not authorized for app {REQUIRED_APP_ID}.", flush=True)
-                    # Cache the failure to prevent repeatedly validating unauthorized tokens
                     cache.set(cache_key, False, timeout=60)
                     return False
                 
@@ -160,18 +159,13 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         user = get_user_identity()
         
-        # 1. Check if the user exists in the local session
         if not user:
-            # Store the requested URL before redirecting
             session['next'] = request.url
             return redirect(url_for('login'))
             
-        # 2. Extract the stored access token
         token = user.get('token')
         
-        # 3. Validate the token with FusionAuth 
         if not is_token_valid(token):
-            # Store the requested URL BEFORE clearing the session
             next_url = request.url
             session.clear()  
             session['next'] = next_url
@@ -188,7 +182,6 @@ def get_cached_reward_requests(api_email):
     
     response = requests.get(api_url)
     response.raise_for_status()
-    #print("Reward requests API response:", response.text, flush=True)
     return response.json()
 
 @cache.memoize(timeout=14400) 
@@ -200,21 +193,19 @@ def get_cached_rep_accounts(api_email):
     response.raise_for_status()
     return response.json()
 
-# Modify your existing get_cached_licenses to accept an optional account_id
 @cache.memoize(timeout=14400) 
 def get_cached_licenses(api_email, account_id=None):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
     
-    # Base URL
     api_url = f"https://www.zohoapis.com/crm/v7/functions/vfresellerlicenselookup/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
     
-    # Append account_id to the Zoho function if provided by the rep's selection
     if account_id:
         api_url += f"&account_id={account_id}"
         
     response = requests.get(api_url)
     response.raise_for_status()
     return response.json()
+
 @cache.memoize(timeout=14400) 
 def get_cached_claims(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
@@ -234,7 +225,57 @@ def get_cached_rewards(api_email):
     return response.json()
 
 
-# --- AUTH ROUTES ---
+# --- CONTACTS LOOKUP HELPERS & ROUTE ---
+
+@cache.memoize(timeout=14400)
+def get_cached_account_contacts(account_id):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/vfcontactlist/actions/execute?auth_type=apikey&zapikey={api_key}&account_id={account_id}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
+
+@app.route('/rep/accounts/<account_id>/contacts')
+@login_required
+def account_contacts(user, account_id):
+    account_name = request.args.get('account_name', 'Account')
+    
+    is_admin = 'Admin' in user.get('permissions', []) or 'original_admin_user' in session
+    
+    try:
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_cached_account_contacts, account_id)
+            
+        data = get_cached_account_contacts(account_id)
+
+        if data.get("code") == "success":
+            raw_output = data.get("details", {}).get("output", "{}")
+            parsed_data = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
+
+            if not isinstance(parsed_data, dict):
+                parsed_data = {}
+
+            contacts = parsed_data.get("Contacts") or parsed_data.get("data") or []
+            total_contacts = parsed_data.get("Total_Number_of_Contacts", len(contacts))
+
+            return render_template(
+                'account_contacts.html', 
+                user=user, 
+                contacts=contacts, 
+                total_contacts=total_contacts,
+                account_id=account_id,
+                account_name=account_name,
+                is_admin=is_admin
+            )
+        else:
+            return "API returned an error loading contacts.", 400
+
+    except requests.RequestException as e:
+        return f"Error fetching contacts data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing contacts data from the API.", 500
+
 
 # --- SHIPMENT TRACKING HELPERS & ROUTE ---
 
@@ -250,11 +291,9 @@ def get_cached_shipment_tracking(account_id):
 @app.route('/shipment-tracking')
 @login_required
 def shipment_tracking(user):
-    # 1. Pull active account_id from session or fallback to user's direct account_id
     account_id = session.get('active_account_id') or user.get('account_id', '')
     user_email = user.get('email', '')
     
-    # 2. Default fallback for internal ACDI employees if no account is tied
     if user_email and '@acd-inc.com' in user_email.lower() and not account_id:
         account_id = '474481000000076079'
 
@@ -283,10 +322,7 @@ def shipment_tracking(user):
 @app.route('/rep/set_account/<account_id>')
 @login_required
 def set_active_account(user, account_id):
-    # Store the account_id securely in the user's session
     session['active_account_id'] = account_id
-    
-    # Redirect to the licenses page (the URL will just be /licenses)
     return redirect(url_for('reseller_licenses'))
 
 @app.route('/login')
@@ -302,10 +338,8 @@ def auth_callback():
     
     raw_app_ids = user_info.get('authorized_apps', [])
     
-    # --- NEW: Deny access if they don't have the required app ---
     REQUIRED_APP_ID = '10ec4e31-10a5-417a-92e3-24b886e1c750'
     if REQUIRED_APP_ID not in raw_app_ids:
-        # Clear the FusionAuth SSO session on denial (optional but recommended)
         return "Unauthorized: You are not registered for the ACDI Reseller Portal.", 403
     
     friendly_apps = []
@@ -326,7 +360,6 @@ def auth_callback():
         'token': id_token
     }
     
-    # Extract the next URL and clear it from the session, default to dashboard
     next_url = session.pop('next', url_for('dashboard'))
     return redirect(next_url)
 
@@ -354,8 +387,8 @@ def logout():
 @app.route('/impersonate', methods=['POST'])
 @login_required
 def impersonate(user):
-    # Ensure only Admins can execute this
-    if 'Admin' not in user.get('permissions', []):
+    is_admin = 'Admin' in user.get('permissions', []) or 'original_admin_user' in session
+    if not is_admin:
         return jsonify({'status': 'error', 'message': 'Unauthorized. Admin access required.'}), 403
 
     data = request.get_json()
@@ -371,7 +404,6 @@ def impersonate(user):
         response = requests.get(api_url)
         res_data = response.json()
 
-        # Save original admin session if not already set
         if 'original_admin_user' not in session:
             session['original_admin_user'] = user
 
@@ -380,7 +412,6 @@ def impersonate(user):
             user_messages = res_data.get("details", {}).get("userMessage", [])
             parsed_user = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
 
-            # Check if record was not found
             if not parsed_user or "No record found with that email address." in user_messages:
                 session['user'] = session.pop('original_admin_user', user)
                 warning_msg = user_messages[0] if user_messages else f"User record '{target_email}' could not be found."
@@ -389,7 +420,6 @@ def impersonate(user):
                     'message': f"{warning_msg} Admin session restored."
                 }), 404
 
-            # Extract account_id from the parsed user payload
             target_account_id = parsed_user.get('account_id', '')
 
             impersonated_user = {
@@ -399,7 +429,7 @@ def impersonate(user):
                 'account': parsed_user.get('account', ''),
                 'account_category': parsed_user.get('account_category', ''),
                 'reseller_account': parsed_user.get('reseller_account', ''),
-                'account_id': target_account_id,  # Saved in user dict
+                'account_id': target_account_id,
                 'tier': parsed_user.get('tier', 'Standard'),
                 'permissions': parsed_user.get('permissions', []),
                 'authorized_apps': parsed_user.get('authorized_apps', []),
@@ -408,7 +438,6 @@ def impersonate(user):
 
             session['user'] = impersonated_user
             
-            # Automatically set active_account_id to the impersonated user's account ID
             if target_account_id:
                 session['active_account_id'] = target_account_id
             else:
@@ -423,13 +452,13 @@ def impersonate(user):
         if 'original_admin_user' in session:
             session['user'] = session.pop('original_admin_user')
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/stop-impersonating')
 @login_required
 def stop_impersonating(user):
-    # Restore the original admin user session
     if 'original_admin_user' in session:
         session['user'] = session.pop('original_admin_user')
-        session.pop('active_account_id', None) # Clear it on the way back out, too
+        session.pop('active_account_id', None)
     return redirect(url_for('dashboard'))
 
 @app.route('/')
@@ -456,14 +485,12 @@ def request_access():
     if not service_name:
         return jsonify({'status': 'error', 'message': 'Service name required.'}), 400
 
-    # Fall back to user session details if present, otherwise default to anonymous/guest details
     user_email = user.get('email', 'Guest User / Unauthenticated')
     first_name = user.get('first_name', '')
     last_name = user.get('last_name', '')
     user_name = f"{first_name} {last_name}".strip() or 'Guest User'
     account_name = user.get('account') or user.get('reseller_account', 'N/A')
 
-    # Target email address for the Sales Rep
     sales_rep_email = os.environ.get('SALES_REP_EMAIL', 'sales@yourcompany.com')
     from_email = os.environ.get('SENDGRID_FROM_EMAIL', 'noreply@yourcompany.com')
     sendgrid_api_key = os.environ.get('SENDGRID_API_KEY', '').strip()
@@ -472,7 +499,6 @@ def request_access():
         print("ERROR: SENDGRID_API_KEY environment variable is missing.", flush=True)
         return jsonify({'status': 'error', 'message': 'Email service configuration error.'}), 500
 
-    # Build the Email Message
     email_subject = f"ACDI Partner Portal Access Request: {service_name} - {user_email} - {account_name}"
     email_content = f"""
     <html>
@@ -517,7 +543,6 @@ def request_access():
 def rep_accounts(user):
     user_email = user.get('email') 
     permissions=user.get('permissions')
-   # Use the rep's email for the API call (or override for testing as you did previously)
     api_email = user_email
     if 'Admin' in permissions:
         api_email = '@acd-inc.com'
@@ -544,15 +569,11 @@ def rep_accounts(user):
     except json.JSONDecodeError:
         return "Error parsing the accounts data from the API.", 500
 
-# Modify your existing licenses route to read the account_id from the URL query params
 @app.route('/licenses')
 @login_required
 def reseller_licenses(user):
     user_email = user.get('email') 
-    
-    # Pull the account_id from the session instead of the URL
     account_id = session.get('active_account_id')
-    
     api_email = user_email
 
     try:
@@ -576,6 +597,7 @@ def reseller_licenses(user):
         return f"Error fetching data: {str(e)}", 500
     except json.JSONDecodeError:
         return "Error parsing the license data from the API.", 500
+
 @cache.memoize(timeout=14400) 
 def get_cached_open_deals(api_email):
     api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
@@ -627,10 +649,7 @@ def ace_portal(user):
     if 'ACE' not in user.get('authorized_apps', []):
         return "Unauthorized - You do not have access to the ACE Portal.", 403
 
-    # Extract the raw JWT
     raw_jwt = user.get('token')
-    
-    # Check if currently in impersonate mode
     is_impersonating = 'original_admin_user' in session
 
     return render_template(
@@ -644,6 +663,7 @@ def ace_portal(user):
 @login_required
 def sales_tools(user):
     return render_template('sales_tools.html', user=user)
+
 # --- PERKS ROUTES ---
 
 @app.route('/perks/options')
@@ -713,7 +733,6 @@ def perks_redeem(user):
         response = requests.get(api_url)
         res_data = response.json()
 
-        # Invalidate caches so updated balance/requests reload
         cache.delete_memoized(get_cached_rewards, user_email)
         cache.delete_memoized(get_cached_reward_requests, user_email)
 
@@ -739,7 +758,6 @@ def perks_rewards(user):
         return redirect(url_for('dashboard'))
         
     user_email = user.get('email') 
-    
     api_email = user_email
 
     try:
@@ -747,7 +765,6 @@ def perks_rewards(user):
             cache.delete_memoized(get_cached_rewards, api_email)
             cache.delete_memoized(get_cached_reward_requests, api_email)
 
-        # Fetch reward points
         data = get_cached_rewards(api_email)
         
         points = 0
@@ -760,7 +777,6 @@ def perks_rewards(user):
             points = parsed_data.get("Points", 0)
             rewards_user = parsed_data.get("UserName", "")
 
-        # Fetch reward requests
         req_data = get_cached_reward_requests(api_email)
         reward_requests = []
 
@@ -768,7 +784,6 @@ def perks_rewards(user):
             raw_req_output = req_data["details"]["output"]
             parsed_req_data = json.loads(raw_req_output) if isinstance(raw_req_output, str) else raw_req_output
             
-            # Extract reward requests list from "Claims" key
             if isinstance(parsed_req_data, dict):
                 reward_requests = parsed_req_data.get("Claims", parsed_req_data.get("Reward_Requests", parsed_req_data.get("requests", [])))
             elif isinstance(parsed_req_data, list):
@@ -834,7 +849,6 @@ def perks_claims(user):
         return "Error parsing the claims data from the API.", 500
 
 
-
 def load_employee_data():
     """Fetches employee data securely via the GCS SDK."""
     try:
@@ -842,7 +856,6 @@ def load_employee_data():
         bucket = client.bucket(BUCKET_NAME)
         blob = bucket.blob(BLOB_NAME)
         
-        # Download the file contents as a string
         json_data = blob.download_as_string()
         return json.loads(json_data)
     except Exception as e:
@@ -863,32 +876,25 @@ def save_to_cloud():
         updated_data = request.get_json(force=True)
         current_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        # Automatically update lastUpdateDate and synchronize Full Name
         for emp in updated_data:
             emp["lastUpdateDate"] = current_time
             first = emp.get('First Name', '').strip()
             last = emp.get('Last Name', '').strip()
             emp["Full Name"] = f"{first} {last}".strip()
 
-        # Format JSON with indenting for clean human-readable output
         json_output = json.dumps(updated_data, indent=4)
 
         client = get_gcs_client()
         bucket = client.bucket(BUCKET_NAME)
         blob = bucket.blob(BLOB_NAME)
         
-        # --- NEW: BACKUP EXISTING FILE ---
-        # Check if the master file already exists, and if so, copy it to the backup folder
         if blob.exists():
             timestamp_str = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
             backup_blob_name = f"ID/backup/employees_{timestamp_str}.json"
             bucket.copy_blob(blob, bucket, backup_blob_name)
-        # ---------------------------------
         
-        # Upload the new data to GCS
         blob.upload_from_string(json_output, content_type='application/json')
         
-        # Ensure cache control is set so edge servers fetch the fresh file
         blob.cache_control = 'no-cache, max-age=0, must-revalidate'
         blob.patch()
 
@@ -903,21 +909,17 @@ def save_to_cloud():
 def download_updated_json():
     """Receives edited JSON data from UI, updates timestamp, and sends file back."""
     try:
-        # force=True ensures it parses the JSON even if headers get stripped
         updated_data = request.get_json(force=True) 
         current_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        # Automatically update lastUpdateDate and synchronize Full Name
         for emp in updated_data:
             emp["lastUpdateDate"] = current_time
             first = emp.get('First Name', '').strip()
             last = emp.get('Last Name', '').strip()
             emp["Full Name"] = f"{first} {last}".strip()
 
-        # Format JSON with indenting for clean human-readable output
         json_output = json.dumps(updated_data, indent=4)
 
-        # Create an in-memory file stream for browser download
         buffer = io.BytesIO()
         buffer.write(json_output.encode('utf-8'))
         buffer.seek(0)
@@ -925,32 +927,29 @@ def download_updated_json():
         return send_file(
             buffer,
             as_attachment=True,
-            download_name='employees.json', # CHANGE TO attachment_filename='employees.json' IF ON FLASK 1.x
+            download_name='employees.json',
             mimetype='application/json'
         )
     except Exception as e:
-        # This will print the exact line and error to your Python terminal
         print("--- ERROR IN DOWNLOAD ROUTE ---")
         traceback.print_exc() 
         return jsonify({"status": "error", "message": str(e)}), 400
+
 @app.route('/employees/list_bucket_images', methods=['GET'])
 def list_bucket_images():
     """Lists image files in a specific directory inside the GCS bucket."""
     try:
-        # You can specify a prefix/subfolder here (e.g., 'ID/' or 'ID/images/')
         prefix = request.args.get('prefix', 'ID/')
         
         client = get_gcs_client()
         bucket = client.bucket(BUCKET_NAME)
         
-        # Fetch blobs starting with the prefix
         blobs = bucket.list_blobs(prefix=prefix)
         
         valid_extensions = ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg')
         file_list = []
         
         for blob in blobs:
-            # Filter out folder placeholders and non-image files
             if blob.name.lower().endswith(valid_extensions):
                 public_url = f"https://storage.googleapis.com/{BUCKET_NAME}/{blob.name}"
                 file_list.append({
@@ -970,7 +969,6 @@ def list_bucket_images():
 def upload_image():
     """Receives a local image upload and saves it directly to the GCS bucket."""
     try:
-        # Grab the file and form data sent by your new JS function
         file = request.files.get('profile_image')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
@@ -979,35 +977,27 @@ def upload_image():
         if not file:
             return jsonify({"error": "No file part"}), 400
 
-        # Extract the file extension
         extension = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'png'
-        
-        # Define the folder and the new specific file name format
         folder_name = f"{first_name} {last_name}".strip()
         
-        # NEW FORMAT: First Name_Last Name_tag.extension
         file_name = f"{first_name}_{last_name}_{tag_name}.{extension}"
         blob_path = f"ID/{folder_name}/{file_name}"
-        # Upload to Google Cloud Storage
+
         client = get_gcs_client()
         bucket = client.bucket(BUCKET_NAME)
         blob = bucket.blob(blob_path)
         
-        # Read the file from memory and upload it
         blob.upload_from_file(file, content_type=file.content_type)
         
-        # Ensure cache control is set so new images show up immediately
         blob.cache_control = 'no-cache, max-age=0, must-revalidate'
         blob.patch()
 
-        # Construct the public URL to return to the frontend
         public_url = f"https://storage.googleapis.com/{BUCKET_NAME}/{blob_path}"
 
         return jsonify({"status": "success", "public_path": public_url}), 200
 
     except Exception as e:
         print("--- ERROR UPLOADING FILE ---")
-        import traceback
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
@@ -1016,33 +1006,26 @@ def upload_image():
 def employee_directory(user):
     raw_employees = load_employee_data()
     
-    # Map email to employee dict for quick manager lookup
     emp_by_email = {
         emp.get('Email Address', '').strip().lower(): emp 
         for emp in raw_employees if emp.get('Email Address')
     }
     
-    # Track top-level leadership team members separately
     leadership_team_members = []
-    
-    # Nesting hierarchy: Division -> Department -> Team -> Manager -> Employees
     raw_divisions = {}
     
     for emp in raw_employees:
-        # Filter active employees only
         if emp.get('status') != 'active':
             continue
         
         team_name = emp.get('Team', '').strip() or 'Core Team'
         
-        # Collect top-level Leadership Team members
         if team_name == 'Leadership Team':
             leadership_team_members.append(emp)
             
         division_name = emp.get('Division', '').strip() or 'General Operations'
         dept_name = emp.get('Department', '').strip() or 'General Department'
         
-        # Initialize nested structures
         if division_name not in raw_divisions:
             raw_divisions[division_name] = {}
         if dept_name not in raw_divisions[division_name]:
@@ -1052,7 +1035,6 @@ def employee_directory(user):
             
         manager_email = emp.get('Manager Email', '').strip().lower()
         
-        # Determine manager name & title
         if manager_email and manager_email in emp_by_email:
             mgr_obj = emp_by_email[manager_email]
             manager_key = f"{mgr_obj.get('First Name', '')} {mgr_obj.get('Last Name', '')}".strip()
@@ -1068,14 +1050,10 @@ def employee_directory(user):
             
         raw_divisions[division_name][dept_name][team_name][manager_name].append(emp)
 
-    # Sort hierarchy:
-    # 1. Departments: "Leadership Team" first, then alphabetical
-    # 2. Teams: Teams containing "Manager" first, then alphabetical
     divisions = {}
     for div_name, departments in raw_divisions.items():
         sorted_depts = {}
         
-        # Sort department keys
         sorted_dept_keys = sorted(
             departments.keys(),
             key=lambda d: (0 if d == 'Leadership Team' else 1, d)
@@ -1084,7 +1062,6 @@ def employee_directory(user):
         for dept_name in sorted_dept_keys:
             teams = departments[dept_name]
             
-            # Sort team keys: Teams with "Manager" in their name come first
             sorted_team_keys = sorted(
                 teams.keys(),
                 key=lambda t: (0 if 'manager' in t.lower() else 1, t)

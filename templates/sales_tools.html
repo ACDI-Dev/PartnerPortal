@@ -26,7 +26,7 @@
             <p class="text-sm text-gray-600 leading-relaxed flex-grow">View and manage your assigned reseller accounts and select them to view licenses.</p>
         </a>
         {% endif %}
-
+        {% if user.account != 'ACDI' %}
         <!-- License Dashboard -->
         <a href="/licenses" id="licenseLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             <div id="licenseLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
@@ -42,7 +42,7 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">License Dashboard</h3>
             <p class="text-sm text-gray-600 leading-relaxed flex-grow">View, sort, filter, and export your active and expired software deployments.</p>
         </a>
-
+        {% endif %}
         <!-- Open Deals Dashboard -->
         <a href="/open-deals" id="dealsLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             <div id="dealsLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">

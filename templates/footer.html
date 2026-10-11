@@ -1,0 +1,15 @@
+<footer class="mt-auto py-8 bg-white border-t border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2">
+        <!-- Logout Text Link -->
+        {% if user and user.email %}
+        <a href="/logout" class="text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors">
+            Logout
+        </a>
+        {% endif %}
+
+        <!-- Copyright Line -->
+        <p class="text-xs text-gray-500 font-medium text-center">
+            Copyright 2026 - Access Control Devices, Inc - ACDI
+        </p>
+    </div>
+</footer>

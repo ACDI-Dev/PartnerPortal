@@ -50,10 +50,10 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="p-6 border-b border-gray-200">
             <h3 class="text-xl font-bold text-gray-900">Assigned Accounts</h3>
-            <p class="text-sm text-gray-500 mt-1">Select an account below to view their detailed license deployments.</p>
+            <p class="text-sm text-gray-500 mt-1">Select an account below to view their detailed license deployments or contact details.</p>
         </div>
 
-        <div class="p-6 overflow-x-auto">
+        <div class="p-6 overflow-x-auto min-h-[400px]">
 
             <!-- Custom Filter Controls -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
@@ -144,9 +144,27 @@
                             {% endif %}
                         </td>
                         <td class="px-4 py-3 text-right">
-                            <a href="{{ url_for('set_active_account', account_id=acc.get('id')) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-acdi-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                View Licenses
-                            </a>
+                            <div class="relative inline-block text-left dropdown-container">
+                                <button type="button" onclick="toggleDropdown(event, this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 text-xs font-semibold rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                                    Actions
+                                    <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+
+                                <div class="hidden dropdown-menu origin-top-right absolute right-0 mt-1 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50">
+                                    <div class="py-1">
+                                        <a href="{{ url_for('account_contacts', account_id=acc.get('id'), account_name=acc.get('Account_Name')) }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                            View Contacts
+                                        </a>
+                                        <a href="{{ url_for('set_active_account', account_id=acc.get('id')) }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            View Licenses
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
@@ -252,121 +270,145 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<!-- Add this new script for Column Visibility -->
+<!-- Column Visibility JS -->
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
 
 <script>
-        // Custom DataTables Search Function for the Parent Filter
-        $.fn.dataTable.ext.search.push(
-            function(settings, data, dataIndex) {
-                var parentFilterValue = $('#parentFilter').val();
+            // Dropdown Toggle Logic
+            function toggleDropdown(event, button) {
+                event.stopPropagation();
+                const container = button.closest('.dropdown-container');
+                const menu = container.querySelector('.dropdown-menu');
 
-                // If "All Accounts" is selected, show the row
-                if (parentFilterValue === 'all') {
+                // Close all other open dropdowns
+                document.querySelectorAll('.dropdown-menu').forEach(m => {
+                    if (m !== menu) m.classList.add('hidden');
+                });
+
+                menu.classList.toggle('hidden');
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
+            });
+
+            // Custom DataTables Search Function for the Parent Filter
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var parentFilterValue = $('#parentFilter').val();
+
+                    // If "All Accounts" is selected, show the row
+                    if (parentFilterValue === 'all') {
+                        return true;
+                    }
+
+                    // If "Parent Accounts Only" is selected, Column 0 (Parent) must match Column 1 (Account)
+                    if (parentFilterValue === 'parent') {
+                        var parentAcc = data[0].trim();
+                        var accountName = data[1].trim();
+                        return parentAcc === accountName;
+                    }
+
                     return true;
                 }
+            );
 
-                // If "Parent Accounts Only" is selected, Column 0 (Parent) must match Column 1 (Account)
-                if (parentFilterValue === 'parent') {
-                    var parentAcc = data[0].trim();
-                    var accountName = data[1].trim();
-                    return parentAcc === accountName;
-                }
+            $(document).ready(function() {
+                var table = $('#accountsTable').DataTable({
+                    order: [[1, 'asc']], // Adjusted order to account name (index 1)
+                    pageLength: 25,
+                    language: { search: "Search Accounts:" },
 
-                return true;
-            }
-        );
+                    // Hide City (3), State (4), and Website (5) by default
+                    columnDefs: [
+                        { targets: [3, 4, 5], visible: false },
+                        { targets: [8], orderable: false } // Disable sorting on Actions dropdown column
+                    ],
 
-        $(document).ready(function() {
-            var table = $('#accountsTable').DataTable({
-                order: [[1, 'asc']], // Adjusted order to account name (index 1)
-                pageLength: 25,
-                language: { search: "Search Accounts:" },
-
-                // Hide City (3), State (4), and Website (5) by default
-                columnDefs: [
-                    { targets: [3, 4, 5], visible: false }
-                ],
-
-                dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
-                     '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
-                     'rt' +
-                     '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
-                buttons: [
-                    {
-                        extend: 'colvis',
-                        text: 'Select Columns',
-                        // Exclude the last column (Actions) from the dropdown
-                        columns: ':not(:last-child)',
-                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                    },
-                    {
-                        extend: 'csv',
-                        text: 'Export CSV',
-                        filename: 'Rep_Accounts_Export',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7],
-                            format: {
-                                body: function ( data, row, column, node ) {
-                                    if (column === 5 && data.indexOf('<a') !== -1) {
-                                        var temp = $('<div>').html(data);
-                                        return temp.find('a').attr('href');
-                                    }
-                                    return data;
-                                }
-                            }
+                    dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                         '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                         'rt' +
+                         '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+                    buttons: [
+                        {
+                            extend: 'colvis',
+                            text: 'Select Columns',
+                            columns: ':not(:last-child)',
+                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                         },
-                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                    },
-                    {
-                        extend: 'excel',
-                        text: 'Export Excel',
-                        filename: 'Rep_Accounts_Export',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7],
-                            format: {
-                                body: function ( data, row, column, node ) {
-                                    if (column === 5 && data.indexOf('<a') !== -1) {
-                                        var temp = $('<div>').html(data);
-                                        return temp.find('a').attr('href');
+                        {
+                            extend: 'csv',
+                            text: 'Export CSV',
+                            filename: 'Rep_Accounts_Export',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7],
+                                format: {
+                                    body: function ( data, row, column, node ) {
+                                        if (column === 5 && data.indexOf('<a') !== -1) {
+                                            var temp = $('<div>').html(data);
+                                            return temp.find('a').attr('href');
+                                        }
+                                        return data;
                                     }
-                                    return data;
                                 }
-                            }
+                            },
+                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                         },
-                        className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        {
+                            extend: 'excel',
+                            text: 'Export Excel',
+                            filename: 'Rep_Accounts_Export',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7],
+                                format: {
+                                    body: function ( data, row, column, node ) {
+                                        if (column === 5 && data.indexOf('<a') !== -1) {
+                                            var temp = $('<div>').html(data);
+                                            return temp.find('a').attr('href');
+                                        }
+                                        return data;
+                                    }
+                                }
+                            },
+                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        }
+                    ]
+                });
+
+                // Re-bind click event after DataTables redraws pages/sorts
+                table.on('draw', function() {
+                    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
+                });
+
+                // Bind the Custom Dropdown to the DataTables Region Column (Column 6)
+                $('#regionFilter').on('change', function() {
+                    var rawVal = $(this).val();
+
+                    if (rawVal === 'US') {
+                        table.column(6).search('^(East|West)$', true, false).draw();
+                    } else {
+                        var val = $.fn.dataTable.util.escapeRegex(rawVal);
+                        table.column(6).search(val ? '^' + val + '$' : '', true, false).draw();
                     }
-                ]
-            });
+                });
 
-            // Bind the Custom Dropdown to the DataTables Region Column (Column 6)
-            $('#regionFilter').on('change', function() {
-                var rawVal = $(this).val();
+                // Bind the Custom Dropdown to the DataTables Owner Column (Column 7)
+                $('#ownerFilter').on('change', function() {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    table.column(7).search(val ? '^' + val + '$' : '', true, false).draw();
+                });
 
-                if (rawVal === 'US') {
-                    table.column(6).search('^(East|West)$', true, false).draw();
-                } else {
-                    var val = $.fn.dataTable.util.escapeRegex(rawVal);
-                    table.column(6).search(val ? '^' + val + '$' : '', true, false).draw();
-                }
-            });
+                // Bind the Custom Dropdown to the DataTables Category Column (Column 2)
+                $('#categoryFilter').on('change', function() {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    table.column(2).search(val ? '^\\s*' + val + '\\s*$' : '', true, false).draw();
+                });
 
-            // Bind the Custom Dropdown to the DataTables Owner Column (Column 7)
-            $('#ownerFilter').on('change', function() {
-                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                table.column(7).search(val ? '^' + val + '$' : '', true, false).draw();
+                // Trigger table redraw when Parent Filter changes
+                $('#parentFilter').on('change', function() {
+                    table.draw();
+                });
             });
-
-            // Bind the Custom Dropdown to the DataTables Category Column (Column 2)
-            $('#categoryFilter').on('change', function() {
-                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                table.column(2).search(val ? '^\\s*' + val + '\\s*$' : '', true, false).draw();
-            });
-
-            // Trigger table redraw when Parent Filter changes
-            $('#parentFilter').on('change', function() {
-                table.draw();
-            });
-        });
 </script>
 {% endblock %}
