@@ -613,9 +613,7 @@ def open_deals(user):
     user_email = user.get('email') 
     api_email = user_email
     
-    if user_email and '@acd-inc.com' in user_email.lower():
-        api_email = 'eknight@tomorrowsoffice.com'
-          
+
     try:
         if request.args.get('refresh') == 'true':
             cache.delete_memoized(get_cached_open_deals, api_email)
@@ -820,12 +818,9 @@ def perks_claims(user):
     if 'Partner Perks' not in authorized_apps:
         return redirect(url_for('dashboard'))
         
-    user_email = user.get('email') 
-    
+    user_email = user.get('email')    
     api_email = user_email
-    if user_email and '@acd-inc.com' in user_email.lower():
-        api_email = 'eknight@tomorrowsoffice.com'
-    
+
     try:
         if request.args.get('refresh') == 'true':
             cache.delete_memoized(get_cached_claims, api_email)
