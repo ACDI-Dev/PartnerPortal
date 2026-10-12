@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    {% include 'partner_advantage/nav.html' %}
+
+    <!-- Hero Banner -->
+    <div class="bg-acdi-dark rounded-2xl p-8 md:p-12 text-white shadow-xl mb-10 relative overflow-hidden">
+        <div class="max-w-3xl relative z-10">
+            <span class="text-acdi-green font-bold tracking-wider uppercase text-sm">Beyond Distribution: A Partnership for Growth</span>
+            <h1 class="text-4xl font-extrabold mt-2 mb-4">The Partner Advantage Program</h1>
+            <p class="text-gray-300 text-lg leading-relaxed">
+                Recognizing and rewarding partners who grow with ACDI, stay engaged, support customer success, and expand opportunities across the ACDI portfolio.
+            </p>
+        </div>
+    </div>
+
+    <!-- Core Pillars -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">Clear Growth Path</h3>
+            <p class="text-sm text-gray-600">Know exactly what activities help you move up and unlock more incentives.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">More Ways to Earn</h3>
+            <p class="text-sm text-gray-600">Points awarded across sales performance, engagement, retention, and portfolio expansion.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">Stronger Support</h3>
+            <p class="text-sm text-gray-600">Higher tiers unlock elevated access to ACDI resources, training, and strategic planning.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">More Opportunity</h3>
+            <p class="text-sm text-gray-600">Build recurring customer value across PaperCut and the broader ACDI portfolio.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

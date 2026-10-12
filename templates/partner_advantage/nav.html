@@ -1,0 +1,20 @@
+<div class="bg-white border-b border-gray-200 mb-8 rounded-xl shadow-sm overflow-hidden">
+    <div class="flex flex-wrap border-b border-gray-100 px-6 pt-4">
+        <a href="{{ url_for('partner_advantage') }}"
+           class="py-3 px-4 font-semibold text-sm border-b-2 transition-colors {{ 'border-acdi-green text-acdi-dark' if request.endpoint == 'partner_advantage' else 'border-transparent text-gray-500 hover:text-gray-700' }}">
+            Program Overview
+        </a>
+        <a href="{{ url_for('partner_advantage_tiers') }}"
+           class="py-3 px-4 font-semibold text-sm border-b-2 transition-colors {{ 'border-acdi-green text-acdi-dark' if request.endpoint == 'partner_advantage_tiers' else 'border-transparent text-gray-500 hover:text-gray-700' }}">
+            Tiers & Benefits
+        </a>
+        <a href="{{ url_for('partner_advantage_drivers') }}"
+           class="py-3 px-4 font-semibold text-sm border-b-2 transition-colors {{ 'border-acdi-green text-acdi-dark' if request.endpoint == 'partner_advantage_drivers' else 'border-transparent text-gray-500 hover:text-gray-700' }}">
+            How to Earn Points
+        </a>
+        <a href="{{ url_for('partner_advantage_portfolio') }}"
+           class="py-3 px-4 font-semibold text-sm border-b-2 transition-colors {{ 'border-acdi-green text-acdi-dark' if request.endpoint == 'partner_advantage_portfolio' else 'border-transparent text-gray-500 hover:text-gray-700' }}">
+            ACDI Ecosystem
+        </a>
+    </div>
+</div>

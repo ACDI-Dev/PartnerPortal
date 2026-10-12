@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    {% include 'partner_advantage/nav.html' %}
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900">One Customer, Multiple Opportunities</h2>
+        <p class="text-gray-600">Expand customer engagements by leveraging the entire ACDI ecosystem.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">PaperCut</h3>
+            <p class="text-sm text-gray-600">Print management control layer for security, cost-control, and print visibility.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">Scanshare</h3>
+            <p class="text-sm text-gray-600">Document capture, automated routing, and business workflow processing.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">Intuitive BI</h3>
+            <p class="text-sm text-gray-600">Ready-made analytics dashboards for PaperCut and DocuWare environments.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">KPAX Fleet Management</h3>
+            <p class="text-sm text-gray-600">Centralized print fleet management, automated meter collection, and proactive service.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">ACDI Energy Services</h3>
+            <p class="text-sm text-gray-600">Commercial EV charging hardware, management software, and EVantage support plans.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="font-bold text-gray-900 text-lg mb-2">Secure Access (rf IDEAS & ELATEC)</h3>
+            <p class="text-sm text-gray-600">Card readers, mobile authentication, and secure device release integrations.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

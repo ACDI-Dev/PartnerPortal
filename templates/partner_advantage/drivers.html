@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    {% include 'partner_advantage/nav.html' %}
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900">The 6 Point Drivers</h2>
+        <p class="text-gray-600">Points are earned across key performance areas throughout the calendar year.</p>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
+        <table class="w-full text-left text-sm">
+            <thead class="bg-gray-50 border-b border-gray-200 text-gray-700 uppercase text-xs">
+                <tr>
+                    <th class="p-4">Driver Category</th>
+                    <th class="p-4">Focus Activity</th>
+                    <th class="p-4">Impact</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <tr>
+                    <td class="p-4 font-bold text-gray-900">1. Revenue Growth</td>
+                    <td class="p-4 text-gray-600">Overall ACDI Business Growth</td>
+                    <td class="p-4 text-gray-600">Rewards core volume expansion.</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-bold text-gray-900">2. PaperCut Footprint</td>
+                    <td class="p-4 text-gray-600">Growth in PaperCut Embeds</td>
+                    <td class="p-4 text-gray-600">Expands embedded device footprint.</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-bold text-gray-900">3. Net New Customers</td>
+                    <td class="p-4 text-gray-600">New Customer Acquisition</td>
+                    <td class="p-4 text-gray-600">Incentivizes bringing new accounts to PaperCut/ACDI.</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-bold text-gray-900">4. Portfolio Adoption</td>
+                    <td class="p-4 text-gray-600">Expansion into Additional ACDI Solutions</td>
+                    <td class="p-4 text-gray-600">Rewards selling Scanshare, Intuitive, Hardware, EV Charging, KPAX.</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-bold text-gray-900">5. Renewal Performance</td>
+                    <td class="p-4 text-gray-600">PaperCut Renewal Rates</td>
+                    <td class="p-4 text-gray-600">Protects recurring customer retention.</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-bold text-gray-900">6. Engagement & Alignment</td>
+                    <td class="p-4 text-gray-600">Trainings, QBRs, Events, Certifications</td>
+                    <td class="p-4 text-gray-600">Earn points per webinar, remote training, onsite event, and QBR.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

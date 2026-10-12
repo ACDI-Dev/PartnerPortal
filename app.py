@@ -980,6 +980,32 @@ def open_installs(user):
     except json.JSONDecodeError:
         return "Error parsing open installs data from the API.", 500
 
+    # --- PARTNER ADVANTAGE PROGRAM ROUTES ---
+
+@app.route('/partner-advantage')
+@login_required
+def partner_advantage(user):
+    """Main overview landing page for Partner Advantage Program."""
+    return render_template('partner_advantage/overview.html', user=user)
+
+@app.route('/partner-advantage/tiers')
+@login_required
+def partner_advantage_tiers(user):
+    """Breakdown of Foundation (Authorized, Select) and Strategic (Premier, Elite) Tiers."""
+    return render_template('partner_advantage/tiers.html', user=user)
+
+@app.route('/partner-advantage/drivers')
+@login_required
+def partner_advantage_drivers(user):
+    """Detailed breakdown of the 6 Point Drivers and Scoring Rules."""
+    return render_template('partner_advantage/drivers.html', user=user)
+
+@app.route('/partner-advantage/portfolio')
+@login_required
+def partner_advantage_portfolio(user):
+    """Ecosystem Expansion (PaperCut, Scanshare, Intuitive, Hardware, Energy Services, KPAX)."""
+    return render_template('partner_advantage/portfolio.html', user=user)
+
 # --- PERKS ROUTES ---
 
 @app.route('/perks/options')
