@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% include "support_tools_nav.html" %}
+
+<!-- Header & Statistics -->
+<section class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+        <div class="flex items-center gap-2 mb-1">
+            <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+            <h2 class="text-2xl font-bold text-gray-900 font-sans">Open Installs</h2>
+        </div>
+        <p class="text-gray-600 text-sm">Active post-sale installation projects assigned to your account.</p>
+    </div>
+
+    <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200">
+            Total Installs: <strong class="text-gray-900">{{ total_installs }}</strong>
+        </span>
+        <a href="{{ url_for('open_installs', refresh='true') }}" class="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium transition-colors flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            Refresh
+        </a>
+    </div>
+</section>
+
+<!-- Table View -->
+<section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-gray-600">
+            <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                <tr>
+                    <th class="px-6 py-3 font-semibold">End User Account</th>
+                    <th class="px-6 py-3 font-semibold">Stage</th>
+                    <th class="px-6 py-3 font-semibold">PSE / Coordinator</th>
+                    <th class="px-6 py-3 font-semibold">CRN</th>
+                    <th class="px-6 py-3 font-semibold">Products</th>
+                    <th class="px-6 py-3 font-semibold">Created</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for item in installs %}
+                <tr class="hover:bg-gray-50/80 transition-colors">
+                    <td class="px-6 py-4 font-bold text-gray-900">
+                        {{ item.End_User_Account_Name|default('N/A') }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {% set stage = item.Project_Stage|default('') %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                            {% if 'In Progress' in stage %}
+                                bg-blue-100 text-blue-800
+                            {% elif 'Initial Contact' in stage %}
+                                bg-yellow-100 text-yellow-800
+                            {% else %}
+                                bg-gray-100 text-gray-800
+                            {% endif %}">
+                            {{ stage }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-xs text-gray-900 font-medium">PSE: {{ item.PSE_Assignment if item.PSE_Assignment else 'Unassigned' }}</div>
+                        <div class="text-xs text-gray-500">Coord: {{ item.Assigned_Coordinator|default('Unassigned') }}</div>
+                    </td>
+                    <td class="px-6 py-4 font-mono text-xs text-gray-700">
+                        {{ item.PC_License_CRN|default('—') }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <pre class="font-sans text-xs text-gray-600 whitespace-pre-wrap max-h-24 overflow-y-auto bg-gray-50 p-2 rounded border border-gray-100">{{ item.Product_Details1|default('N/A') }}</pre>
+                    </td>
+                    <td class="px-6 py-4 text-xs text-gray-500 whitespace-nowrap">
+                        {{ item.Created_Time[:10] if item.Created_Time else 'N/A' }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        No open installs found for this account.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

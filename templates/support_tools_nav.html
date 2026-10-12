@@ -1,0 +1,52 @@
+<!-- Sub-Navigation Menu -->
+<section class="mb-6">
+    <nav class="flex items-center gap-1 bg-white p-2 rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+        <!-- Back to Main Dashboard -->
+        <a href="/" class="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Dashboard
+        </a>
+
+        <div class="w-px h-6 bg-gray-200 mx-2"></div>
+
+        <!-- Support Tools Home -->
+        <a href="/support-tools" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'support_tools' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            Support Tools Home
+        </a>
+
+        <!-- Create a Ticket -->
+        <a href="/support/create-ticket" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'create_ticket' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            Create a Ticket
+        </a>
+
+        <!-- View Open Tickets -->
+        <a href="/support/open-tickets" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'open_tickets' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            View Open Tickets
+        </a>
+
+        <!-- View Open Installs -->
+        <a href="/support/open-installs" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'open_installs' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            View Open Installs
+        </a>
+    </nav>
+</section>

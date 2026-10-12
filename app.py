@@ -41,6 +41,115 @@ app.config['CACHE_DEFAULT_TIMEOUT'] = 14400 # 4 hours
 # Initialize the cache
 cache = Cache(app)
 
+# --- ZOHO DESK OAUTH & API INTEGRATION ---
+ZOHO_ACCOUNTS_URL = os.environ.get("ZOHO_ACCOUNTS_URL", "https://accounts.zoho.com")
+
+class ZohoAuthManager:
+    """Manages Zoho Desk OAuth tokens and automatically refreshes them when expired."""
+    def __init__(self, client_id: str, client_secret: str, refresh_token: str):
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.refresh_token = refresh_token
+        self._access_token = None
+        self._token_expires_at = 0
+
+    def get_access_token(self) -> str:
+        # Refreshes token if it's missing or within 60 seconds of expiration
+        if not self._access_token or time.time() >= (self._token_expires_at - 60):
+            self._refresh_access_token()
+        return self._access_token
+
+    def _refresh_access_token(self):
+        url = f"{ZOHO_ACCOUNTS_URL}/oauth/v2/token"
+        payload = {
+            "refresh_token": self.refresh_token,
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "grant_type": "refresh_token",
+        }
+        response = requests.post(url, data=payload, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        if "error" in data:
+            raise RuntimeError(f"Zoho Token Refresh Failed: {data['error']}")
+
+        self._access_token = data["access_token"]
+        self._token_expires_at = time.time() + data.get("expires_in", 3600)
+
+# Instantiate Zoho Auth Manager from environment variables
+zoho_auth = ZohoAuthManager(
+    client_id=os.environ.get("ZOHO_CLIENT_ID", ""),
+    client_secret=os.environ.get("ZOHO_CLIENT_SECRET", ""),
+    refresh_token=os.environ.get("ZOHO_REFRESH_TOKEN", "")
+)
+
+def vf_create_ticket(
+    ticket_subject: str,
+    firstname: str,
+    lastname: str,
+    email: str,
+    description: str,
+    product_involved: str,
+    crn: str,
+    reseller_account_name: str = "",
+) -> str:
+    """Replicates standalone.VFCreateTicket Deluge logic using Python REST API."""
+    url = "https://desk.zoho.com/api/v1/tickets"
+
+    try:
+        token = zoho_auth.get_access_token()
+    except Exception as ex:
+        app.logger.error(f"Failed to fetch Zoho access token: {ex}")
+        return "0"
+
+    headers = {
+        "orgId": os.environ.get("ZOHO_ORG_ID", "7868846"),
+        "Authorization": f"Zoho-oauthtoken {token}",
+        "Content-Type": "application/json",
+    }
+
+    formatted_description = description.replace("ZZZZZ", "").replace(
+        "\n", "<br>"
+    )
+
+    # Base custom fields
+    custom_fields = {
+        "cf_product": product_involved,
+        "cf_crn": crn,
+    }
+    
+    # Add reseller account name if populated
+    if reseller_account_name:
+        custom_fields["cf_reseller_account_name"] = reseller_account_name
+
+    payload = {
+        "subject": ticket_subject,
+        "departmentId": "20427000000006907",
+        "contact": {
+            "firstName": firstname,
+            "lastName": lastname,
+            "email": email,
+        },
+        "description": formatted_description,
+        "status": "Open",
+        "priority": "Sev 3",
+        "channel": "AI Chat Bot",
+        "email": email,
+        "cf": custom_fields,
+    }
+
+    try:
+        response = requests.post(
+            url, headers=headers, json=payload, timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        return str(data.get("ticketNumber", "0"))
+    except Exception as ex:
+        app.logger.error(f"Error creating ticket in Zoho Desk: {ex}")
+        return "0"
+
 # Initialize OAuth
 oauth = OAuth(app)
 
@@ -661,6 +770,215 @@ def ace_portal(user):
 @login_required
 def sales_tools(user):
     return render_template('sales_tools.html', user=user)
+
+
+
+# --- SUPPORT TOOLS ROUTES ---
+
+@app.route('/support-tools')
+@login_required
+def support_tools(user):
+    return render_template('support_tools.html', user=user)
+
+@app.route('/support/create-ticket', methods=['GET', 'POST'])
+@login_required
+def create_ticket(user):
+    if request.method == 'POST':
+        data = request.form if request.form else (request.get_json() or {})
+
+        ticket_subject = data.get('ticket_subject', '').strip()
+        first_name = data.get('firstname', '').strip() or user.get('first_name', '')
+        last_name = data.get('lastname', '').strip() or user.get('last_name', '')
+        email = data.get('email', '').strip() or user.get('email', '')
+        description = data.get('description', '').strip()
+        product_involved = data.get('Product_Involved', '').strip()
+        crn = data.get('CRN', '').strip()
+
+        # Input validation
+        if not ticket_subject or not description or not product_involved:
+            return jsonify({
+                'status': 'error', 
+                'message': 'Subject, Product Involved, and Description are required.'
+            }), 400
+
+        # Account category check (Internal or Reseller)
+        account_category = (user.get('account_category') or '').strip().lower()
+        reseller_account_name = ""
+
+        if account_category in ['internal', 'reseller']:
+            reseller_account_name = user.get('account') or user.get('reseller_account', '')
+
+        # Pass inputs and conditional reseller account name to Zoho function
+        ticket_number = vf_create_ticket(
+            ticket_subject=ticket_subject,
+            firstname=first_name,
+            lastname=last_name,
+            email=email,
+            description=description,
+            product_involved=product_involved,
+            crn=crn,
+            reseller_account_name=reseller_account_name
+        )
+
+        if ticket_number != "0":
+            return jsonify({
+                'status': 'success',
+                'message': f'Support ticket #{ticket_number} created successfully!',
+                'ticket_number': ticket_number
+            }), 200
+        else:
+            return jsonify({
+                'status': 'error', 
+                'message': 'Failed to create support ticket in Zoho Desk.'
+            }), 500
+
+    default_crn = request.args.get('crn', '')
+    return render_template('create_ticket.html', user=user, default_crn=default_crn)
+
+@app.route('/support/open-tickets')
+@login_required
+def open_tickets(user):
+    account_category = (user.get('account_category') or '').strip().lower()
+
+    # Determine account name for reseller users
+    account_name = (
+        user.get('account') or user.get('reseller_account') or ''
+    ).strip()
+
+    tickets = []
+
+    if account_category == 'reseller' and account_name:
+        # Handle manual cache refresh via query string (e.g., /support/open-tickets?refresh=true)
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_reseller_open_tickets, account_name)
+
+        tickets = get_reseller_open_tickets(account_name)
+
+    return render_template(
+        'open_tickets.html',
+        user=user,
+        tickets=tickets,
+        total_tickets=len(tickets),
+        account_name=account_name,
+    )
+
+
+
+# --- OPEN INSTALLS HELPERS & ROUTE ---
+
+@cache.memoize(timeout=600)  # Caches for 10 minutes
+def get_reseller_open_tickets(account_name: str) -> list:
+    """Queries Zoho Desk Search API for non-closed tickets matching cf_reseller_account_name."""
+    if not account_name:
+        return []
+
+    url = "https://desk.zoho.com/api/v1/tickets/search"
+
+    try:
+        token = zoho_auth.get_access_token()
+    except Exception as ex:
+        app.logger.error(f"Failed to fetch Zoho access token: {ex}")
+        return []
+
+    headers = {
+        "orgId": os.environ.get("ZOHO_ORG_ID", "7868846"),
+        "Authorization": f"Zoho-oauthtoken {token}",
+        "Content-Type": "application/json",
+    }
+
+    params = {
+        "from": 0,
+        "limit": 100,
+        "departmentId": "20427000000006907",
+        "status": "Open,Awaiting Development,Awaiting Customer Response,On Hold,Pending,Resolved,Scheduled",
+        "customField1": f"cf_reseller_account_name:{account_name}",
+    }
+
+    try:
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        # /tickets/search returns an array/list of ticket dictionaries
+        tickets = data.get("data", []) if isinstance(data, dict) else data
+        return tickets if isinstance(tickets, list) else []
+
+    except Exception as ex:
+        app.logger.error(f"Error searching reseller tickets in Zoho Desk: {ex}")
+        return []
+
+@cache.memoize(timeout=14400)
+def get_cached_open_installs(api_email):
+    api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+    api_url = f"https://www.zohoapis.com/crm/v7/functions/getopenpostsalebyrep/actions/execute?auth_type=apikey&zapikey={api_key}&repemail={api_email}"
+    
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response.json()
+
+@app.route('/support/open-installs')
+@login_required
+def open_installs(user):
+    user_email = user.get('email', '')
+    api_email = user_email
+    if not user_email.lower().endswith('@acd-inc.com'):
+        return "Unauthorized: Open Installs lookup is restricted to internal ACDI employees.", 403
+    if user_email.lower().endswith('seth.ingram@acd-inc.com'):
+        api_email = 'chris.mcpheeters@acd-inc.com'
+    try:
+        if request.args.get('refresh') == 'true':
+            cache.delete_memoized(get_cached_open_installs, api_email)
+
+        data = get_cached_open_installs(api_email)
+
+        if data.get("code") == "success":
+            details = data.get("details", {})
+            
+            # 1. Safe parsing of `output`
+            raw_output = details.get("output", "[]")
+            parsed_installs = []
+            
+            if isinstance(raw_output, str) and raw_output.strip():
+                try:
+                    parsed_installs = json.loads(raw_output)
+                except json.JSONDecodeError:
+                    parsed_installs = []
+            elif isinstance(raw_output, list):
+                parsed_installs = raw_output
+
+            # Guarantee parsed_installs is a list
+            if not isinstance(parsed_installs, list):
+                parsed_installs = []
+
+            # 2. Safe parsing of `userMessage` (skips empty strings)
+            raw_user_message = details.get("userMessage", [])
+            metadata_list = []
+            
+            if isinstance(raw_user_message, list):
+                for item in raw_user_message:
+                    if isinstance(item, str) and item.strip():
+                        try:
+                            metadata_list.append(json.loads(item))
+                        except json.JSONDecodeError:
+                            pass
+                    elif isinstance(item, dict):
+                        metadata_list.append(item)
+
+            total_installs = len(parsed_installs)
+
+            return render_template(
+                'open_installs.html', 
+                user=user, 
+                installs=parsed_installs, 
+                total_installs=total_installs
+            )
+        else:
+            return "API returned an error loading open installs.", 400
+
+    except requests.RequestException as e:
+        return f"Error fetching open installs data: {str(e)}", 500
+    except json.JSONDecodeError:
+        return "Error parsing open installs data from the API.", 500
 
 # --- PERKS ROUTES ---
 
