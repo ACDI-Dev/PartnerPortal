@@ -647,36 +647,98 @@ def request_access():
         print(f"ERROR: Exception while sending email via SendGrid: {str(e)}", flush=True)
         return jsonify({'status': 'error', 'message': 'Error sending request email.'}), 500
 
+RESELLER_ACCOUNTS_BLOB = 'CACHE/reseller_accounts.json'
+api_key = "1003.1b041a7343e84025c8361f86ba9bd6c2.77be6b286da0fa40d8defcd4bdc4fd29"
+api_email = "@acd-inc.com"
+ZOHO_RESELLER_API_URL = f"https://www.zohoapis.com/crm/v7/functions/vfreselleraccounts/actions/execute?auth_type=apikey&zapikey={api_key}&email={api_email}"
+
+def refresh_reseller_accounts_gcs():
+    """Hits Zoho API and updates reseller_accounts.json in GCS."""
+    print("Reseller cache expired or missing. Fetching fresh data from Zoho API...", flush=True)
+    response = requests.get(ZOHO_RESELLER_API_URL, timeout=30)
+    response.raise_for_status()
+    data = response.json()
+
+    if data.get("code") == "success":
+        raw_output = data.get("details", {}).get("output", "{}")
+        parsed_data = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
+
+        client = get_gcs_client()
+        bucket = client.bucket(BUCKET_NAME)
+        blob = bucket.blob(RESELLER_ACCOUNTS_BLOB)
+
+        blob.upload_from_string(
+            json.dumps(parsed_data, indent=2),
+            content_type='application/json'
+        )
+        print("Successfully refreshed reseller_accounts.json in GCS.", flush=True)
+        return parsed_data
+    else:
+        raise RuntimeError(f"Zoho API error: {data}")
+
+def get_or_update_reseller_accounts():
+    """Reads GCS file. If older than 24h or missing, triggers a fresh Zoho API sync."""
+    try:
+        client = get_gcs_client()
+        bucket = client.bucket(BUCKET_NAME)
+        blob = bucket.blob(RESELLER_ACCOUNTS_BLOB)
+
+        # Check if blob exists and inspect its last updated timestamp
+        if blob.exists():
+            blob.reload()  # Fetch latest metadata from GCS
+            last_updated = blob.updated  # Returns datetime object in UTC
+            now = datetime.now(timezone.utc)
+
+            # If cache is younger than 24 hours (86,400 seconds), use it
+            if (now - last_updated).total_seconds() < 86400:
+                print("Serving reseller accounts from GCS cache...", flush=True)
+                return json.loads(blob.download_as_string())
+
+        # If missing or older than 24 hours, update file live
+        return refresh_reseller_accounts_gcs()
+
+    except Exception as e:
+        print(f"Error accessing GCS cache or Zoho API: {e}", flush=True)
+        # Fallback: Attempt reading existing file if API fetch failed
+        if 'blob' in locals() and blob.exists():
+            return json.loads(blob.download_as_string())
+        return {}
+
 @app.route('/rep/accounts')
 @login_required
 def rep_accounts(user):
-    user_email = user.get('email') 
-    permissions=user.get('permissions')
-    api_email = user_email
-    if 'Admin' in permissions:
-        api_email = '@acd-inc.com'
-    
+    user_email = user.get('email', '')
+    permissions = user.get('permissions', [])
+    is_admin = 'Admin' in permissions or 'original_admin_user' in session
+
     try:
+        # Force refresh query string support (?refresh=true)
         if request.args.get('refresh') == 'true':
-            cache.delete_memoized(get_cached_rep_accounts, api_email)
-            
-        data = get_cached_rep_accounts(api_email)
-        
-        if data.get("code") == "success":
-            raw_output = data["details"]["output"]
-            parsed_data = json.loads(raw_output)
-            
-            accounts = parsed_data.get("Accounts", [])
-            total_accounts = parsed_data.get("Total_Number_of_Accounts", 0)
-            
-            return render_template('rep_accounts.html', user=user,accounts=accounts,total_accounts=total_accounts)
+            data = refresh_reseller_accounts_gcs()
         else:
-            return "API returned an error.", 400
-            
-    except requests.RequestException as e:
-        return f"Error fetching data: {str(e)}", 500
-    except json.JSONDecodeError:
-        return "Error parsing the accounts data from the API.", 500
+            data = get_or_update_reseller_accounts()
+
+        raw_accounts = data.get("Accounts", [])
+
+        # Filter: Admins see all accounts; Sales Reps see only accounts matching their Owner email
+        if is_admin:
+            accounts = raw_accounts
+        else:
+            accounts = [
+                acc for acc in raw_accounts 
+                if acc.get('Owner.email', '').lower() == user_email.lower()
+            ]
+
+        return render_template(
+            'rep_accounts.html', 
+            user=user, 
+            accounts=accounts, 
+            total_accounts=len(accounts)
+        )
+
+    except Exception as e:
+        app.logger.error(f"Error loading rep accounts: {e}")
+        return f"Error fetching reseller accounts: {str(e)}", 500
 
 @app.route('/licenses')
 @login_required
