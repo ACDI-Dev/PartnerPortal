@@ -62,7 +62,7 @@ def account_contacts(user, account_id):
             parsed_data = json.loads(raw_output) if isinstance(raw_output, str) else raw_output
             contacts = parsed_data.get("Contacts") or parsed_data.get("data") or []
             return render_template(
-                'account_contacts.html', 
+                'sales/account_contacts.html', 
                 user=user, 
                 contacts=contacts, 
                 total_contacts=len(contacts), 
