@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block title %}Review Claim - ACDI Partner Perks{% endblock %}
+
+{% block content %}
+<!-- Include the centralized Partner Perks Navigation -->
+{% include "perks/_nav.html" %}
+
+<section class="mb-8">
+    <div class="flex items-center gap-2 mb-6">
+        <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Review Your Claim</h2>
+    </div>
+    <p class="text-gray-600 text-sm">Please verify the details below before submitting your claim for processing.</p>
+</section>
+
+<section class="mb-12">
+    <form id="claimReviewForm" method="post" action="{{ url_for('perks.perks_claim_submit') if 'perks.perks_claim_submit' in self else '/perks/claim/submit' }}">
+
+        <!-- Hidden Payload Inputs carried over from the initial form submission -->
+        <input type="hidden" name="code" value="{{ claim_data.get('code', '6a8dc0f4a0308') }}" />
+        <input type="hidden" name="filesCode" value="{{ claim_data.get('filesCode', '6a8dc0f4a0308') }}" />
+        <input type="hidden" name="mode" value="{{ claim_data.get('mode', 'new') }}" />
+        <input type="hidden" name="offer_promotion_id" value="{{ claim_data.get('offer_promotion_id', '1') }}" />
+        <input type="hidden" name="claim_id" value="{{ claim_data.get('claim_id', 'new') }}" />
+        <input type="hidden" name="customer_name" value="{{ claim_data.get('customer_name', '') }}" />
+        <input type="hidden" name="activity_date" value="{{ claim_data.get('activity_date', '') }}" />
+        <input type="hidden" name="prm_number" value="{{ claim_data.get('prm_number', '') }}" />
+        <input type="hidden" name="distributor_po_number" value="{{ claim_data.get('distributor_po_number', '') }}" />
+        <input type="hidden" name="split_points_checkbox" value="{{ claim_data.get('split_points_checkbox', '') }}" />
+        <input type="hidden" name="email_shared_points" value="{{ claim_data.get('email_shared_points', '') }}" />
+        <input type="hidden" name="_token" value="{{ csrf_token() if csrf_token is defined else '' }}">
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
+            <!-- Card Header -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">Claim Summary</h3>
+                    <p class="text-xs text-gray-500 mt-1">Review contact, sales order, and split-point info.</p>
+                </div>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+                    Pending Confirmation
+                </span>
+            </div>
+
+            <!-- Review Details Grid -->
+            <div class="p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                    <!-- Contact & End-User Information -->
+                    <div class="space-y-6">
+                        <div class="border-b border-gray-100 pb-3">
+                            <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Contact Information</h4>
+                        </div>
+
+                        <div>
+                            <span class="block text-xs font-medium text-gray-500">Contact Name</span>
+                            <span class="text-base font-semibold text-gray-900">
+                                {{ user.get('first_name', '') }} {{ user.get('last_name', '') }}
+                            </span>
+                        </div>
+
+                        <div>
+                            <span class="block text-xs font-medium text-gray-500">Contact Email</span>
+                            <span class="text-base font-semibold text-gray-900">
+                                {{ user.get('email', '') }}
+                            </span>
+                        </div>
+
+                        <div>
+                            <span class="block text-xs font-medium text-gray-500">End User Company</span>
+                            <span class="text-base font-semibold text-gray-900">
+                                {{ claim_data.get('customer_name', 'N/A') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Order & Split Points Information -->
+                    <div class="space-y-6">
+                        <div class="border-b border-gray-100 pb-3">
+                            <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Order & Point Details</h4>
+                        </div>
+
+                        <div>
+                            <span class="block text-xs font-medium text-gray-500">Date of Sale</span>
+                            <span class="text-base font-semibold text-gray-900">
+                                {{ claim_data.get('activity_date', 'N/A') }}
+                            </span>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-3">
+                            <div>
+                                <span class="block text-xs font-medium text-gray-500">ACDI Sales Order Number</span>
+                                <span class="text-sm font-semibold text-gray-900">
+                                    {{ claim_data.get('prm_number') if claim_data.get('prm_number') else 'None Provided' }}
+                                </span>
+                            </div>
+
+                            <div>
+                                <span class="block text-xs font-medium text-gray-500">Company PO Number</span>
+                                <span class="text-sm font-semibold text-gray-900">
+                                    {{ claim_data.get('distributor_po_number') if claim_data.get('distributor_po_number') else 'None Provided' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Split Points Status -->
+                        <div>
+                            <span class="block text-xs font-medium text-gray-500 mb-1">Point Allocation</span>
+                            {% if claim_data.get('split_points_checkbox') or claim_data.get('email_shared_points') %}
+                            <div class="p-3 bg-blue-50 border border-blue-200 rounded-md flex items-start gap-3">
+                                <svg class="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-bold text-blue-900">Split Points Enabled (50/50)</p>
+                                    <p class="text-xs text-blue-700 mt-0.5">Shared with: <strong>{{ claim_data.get('email_shared_points', 'N/A') }}</strong></p>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="p-3 bg-gray-50 border border-gray-200 rounded-md">
+                                <p class="text-sm font-medium text-gray-700">100% awarded to submitter</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit & Edit Buttons -->
+        <div class="mt-8 flex justify-end gap-4">
+            <button type="button" onclick="window.history.back()" class="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors cursor-pointer">
+                <svg class="w-5 h-5 mr-2 -ml-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                </svg>
+                Edit Details
+            </button>
+
+            <button type="submit" id="confirmSubmit" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-acdi-green hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors cursor-pointer">
+                Confirm & Submit Claim
+                <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock %}

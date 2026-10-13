@@ -24,7 +24,8 @@ class ZohoAuthManager:
         if not self._access_token or time.time() >= (
             self._token_expires_at - 60
         ):
-            self._refresh_access_token()
+            self._
+            _token()
 
         return self._access_token
 

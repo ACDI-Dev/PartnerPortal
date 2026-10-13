@@ -59,7 +59,7 @@
                 </button>
                 {% endif %}
 
-                <a href="{{ url_for('perks_options') }}" class="inline-flex items-center justify-center px-8 py-4 border border-gray-300 shadow-sm text-lg font-bold rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-acdi-green hover:text-acdi-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all w-full sm:w-auto">
+                <a href="{{ url_for('perks.perks_options') }}" class="inline-flex items-center justify-center px-8 py-4 border border-gray-300 shadow-sm text-lg font-bold rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-acdi-green hover:text-acdi-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all w-full sm:w-auto">
                     <svg class="w-6 h-6 mr-3 text-gray-400 group-hover:text-acdi-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     Learn More
                 </a>
@@ -83,7 +83,7 @@
         <div class="flex items-center justify-between pb-4 border-b border-gray-200">
             <div class="flex items-center gap-3">
                 <h3 class="text-xl font-bold text-gray-900">Redeem Points</h3>
-                <a href="{{ url_for('perks_options') }}" class="text-sm font-medium text-acdi-green hover:underline inline-flex items-center gap-1">
+                <a href="{{ url_for('perks.perks_options') }}" class="text-sm font-medium text-acdi-green hover:underline inline-flex items-center gap-1">
                     Learn More
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
         submitBtn.innerHTML = 'Processing...';
 
-        fetch("{{ url_for('perks_redeem') }}", {
+        fetch("{{ url_for('perks.perks_redeem') }}", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

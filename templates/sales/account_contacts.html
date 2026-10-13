@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{% include "sales_tools_nav.html" %}
+{% include "sales/sales_tools_nav.html" %}
 
 <!-- Header & Back Navigation -->
 <section class="mb-8">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-            <a href="{{ url_for('rep_accounts') }}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-acdi-green mb-2 transition-colors">
+            <!-- AFTER -->
+            <a href="{{ url_for('sales.rep_accounts') }}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-acdi-green mb-2 transition-colors">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 Back to My Accounts
             </a>

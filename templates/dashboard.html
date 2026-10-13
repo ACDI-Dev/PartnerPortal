@@ -72,7 +72,7 @@
         {% endif %}
 
         <!-- Sales Tools Hub -->
-        <a href="{{ url_for('sales_tools') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <a href="{{ url_for('sales.sales_tools') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>
@@ -81,7 +81,7 @@
         </a>
 
         <!-- Support Tools Hub -->
-        <a href="{{ url_for('support_tools') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <a href="{{ url_for('support.support_tools') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
@@ -91,7 +91,7 @@
 
         <!-- Partner Perks -->
         {% if 'Partner Perks' in user.authorized_apps %}
-        <a href="{{ url_for('perks_home') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <a href="{{ url_for('perks.perks_home') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='icon-register.png') }}" alt="Partner Perks Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
             </div>
@@ -146,7 +146,7 @@
             <p class="text-sm text-gray-600 leading-relaxed">Access battlecards, technical datasheets, and co-branded marketing assets.</p>
         </a>
         <!-- Partner Advantage Program Card -->
-        <a href="{{ url_for('partner_advantage') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <a href="{{ url_for('partner_advantage.partner_advantage') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -234,7 +234,7 @@ function submitAccessRequest() {
     confirmBtn.disabled = true;
     confirmBtn.textContent = 'Sending...';
 
-    fetch("{{ url_for('request_access') }}", {
+    fetch("{{ url_for('main.request_access') }}", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

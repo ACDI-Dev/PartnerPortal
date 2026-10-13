@@ -10,18 +10,18 @@
         <div class="w-px h-6 bg-gray-200 mx-2"></div>
 
         <!-- Support Tools Home -->
-        <a href="/support-tools" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'support_tools' %}
+        <a href="{{ url_for('support.support_tools') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'support.support_tools' %}
                 font-bold text-acdi-green bg-[#f0f9e8]
             {% else %}
                 font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
             {% endif %}">
-            Support Tools Home
+            Support Tools
         </a>
 
         <!-- Create a Ticket -->
-        <a href="/support/create-ticket" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'create_ticket' %}
+        <a href="{{ url_for('support.create_ticket') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'support.create_ticket'  %}
                 font-bold text-acdi-green bg-[#f0f9e8]
             {% else %}
                 font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
@@ -30,8 +30,8 @@
         </a>
 
         <!-- View Open Tickets -->
-        <a href="/support/open-tickets" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'open_tickets' %}
+        <a href="{{ url_for('support.open_tickets') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'support.open_tickets' %}
                 font-bold text-acdi-green bg-[#f0f9e8]
             {% else %}
                 font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
@@ -40,13 +40,23 @@
         </a>
 
         <!-- View Open Installs -->
-        <a href="/support/open-installs" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'open_installs' %}
+        <a href="{{ url_for('support.open_installs') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'support.open_installs' %}
                 font-bold text-acdi-green bg-[#f0f9e8]
             {% else %}
                 font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
             {% endif %}">
             View Open Installs
+        </a>
+
+        <!-- Shipment Tracking -->
+        <a href="{{ url_for('support.shipment_tracking') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
+            {% if request.endpoint == 'support.shipment_tracking' %}
+                font-bold text-acdi-green bg-[#f0f9e8]
+            {% else %}
+                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
+            {% endif %}">
+            Shipment Tracking
         </a>
     </nav>
 </section>

@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{% include "sales_tools_nav.html" %}
+{% include "sales/sales_tools_nav.html" %}
 
 <!-- Title Section -->
 <section class="mb-8">
     <div class="flex items-center gap-2 mb-2">
         <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
-        <h2 class="text-2xl font-bold text-gray-900 font-sans">Sales Tools Hub</h2>
+        <h2 class="text-2xl font-bold text-gray-900 font-sans">Sales Tools</h2>
     </div>
     <p class="text-gray-600">Select a utility below to manage your accounts and software deployments.</p>
 </section>
@@ -18,7 +18,7 @@
 
         {% if user.account == 'ACDI' %}
         <!-- My Accounts (Visible only to ACDI) -->
-        <a href="/rep/accounts" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+        <a href="{{ url_for('sales.rep_accounts') }}" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             </div>
@@ -26,9 +26,10 @@
             <p class="text-sm text-gray-600 leading-relaxed flex-grow">View and manage your assigned reseller accounts and select them to view licenses.</p>
         </a>
         {% endif %}
+
         {% if user.account != 'ACDI' %}
         <!-- License Dashboard -->
-        <a href="/licenses" id="licenseLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+        <a href="{{ url_for('sales.reseller_licenses') }}" id="licenseLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             <div id="licenseLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
                 <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -43,8 +44,9 @@
             <p class="text-sm text-gray-600 leading-relaxed flex-grow">View, sort, filter, and export your active and expired software deployments.</p>
         </a>
         {% endif %}
+
         <!-- Open Deals Dashboard -->
-        <a href="/open-deals" id="dealsLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+        <a href="{{ url_for('sales.open_deals') }}" id="dealsLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             <div id="dealsLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
                 <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -60,7 +62,7 @@
         </a>
 
         <!-- Shipment Tracking Dashboard -->
-        <a href="/shipment-tracking" id="shipmentsLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+        <a href="{{ url_for('support.shipment_tracking') }}" id="shipmentsLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             <div id="shipmentsLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
                 <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -81,28 +83,28 @@
 <!-- Scripts -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function setupOverlay(linkId, overlayId) {
-        const link = document.getElementById(linkId);
-        const overlay = document.getElementById(overlayId);
+        function setupOverlay(linkId, overlayId) {
+            const link = document.getElementById(linkId);
+            const overlay = document.getElementById(overlayId);
 
-        if (link && overlay) {
-            link.addEventListener('click', function(e) {
-                if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
-                    overlay.classList.remove('hidden');
-                }
-            });
+            if (link && overlay) {
+                link.addEventListener('click', function(e) {
+                    if (this.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                        overlay.classList.remove('hidden');
+                    }
+                });
+            }
         }
-    }
 
-    setupOverlay('licenseLink', 'licenseLoadingOverlay');
-    setupOverlay('dealsLink', 'dealsLoadingOverlay');
-    setupOverlay('shipmentsLink', 'shipmentsLoadingOverlay');
+        setupOverlay('licenseLink', 'licenseLoadingOverlay');
+        setupOverlay('dealsLink', 'dealsLoadingOverlay');
+        setupOverlay('shipmentsLink', 'shipmentsLoadingOverlay');
 
-    window.addEventListener('pageshow', function() {
-        document.querySelectorAll('[id$="LoadingOverlay"]').forEach(overlay => {
-            overlay.classList.add('hidden');
+        window.addEventListener('pageshow', function() {
+            document.querySelectorAll('[id$="LoadingOverlay"]').forEach(overlay => {
+                overlay.classList.add('hidden');
+            });
         });
-    });
 });
 </script>
 {% endblock %}

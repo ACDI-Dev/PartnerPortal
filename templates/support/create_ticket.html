@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{% include "support_tools_nav.html" %}
+{% include "support/support_tools_nav.html" %}
 
 <section class="max-w-3xl mx-auto mb-12">
     <div class="flex items-center gap-2 mb-6">
@@ -93,7 +93,7 @@ function submitTicketForm(event) {
 
     const formData = new FormData(form);
 
-    fetch("{{ url_for('create_ticket') }}", {
+    fetch("{{ url_for('support.create_ticket') }}", {
         method: 'POST',
         body: formData
     })
