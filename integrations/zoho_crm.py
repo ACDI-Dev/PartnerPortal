@@ -60,8 +60,41 @@ def get_cached_shipment_tracking(account_id):
     return response.json()
 
 @cache.memoize(timeout=14400) 
-def get_cached_open_deals(api_email):
-    api_url = f"https://www.zohoapis.com/crm/v7/functions/vf_open_deals/actions/execute?auth_type=apikey&zapikey={API_KEY}&email={api_email}"
+def get_cached_open_deals(api_email, account_category=None, account_id=None):
+    """
+    Fetches open potentials/deals from Zoho CRM.
+    Supports both ACDI Sales reps and Resellers.
+    """
+    if str(account_category).lower() == "reseller2":
+        api_url = (
+            f"https://www.zohoapis.com/crm/v7/functions/vf_get_open_potentials/actions/execute"
+            f"?auth_type=apikey&zapikey={API_KEY}"
+            f"&filterType=Contact"
+            f"&filterValue={api_email}"
+            f"&offset=0"
+            f"&limit=200"
+        )
+    elif str(account_category).lower() == "internal":
+        api_url = (
+            f"https://www.zohoapis.com/crm/v7/functions/vf_get_open_potentials/actions/execute"
+            f"?auth_type=apikey&zapikey={API_KEY}"
+            f"&filterType=Owner"
+            f"&filterValue={api_email}"
+            f"&offset=0"
+            f"&limit=2000"
+        )
+    elif str(account_category).lower() == "reseller":
+        api_url = (
+            f"https://www.zohoapis.com/crm/v7/functions/vf_get_open_potentials/actions/execute"
+            f"?auth_type=apikey&zapikey={API_KEY}"
+            f"&filterType=Account_ID"
+            f"&filterValue={account_id}"
+            f"&offset=0"
+            f"&limit=2000"
+        )
+    else:
+        api_url = f"https://www.zohoapis.com/crm/v7/functions/vf_open_deals/actions/execute?auth_type=apikey&zapikey={API_KEY}&email={api_email}"
+
     response = requests.get(api_url)
     response.raise_for_status()
     return response.json()

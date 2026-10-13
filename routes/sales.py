@@ -20,9 +20,9 @@ def sales_tools(user):
 @sales_bp.route('/accounts')
 @login_required
 def rep_accounts(user):
-    user_email = user.get('email', '')
+    user_email = user.get('email', '').strip().lower()
     permissions = user.get('permissions', [])
-    is_admin = 'Admin' in permissions or 'original_admin_user' in session
+    is_admin = 'Admin' in permissions #or 'original_admin_user' in session
 
     try:
         if request.args.get('refresh') == 'true':
@@ -31,9 +31,15 @@ def rep_accounts(user):
             data = get_or_update_reseller_accounts()
 
         raw_accounts = data.get("Accounts", [])
-        accounts = raw_accounts if is_admin else [
-            acc for acc in raw_accounts if acc.get('Owner.email', '').lower() == user_email.lower()
-        ]
+        
+        # Filter server-side before passing to Jinja/HTML
+        if is_admin:
+            accounts = raw_accounts
+        else:
+            accounts = [
+                acc for acc in raw_accounts 
+                if acc.get('Owner.email') and acc.get('Owner.email').strip().lower() == user_email
+            ]
 
         return render_template('sales/rep_accounts.html', user=user, accounts=accounts, total_accounts=len(accounts))
     except Exception as e:
@@ -100,11 +106,14 @@ def reseller_licenses(user):
 @login_required
 def open_deals(user):
     api_email = user.get('email')
+
     try:
         if request.args.get('refresh') == 'true':
             cache.delete_memoized(get_cached_open_deals, api_email)
-            
-        data = get_cached_open_deals(api_email)
+        account_category = user.get('account_category') 
+        account_id = user.get('account_id')
+        print(account_category)
+        data = get_cached_open_deals(api_email, account_category=account_category, account_id=account_id)
         if data.get("code") == "success":
             parsed_data = json.loads(data["details"]["output"])
             return render_template('sales/open_deals.html', user=user, deals=parsed_data.get("Deals", []), total_deals=parsed_data.get("Total_Number_of_Open_Deals", 0))

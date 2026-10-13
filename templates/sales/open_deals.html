@@ -24,12 +24,17 @@
 <!-- Extract Unique Filters using Jinja -->
 {% set unique_stages = [] %}
 {% set unique_types = [] %}
+{% set unique_contacts = [] %}
 {% for deal in deals %}
     {% if deal.get('Stage') and deal.get('Stage') not in unique_stages %}
         {% set _ = unique_stages.append(deal.get('Stage')) %}
     {% endif %}
     {% if deal.get('Type') and deal.get('Type') not in unique_types %}
         {% set _ = unique_types.append(deal.get('Type')) %}
+    {% endif %}
+    {% set contact_full = (deal.get('Contact_Name.First_Name', '') ~ ' ' ~ deal.get('Contact_Name.Last_Name', ''))|trim %}
+    {% if contact_full and contact_full not in unique_contacts %}
+        {% set _ = unique_contacts.append(contact_full) %}
     {% endif %}
 {% endfor %}
 
@@ -44,7 +49,18 @@
         <div class="p-6 overflow-x-auto">
 
             <!-- Custom Filter Controls -->
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 items-end">
+                <!-- Contact Filter -->
+                <div>
+                    <label for="contactFilter" class="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+                    <select id="contactFilter" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm p-2 border outline-none bg-white">
+                        <option value="">All Contacts</option>
+                        {% for c in unique_contacts|sort %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
                 <!-- Type Filter -->
                 <div>
                     <label for="typeFilter" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
@@ -99,6 +115,7 @@
             <table id="dealsTable" class="w-full text-left text-sm text-gray-600">
                 <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
                     <tr>
+                        <!-- Default Visible Columns -->
                         <th class="px-4 py-3 rounded-tl-lg">Deal Name</th>
                         <th class="px-4 py-3">Contact</th>
                         <th class="px-4 py-3">Amount</th>
@@ -106,26 +123,40 @@
                         <th class="px-4 py-3">Stage</th>
                         <th class="px-4 py-3">Closing Date</th>
                         <th class="px-4 py-3">Avg Embeds</th>
-                        <th class="px-4 py-3 rounded-tr-lg">Sales Rep</th>
+                        <th class="px-4 py-3">Sales Rep</th>
+
+                        <!-- Additional Hidden-By-Default Columns -->
+                        <th class="px-4 py-3">Lead Contact Full Name</th>
+                        <th class="px-4 py-3">Lead Contact Email</th>
+                        <th class="px-4 py-3">Lead Contact Stage</th>
+                        <th class="px-4 py-3">PaperCut Deal ID</th>
+                        <th class="px-4 py-3">Lead Source</th>
+                        <th class="px-4 py-3">Owner Email</th>
+                        <th class="px-4 py-3 rounded-tr-lg">Deal ID</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     {% for deal in deals %}
                     <tr class="hover:bg-gray-50 transition-colors">
+                        <!-- Col 0: Deal Name -->
                         <td class="px-4 py-3 font-bold text-gray-900">{{ deal.get('Deal_Name', 'N/A') }}</td>
 
+                        <!-- Col 1: Contact -->
                         <td class="px-4 py-3">
                             {% set fname = deal.get('Contact_Name.First_Name', '') %}
                             {% set lname = deal.get('Contact_Name.Last_Name', '') %}
                             {{ fname }} {{ lname }}
                         </td>
 
+                        <!-- Col 2: Amount -->
                         <td class="px-4 py-3 font-medium text-gray-900" data-order="{{ deal.get('Amount', 0) }}">
-                            ${{ "{:,.2f}".format(deal.get('Amount', 0)|float) }}
+                            ${{ "{:,.2f}".format(deal.get('Amount', 0)|float) if deal.get('Amount') != None else '$0.00' }}
                         </td>
 
+                        <!-- Col 3: Type -->
                         <td class="px-4 py-3">{{ deal.get('Type', 'Unknown') }}</td>
 
+                        <!-- Col 4: Stage -->
                         {% set stage = deal.get('Stage', 'Unknown') %}
                         <td class="px-4 py-3">
                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#f0f9e8] text-green-700 border border-green-200 shadow-sm">
@@ -133,15 +164,40 @@
                             </span>
                         </td>
 
+                        <!-- Col 5: Closing Date -->
                         <td class="px-4 py-3">{{ deal.get('Closing_Date') or 'N/A' }}</td>
 
+                        <!-- Col 6: Avg Embeds -->
                         <td class="px-4 py-3">{{ deal.get('Average_Quoted_Embeds') if deal.get('Average_Quoted_Embeds') != None else '0' }}</td>
 
+                        <!-- Col 7: Sales Rep -->
                         <td class="px-4 py-3">
                             {% set ofname = deal.get('Sales_Rep_First_Name', '') %}
                             {% set olname = deal.get('Sales_Rep_Last_Name', '') %}
                             {{ ofname }} {{ olname }}
                         </td>
+
+                        <!-- Hidden Columns (Selectable via 'Select Columns') -->
+                        <!-- Col 8: Lead Contact Full Name -->
+                        <td class="px-4 py-3">{{ deal.get('Lead_Contact.Full_Name') or 'N/A' }}</td>
+
+                        <!-- Col 9: Lead Contact Email -->
+                        <td class="px-4 py-3">{{ deal.get('Lead_Contact.Email') or 'N/A' }}</td>
+
+                        <!-- Col 10: Lead Contact Stage -->
+                        <td class="px-4 py-3">{{ deal.get('Lead_Contact_Stage') or 'N/A' }}</td>
+
+                        <!-- Col 11: PaperCut Deal ID -->
+                        <td class="px-4 py-3">{{ deal.get('PapeCutDeal') or 'N/A' }}</td>
+
+                        <!-- Col 12: Lead Source -->
+                        <td class="px-4 py-3">{{ deal.get('Lead_Source') or 'N/A' }}</td>
+
+                        <!-- Col 13: Owner Email -->
+                        <td class="px-4 py-3">{{ deal.get('Owner.email') or 'N/A' }}</td>
+
+                        <!-- Col 14: Deal ID -->
+                        <td class="px-4 py-3">{{ deal.get('id', 'N/A') }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -250,112 +306,118 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
 
 <script>
-            $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    var min = $('#minDate').val();
-                    var max = $('#maxDate').val();
-                    var dateStr = data[5]; // Column 5 is Closing Date
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var min = $('#minDate').val();
+            var max = $('#maxDate').val();
+            var dateStr = data[5]; // Column 5 is Closing Date
 
-                    if (!min && !max) { return true; }
-                    if (!dateStr || dateStr === 'N/A') { return false; }
-                    if (min && dateStr < min) { return false; }
-                    if (max && dateStr > max) { return false; }
-                    return true;
+            if (!min && !max) { return true; }
+            if (!dateStr || dateStr === 'N/A') { return false; }
+            if (min && dateStr < min) { return false; }
+            if (max && dateStr > max) { return false; }
+            return true;
+        }
+    );
+
+    $(document).ready(function () {
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+            return [year, month, day].join('-');
+        }
+
+        function addDaysToToday(days) {
+            var d = new Date();
+            d.setDate(d.getDate() + days);
+            return formatDate(d);
+        }
+
+        var table = $('#dealsTable').DataTable({
+            order: [[5, 'asc']], // Sort by Closing Date
+            pageLength: 25,
+            language: { search: "Search Deals:" },
+            columnDefs: [
+                { targets: [8, 9, 10, 11, 12, 13, 14], visible: false } // Hide new API columns by default
+            ],
+            dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
+                '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
+                'rt' +
+                '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
+            buttons: [
+                {
+                    extend: 'colvis',
+                    text: 'Select Columns',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                },
+                {
+                    extend: 'csv',
+                    text: 'Export CSV',
+                    filename: 'Open_Deals_Export',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export Excel',
+                    filename: 'Open_Deals_Export',
+                    className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                 }
-            );
+            ]
+        });
 
-            $(document).ready(function() {
+        // Contact Filter Trigger
+        $('#contactFilter').on('change', function () {
+            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(1).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
 
-                // Format dates as YYYY-MM-DD
-                function formatDate(date) {
-                    var d = new Date(date),
-                        month = '' + (d.getMonth() + 1),
-                        day = '' + d.getDate(),
-                        year = d.getFullYear();
-                    if (month.length < 2) month = '0' + month;
-                    if (day.length < 2) day = '0' + day;
-                    return [year, month, day].join('-');
-                }
+        // Type Filter Trigger
+        $('#typeFilter').on('change', function () {
+            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
 
-                // Calculate date offsets
-                function addDaysToToday(days) {
-                    var d = new Date();
-                    d.setDate(d.getDate() + days);
-                    return formatDate(d);
-                }
+        // Stage Filter Trigger
+        $('#stageFilter').on('change', function () {
+            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
 
-                var table = $('#dealsTable').DataTable({
-                    order: [[5, 'asc']], // Sort by Closing Date
-                    pageLength: 25,
-                    language: { search: "Search Deals:" },
+        // Quick Date Filter Trigger
+        $('#quickDateFilter').on('change', function () {
+            var val = $(this).val();
 
-                    dom: '<"flex flex-col md:flex-row gap-4 justify-between items-center mb-4"<"flex items-center"lB>f>' +
-                         '<"flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-gray-500"ip>' +
-                         'rt' +
-                         '<"flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500"ip>',
-                    buttons: [
-                        {
-                            extend: 'colvis',
-                            text: 'Select Columns',
-                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                        },
-                        {
-                            extend: 'csv',
-                            text: 'Export CSV',
-                            filename: 'Open_Deals_Export',
-                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                        },
-                        {
-                            extend: 'excel',
-                            text: 'Export Excel',
-                            filename: 'Open_Deals_Export',
-                            className: 'tailwind-btn inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                        }
-                    ]
-                });
+            if (val === 'past') {
+                $('#minDate').val('');
+                $('#maxDate').val(addDaysToToday(-1));
+            } else if (val === 'all') {
+                $('#minDate').val('');
+                $('#maxDate').val('');
+            }
 
-                // Quick Date Filter Trigger
-                $('#quickDateFilter').on('change', function() {
-                    var val = $(this).val();
+            if (val !== 'custom') {
+                table.draw();
+            }
+        });
 
-                    if (val === 'past') {
-                        $('#minDate').val(''); // Open ended past
-                        $('#maxDate').val(addDaysToToday(-1)); // Anything prior to today
-                    } else if (val === 'all') {
-                        $('#minDate').val('');
-                        $('#maxDate').val('');
-                    }
+        // Date Range Filters Trigger
+        $('#minDate, #maxDate').on('change', function () {
+            $('#quickDateFilter').val('custom');
+            table.draw();
+        });
 
-                    if (val !== 'custom') {
-                        table.draw();
-                    }
-                });
-
-                // Date Range Filters Trigger
-                $('#minDate, #maxDate').on('change', function() {
-                    $('#quickDateFilter').val('custom');
-                    table.draw();
-                });
-
-                // Clear Dates
-                $('#clearDatesBtn').on('click', function() {
-                    $('#minDate').val('');
-                    $('#maxDate').val('');
-                    $('#quickDateFilter').val('all');
-                    table.draw();
-                });
-
-                // Type Filter
-                $('#typeFilter').on('change', function() {
-                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                    table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
-                });
-
-                // Stage Filter
-                $('#stageFilter').on('change', function() {
-                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                    table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
-                });
-            });
+        // Clear Dates Trigger
+        $('#clearDatesBtn').on('click', function () {
+            $('#minDate').val('');
+            $('#maxDate').val('');
+            $('#quickDateFilter').val('all');
+            table.draw();
+        });
+    });
 </script>
 {% endblock %}
