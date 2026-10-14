@@ -4,55 +4,56 @@
 {% include "support/support_tools_nav.html" %}
 
 <!-- Title Section -->
-<section class="mb-8">
+<section class="mb-6 sm:mb-8">
     <div class="flex items-center gap-2 mb-2">
         <div class="w-2 h-6 bg-acdi-green rounded-sm"></div>
-        <h2 class="text-2xl font-bold text-gray-900 font-sans">Support Tools</h2>
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 font-sans">Support Tools</h2>
     </div>
-    <p class="text-gray-600">Select a utility below to manage your technical support requests and installation projects.</p>
+    <p class="text-sm sm:text-base text-gray-600">Select a utility below to manage your technical support requests and installation projects.</p>
 </section>
 
 <!-- Tools Grid -->
-<section class="mb-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<section class="mb-8 sm:mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 
-        <!-- Software Support (External Support Portal) -->
-        <a href="https://support.acd-inc.com/portal/en/signin" target="_blank" rel="noopener noreferrer" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+        <!-- Software Support -->
+        <a href="https://support.acd-inc.com/portal/en/signin" target="_blank" rel="noopener noreferrer" class="block w-full min-w-0 p-5 sm:p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-4 sm:mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Software Support</h3>
-            <p class="text-sm text-gray-600 leading-relaxed flex-grow">Open priority tickets on behalf of your end-users or access the knowledge base.</p>
+            <p class="text-sm text-gray-600 leading-relaxed">Open priority tickets on behalf of your end-users or access the knowledge base.</p>
         </a>
 
         <!-- Create a Ticket -->
-        <a href="/support/create-ticket" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <a href="/support/create-ticket" class="block w-full min-w-0 p-5 sm:p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-4 sm:mb-5 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 0 0118 0z"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Create a Ticket</h3>
-            <p class="text-sm text-gray-600 leading-relaxed flex-grow">Submit a new support ticket directly to technical support for your software or hardware deployments.</p>
+            <p class="text-sm text-gray-600 leading-relaxed">Submit a new support ticket directly to technical support for your software or hardware deployments.</p>
         </a>
 
         <!-- View Open Tickets -->
-        <a href="/support/open-tickets" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+        <a href="/support/open-tickets" class="block w-full min-w-0 p-5 sm:p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-4 sm:mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5z"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">View Open Tickets</h3>
-            <p class="text-sm text-gray-600 leading-relaxed flex-grow">Track status, reply to technicians, and monitor resolution progress for active support tickets.</p>
+            <p class="text-sm text-gray-600 leading-relaxed">Track status, reply to technicians, and monitor resolution progress for active support tickets.</p>
         </a>
 
         <!-- View Open Installs -->
-        <a href="/support/open-installs" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+        <a href="/support/open-installs" class="block w-full min-w-0 p-5 sm:p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-4 sm:mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">View Open Installs</h3>
-            <p class="text-sm text-gray-600 leading-relaxed flex-grow">Review scheduled and active professional services and software installation projects.</p>
+            <p class="text-sm text-gray-600 leading-relaxed">Review scheduled and active professional services and software installation projects.</p>
         </a>
+
         <!-- Shipment Tracking Dashboard -->
-        <a href="{{ url_for('support.shipment_tracking') }}" id="shipmentsLink" class="flex flex-col h-full p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
+        <a href="{{ url_for('support.shipment_tracking') }}" id="shipmentsLink" class="block w-full min-w-0 p-5 sm:p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group relative overflow-hidden">
             <div id="shipmentsLoadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center hidden transition-opacity">
                 <svg class="animate-spin h-8 w-8 text-acdi-green mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -60,11 +61,11 @@
                 </svg>
                 <span class="text-sm font-bold text-gray-700 tracking-wide">Fetching Data...</span>
             </div>
-            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-5 transition-colors">
+            <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-acdi-green mb-4 sm:mb-5 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 011 1v2a1 1 0 01-1 1m-1-4h-2m8 0h1a1 1 0 001-1v-4a1 1 0 00-.293-.707l-2.828-2.828A1 1 0 0016.586 7H14"></path></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Shipment Tracking</h3>
-            <p class="text-sm text-gray-600 leading-relaxed flex-grow">View, sort, filter, and track order shipment records and carrier tracking numbers.</p>
+            <p class="text-sm text-gray-600 leading-relaxed">View, sort, filter, and track order shipment records and carrier tracking numbers.</p>
         </a>
 
     </div>

@@ -1,44 +1,93 @@
 <!-- Partner Perks Sub-Navigation -->
-<nav id="perks-nav" class="flex items-center overflow-x-auto gap-3 md:gap-5 mb-8 bg-white p-3 rounded-2xl shadow-sm border border-gray-200">
-    <!-- Back to Main Dashboard -->
-    <a href="{{ url_for('main.dashboard') }}" class="whitespace-nowrap px-4 py-2.5 text-base font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg> Dashboard
-    </a>
+<section class="mb-6 sm:mb-8 w-full">
 
-    <div class="w-px h-6 bg-gray-200 mx-1 shrink-0"></div>
+    <!-- Mobile Navigation: Native Select Dropdown + Back Button (Visible on mobile < sm) -->
+    <div class="flex items-center gap-2 sm:hidden bg-white p-2.5 rounded-xl border border-gray-200 shadow-sm">
+        <!-- Back to Main Dashboard Button -->
+        <a href="{{ url_for('main.dashboard') }}" class="p-2 text-gray-500 hover:text-acdi-green hover:bg-gray-100 rounded-lg transition-colors shrink-0" title="Return to Dashboard">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+        </a>
 
-    <a href="{{ url_for('perks.perks_home') }}"
-       class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_home' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
-        Perks
-    </a>
+        <div class="w-px h-6 bg-gray-200 shrink-0"></div>
 
-    <a href="{{ url_for('perks.perks_rules') }}"
-       class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_rules' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
-        Rules
-    </a>
+        <!-- Dynamic Dropdown Navigation -->
+        <div class="relative flex-1">
+            <select id="perks-mobile-select" onchange="if (this.value) window.location.href = this.value;"
+                    class="w-full bg-gray-50 border border-gray-300 text-gray-800 text-sm font-semibold rounded-lg p-2.5 pr-8 focus:ring-2 focus:ring-acdi-green focus:border-acdi-green outline-none appearance-none cursor-pointer">
+                <option value="{{ url_for('perks.perks_home') }}" {% if request.endpoint =='perks.perks_home' %}selected{% endif %}>
+                    Perks Home
+                </option>
+                <option value="{{ url_for('perks.perks_rules') }}" {% if request.endpoint =='perks.perks_rules' %}selected{% endif %}>
+                    Rules
+                </option>
+                <option value="{{ url_for('perks.perks_terms') }}" {% if request.endpoint =='perks.perks_terms' %}selected{% endif %}>
+                    Terms
+                </option>
+                <option value="{{ url_for('perks.perks_claims') }}" {% if request.endpoint in ['perks.perks_claims', 'perks.perks_claim' , 'perks.perk_claim_review' ] %}selected{% endif %}>
+                    Claims
+                </option>
+                <option value="{{ url_for('perks.perks_rewards') }}" {% if request.endpoint =='perks.perks_rewards' %}selected{% endif %}>
+                    Rewards
+                </option>
+                <option value="{{ url_for('perks.perks_options') }}" {% if request.endpoint =='perks.perks_options' %}selected{% endif %}>
+                    Learn More
+                </option>
+            </select>
 
-    <a href="{{ url_for('perks.perks_terms') }}"
-       class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_terms' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
-        Terms
-    </a>
+            <!-- Custom Dropdown Chevron Icon -->
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
 
-    <!-- Highlighted for claims list, new claim form, and review page -->
-    <a href="{{ url_for('perks.perks_claims') }}"
-       class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint in ['perks.perks_claims', 'perks.perks_claim', 'perks.perk_claim_review'] %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
-        Claims
-    </a>
+    <!-- Desktop Navigation: Tab Bar (Visible on sm and above) -->
+    <nav id="perks-nav" class="hidden sm:flex items-center gap-2 sm:gap-3 bg-white p-2 sm:p-3 rounded-2xl shadow-sm border border-gray-200 w-full">
+        <!-- Back to Main Dashboard -->
+        <a href="{{ url_for('main.dashboard') }}" class="shrink-0 whitespace-nowrap px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 001 1m-6 0h6"></path></svg>
+            Dashboard
+        </a>
 
-    <a href="{{ url_for('perks.perks_rewards') }}"
-       class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_rewards' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
-        Rewards
-    </a>
+        <div class="w-px h-5 bg-gray-200 mx-0.5 shrink-0"></div>
 
-    <!-- Learn More Tab -->
-    <a href="{{ url_for('perks.perks_options') }}"
-       class="px-6 py-2.5 rounded-xl text-base font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_options' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
-        Learn More
-    </a>
-</nav>
+        <a href="{{ url_for('perks.perks_home') }}"
+           class="shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_home' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
+            Perks
+        </a>
+
+        <a href="{{ url_for('perks.perks_rules') }}"
+           class="shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_rules' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
+            Rules
+        </a>
+
+        <a href="{{ url_for('perks.perks_terms') }}"
+           class="shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_terms' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
+            Terms
+        </a>
+
+        <!-- Highlighted for claims list, new claim form, and review page -->
+        <a href="{{ url_for('perks.perks_claims') }}"
+           class="shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint in ['perks.perks_claims', 'perks.perks_claim', 'perks.perk_claim_review'] %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
+            Claims
+        </a>
+
+        <a href="{{ url_for('perks.perks_rewards') }}"
+           class="shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_rewards' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
+            Rewards
+        </a>
+
+        <!-- Learn More Tab -->
+        <a href="{{ url_for('perks.perks_options') }}"
+           class="shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap {% if request.endpoint == 'perks.perks_options' %}bg-green-50 text-acdi-green shadow-sm ring-1 ring-green-200/50{% else %}text-gray-600 hover:bg-gray-50 hover:text-acdi-green hover:shadow-sm hover:-translate-y-0.5{% endif %}">
+            Learn More
+        </a>
+    </nav>
+</section>
 
 <!-- Global Perks Loading Overlay -->
 <div id="perksLoadingOverlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center hidden transition-opacity">
@@ -50,24 +99,35 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('#perks-nav a');
-            const overlay = document.getElementById('perksLoadingOverlay');
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('#perks-nav a');
+        const selectNav = document.getElementById('perks-mobile-select');
+        const overlay = document.getElementById('perksLoadingOverlay');
 
-            if (!overlay) return;
+        if (!overlay) return;
 
-            navLinks.forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    if (link.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
-                        overlay.classList.remove('hidden');
-                    }
-                });
-            });
-
-            window.addEventListener('pageshow', function(e) {
-                if (e.persisted) {
-                    overlay.classList.add('hidden');
+        // Desktop nav links trigger loading overlay
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                if (link.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                    overlay.classList.remove('hidden');
                 }
             });
-});
+        });
+
+        // Mobile dropdown selection triggers loading overlay
+        if (selectNav) {
+            selectNav.addEventListener('change', function () {
+                if (this.value) {
+                    overlay.classList.remove('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) {
+                overlay.classList.add('hidden');
+            }
+        });
+    });
 </script>

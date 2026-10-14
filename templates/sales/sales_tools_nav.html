@@ -1,65 +1,83 @@
 <!-- Sub-Navigation Menu -->
-<section class="mb-6">
-    <nav class="flex items-center gap-1 bg-white p-2 rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+<section class="mb-6 w-full">
+
+    <!-- Mobile Navigation: Native Select Dropdown + Back Button (Visible on mobile < sm) -->
+    <div class="flex items-center gap-2 sm:hidden bg-white p-2.5 rounded-xl border border-gray-200 shadow-sm">
+        <!-- Back to Main Dashboard Button -->
+        <a href="{{ url_for('main.dashboard') }}" class="p-2 text-gray-500 hover:text-acdi-green hover:bg-gray-100 rounded-lg transition-colors shrink-0" title="Return to Dashboard">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+        </a>
+
+        <div class="w-px h-6 bg-gray-200 shrink-0"></div>
+
+        <!-- Dynamic Dropdown Navigation -->
+        <div class="relative flex-1">
+            <select onchange="if (this.value) window.location.href = this.value;"
+                    class="w-full bg-gray-50 border border-gray-300 text-gray-800 text-sm font-semibold rounded-lg p-2.5 pr-8 focus:ring-2 focus:ring-acdi-green focus:border-acdi-green outline-none appearance-none cursor-pointer">
+                <option value="{{ url_for('sales.sales_tools') }}" {% if request.endpoint =='sales.sales_tools' %}selected{% endif %}>
+                    Sales Tools Home
+                </option>
+                {% if user.account == 'ACDI' %}
+                <option value="{{ url_for('sales.rep_accounts') }}" {% if request.endpoint =='sales.rep_accounts' %}selected{% endif %}>
+                    My Accounts
+                </option>
+                {% endif %}
+                {% if user.account != 'ACDI' %}
+                <option value="{{ url_for('sales.reseller_licenses') }}" {% if request.endpoint =='sales.reseller_licenses' %}selected{% endif %}>
+                    Licenses
+                </option>
+                {% endif %}
+                <option value="{{ url_for('sales.open_deals') }}" {% if request.endpoint =='sales.open_deals' %}selected{% endif %}>
+                    Open Deals
+                </option>
+                <option value="{{ url_for('support.shipment_tracking') }}" {% if request.endpoint =='support.shipment_tracking' %}selected{% endif %}>
+                    Shipment Tracking
+                </option>
+            </select>
+
+            <!-- Custom Dropdown Chevron Icon -->
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Navigation: Tab Bar (Visible on sm and above) -->
+    <nav class="hidden sm:flex items-center gap-1.5 bg-white p-2 rounded-xl shadow-sm border border-gray-200 w-full">
         <!-- Back to Main Dashboard -->
-        <a href="{{ url_for('main.dashboard') }}" class="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        <a href="{{ url_for('main.dashboard') }}" class="shrink-0 whitespace-nowrap px-3.5 py-2 text-sm font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Dashboard
         </a>
 
-        <div class="w-px h-6 bg-gray-200 mx-2"></div>
+        <div class="w-px h-5 bg-gray-200 mx-1 shrink-0"></div>
 
         <!-- Sales Tools Home -->
-        <a href="{{ url_for('sales.sales_tools') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'sales.sales_tools' %}
-                font-bold text-acdi-green bg-[#f0f9e8]
-            {% else %}
-                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
-            {% endif %}">
+        <a href="{{ url_for('sales.sales_tools') }}" class="shrink-0 whitespace-nowrap px-3.5 py-2 text-sm rounded-lg transition-colors {% if request.endpoint == 'sales.sales_tools' %}font-bold text-acdi-green bg-[#f0f9e8]{% else %}font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50{% endif %}">
             Sales Tools
         </a>
 
         {% if user.account == 'ACDI' %}
-        <!-- My Accounts (Visible only to ACDI) -->
-        <a href="{{ url_for('sales.rep_accounts') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'sales.rep_accounts' %}
-                font-bold text-acdi-green bg-[#f0f9e8]
-            {% else %}
-                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
-            {% endif %}">
+        <a href="{{ url_for('sales.rep_accounts') }}" class="shrink-0 whitespace-nowrap px-3.5 py-2 text-sm rounded-lg transition-colors {% if request.endpoint == 'sales.rep_accounts' %}font-bold text-acdi-green bg-[#f0f9e8]{% else %}font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50{% endif %}">
             My Accounts
         </a>
         {% endif %}
 
         {% if user.account != 'ACDI'%}
-        <!-- License Dashboard -->
-        <a href="{{ url_for('sales.reseller_licenses') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'sales.reseller_licenses' %}
-                font-bold text-acdi-green bg-[#f0f9e8]
-            {% else %}
-                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
-            {% endif %}">
+        <a href="{{ url_for('sales.reseller_licenses') }}" class="shrink-0 whitespace-nowrap px-3.5 py-2 text-sm rounded-lg transition-colors {% if request.endpoint == 'sales.reseller_licenses' %}font-bold text-acdi-green bg-[#f0f9e8]{% else %}font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50{% endif %}">
             Licenses
         </a>
         {% endif %}
 
-        <!-- Open Deals -->
-        <a href="{{ url_for('sales.open_deals') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'sales.open_deals' %}
-                font-bold text-acdi-green bg-[#f0f9e8]
-            {% else %}
-                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
-            {% endif %}">
+        <a href="{{ url_for('sales.open_deals') }}" class="shrink-0 whitespace-nowrap px-3.5 py-2 text-sm rounded-lg transition-colors {% if request.endpoint == 'sales.open_deals' %}font-bold text-acdi-green bg-[#f0f9e8]{% else %}font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50{% endif %}">
             Open Deals
         </a>
-     
-        <!-- Shipment Tracking -->
-        <a href="{{ url_for('support.shipment_tracking') }}" class="whitespace-nowrap px-4 py-2 text-sm rounded-lg transition-colors
-            {% if request.endpoint == 'support.shipment_tracking' %}
-                font-bold text-acdi-green bg-[#f0f9e8]
-            {% else %}
-                font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50
-            {% endif %}">
+
+        <a href="{{ url_for('support.shipment_tracking') }}" class="shrink-0 whitespace-nowrap px-3.5 py-2 text-sm rounded-lg transition-colors {% if request.endpoint == 'support.shipment_tracking' %}font-bold text-acdi-green bg-[#f0f9e8]{% else %}font-medium text-gray-600 hover:text-acdi-green hover:bg-gray-50{% endif %}">
             Shipment Tracking
         </a>
     </nav>
