@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>PayloadType</key>
+            <string>com.apple.webClip.managed</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>PayloadIdentifier</key>
+            <string>com.oneacdi.portal.webclip</string>
+            <key>PayloadUUID</key>
+            <string>A1B2C3D4-E5F6-7890-ABCD-EF1234567890</string>
+            <key>PayloadDisplayName</key>
+            <string>ACDI Partner Portal Web Clip</string>
+            <key>PayloadDescription</key>
+            <string>Adds the ACDI Partner Portal shortcut to your Home Screen.</string>
+            <key>PayloadOrganization</key>
+            <string>ACDI</string>
+
+            <!-- Web Clip Configurations -->
+            <key>URL</key>
+            <string>https://portal.oneacdi.com</string>
+            <key>Label</key>
+            <string>ACDI Portal</string>
+            <key>IsRemovable</key>
+            <true/>
+            <key>FullScreen</key>
+            <true/>
+            <key>Precomposed</key>
+            <true/>
+        </dict>
+    </array>
+    <key>PayloadDisplayName</key>
+    <string>ACDI Partner Portal</string>
+    <key>PayloadIdentifier</key>
+    <string>com.oneacdi.portal.profile</string>
+    <key>PayloadOrganization</key>
+    <string>ACDI</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>12345678-ABCD-EF12-3456-7890ABCDEF12</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>

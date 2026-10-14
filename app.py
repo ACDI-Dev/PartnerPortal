@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, Response
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from config import Config
@@ -40,6 +40,14 @@ def create_app():
     @app.route('/sw.js')
     def service_worker():
        return send_from_directory('static', 'sw.js', mimetype='application/javascript')
+    @app.route('/download-profile')
+    def download_profile():
+        return send_from_directory(
+        'static', 
+        'acdi_portal.mobileconfig', 
+        mimetype='application/x-apple-aspen-config',
+        as_attachment=True
+    )
     # Register Blueprints with Prefixes
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
@@ -50,6 +58,15 @@ def create_app():
     app.register_blueprint(partner_advantage_bp)
 
     return app
+
+    @app.route('/download-profile')
+    def download_profile():
+        return send_from_directory(
+        'static', 
+        'acdi_portal.mobileconfig', 
+        mimetype='application/x-apple-aspen-config',
+        as_attachment=True
+    )
 
 app = create_app()
 
