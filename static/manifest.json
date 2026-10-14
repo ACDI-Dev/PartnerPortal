@@ -1,0 +1,22 @@
+{
+  "name": "ACDI Partner Portal",
+  "short_name": "ACDI Portal",
+  "description": "Access your exclusive ACDI resources and tools.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#1e293b",
+  "icons": [
+    {
+      "src": "/static/ACDI_Logo180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/ACDI_Logo180.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

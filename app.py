@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from config import Config
@@ -36,6 +36,10 @@ def create_app():
         client_kwargs={'scope': 'openid profile email offline_access'}
     )
 
+
+    @app.route('/sw.js')
+    def service_worker():
+       return send_from_directory('static', 'sw.js', mimetype='application/javascript')
     # Register Blueprints with Prefixes
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
