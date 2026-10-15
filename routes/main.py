@@ -49,7 +49,7 @@ def request_access():
 
     user_email = user.get('email', 'Guest User / Unauthenticated')
     user_name = f"{user.get('first_name', '')} {user.get('last_name', '')}".strip() or 'Guest User'
-    account_name = user.get('account') or user.get('reseller_account', 'N/A')
+    account_name = user.get('account')
 
     sales_rep_email = os.environ.get('SALES_REP_EMAIL', 'sales@yourcompany.com')
     from_email = os.environ.get('SENDGRID_FROM_EMAIL', 'noreply@yourcompany.com')
