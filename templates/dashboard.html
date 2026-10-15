@@ -48,7 +48,6 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         <!-- ACE Support -->
-        {% if 'ACE' in user.authorized_apps %}
         <a href="/ace" target="_blank" rel="noopener noreferrer" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">
             <div class="w-12 h-12 bg-gray-50 group-hover:bg-[#f0f9e8] rounded-lg flex items-center justify-center mb-5 transition-colors p-2">
                 <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain group-hover:scale-110 transition-transform">
@@ -56,20 +55,7 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">ACE Support</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Connect with ACE, your ACDI Customer Support Expert, for instant technical assistance and resources.</p>
         </a>
-        {% else %}
-        <button type="button" onclick="openRequestModal('ACE Support')" class="w-full text-left p-6 bg-gray-100 rounded-xl border border-gray-200 opacity-75 hover:opacity-100 hover:border-gray-400 transition-all duration-200 group relative">
-            <div class="flex justify-between items-start mb-5">
-                <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 p-2">
-                    <img src="{{ url_for('static', filename='ACE Circlesmall.png') }}" alt="ACE Icon" class="w-full h-full object-contain grayscale opacity-60">
-                </div>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-600 group-hover:bg-acdi-green group-hover:text-acdi-dark transition-colors">
-                    Click to request access
-                </span>
-            </div>
-            <h3 class="text-xl font-bold text-gray-500 mb-2">ACE Support</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">Connect with ACE, your ACDI Customer Support Expert, for instant technical assistance and resources.</p>
-        </button>
-        {% endif %}
+
 
         <!-- Sales Tools Hub -->
         <a href="{{ url_for('sales.sales_tools') }}" class="block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 hover:border-acdi-green transition-all duration-200 group">

@@ -8,7 +8,6 @@ from extensions import cache
 
 AUTHORIZED_APP_MAP = {
     '10ec4e31-10a5-417a-92e3-24b886e1c750': 'ACDI Reseller Portal',
-    '27318a59-d4ae-47a5-b300-3eebabae6aba': 'ACE',
     '2c6ebaaa-4419-4b3c-8fff-1770f7122810': 'Partner Perks',
     '3c219e58-ed0e-4b18-ad48-f4f92793ae32': 'FusionAuth',
     '416edefe-23fd-48f1-9355-4f63f6965711': 'Quote Portal',
