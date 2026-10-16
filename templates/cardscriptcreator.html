@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACDI JavaScript Conversion & Script Creator</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+
+  <script>
+    function ConvertCardString() {
+      const list = [];
+      var cardstring = document.getElementById('cardnumb').value;
+      var cardtype = document.getElementById('card').value;
+      var cardout = document.getElementById('expected').value;
+      var exptype = document.getElementById('expcard').value;
+
+      list[0] = convert(cardstring, cardtype, cardout, exptype)[0];
+      list[1] = convert(cardstring, cardtype, cardout, exptype)[1];
+      list[2] = convert(cardstring, cardtype, cardout, exptype)[2];
+      list[3] = convert(cardstring, cardtype, cardout, exptype)[3];
+
+      document.getElementById("cardreturn").innerHTML = list[0] || '';
+      document.getElementById("scriptout").value = list[1] || '';
+      document.getElementById("details").innerHTML = list[2] || '';
+
+      document.getElementById("copied").innerHTML = '';
+
+      if (cardtype == "Hex" && exptype == "Dec"){
+        document.getElementById("pad").innerHTML = "(Pad with zeros as needed)";
+      } else if (cardtype == "HP" && exptype == "Dec"){
+        document.getElementById("pad").innerHTML = "(Pad with zeros as needed)";
+      } else {
+        document.getElementById("pad").innerHTML = '';
+      }
+    }
+
+    function myCopy(){
+      var ele = document.getElementById("scriptout");
+      ele.select();
+      document.execCommand("Copy");
+      var n = Math.floor(Math.random() * 5);
+      var message = "";
+      if (n == 0){ message = "good job you!"; }
+      if (n == 1){ message = "you are awesome!"; }
+      if (n == 2){ message = "wasn't that easy?!"; }
+      if (n == 3){ message = "you can code now!"; }
+      if (n == 4){ message = "ez pz lemon squeezy!"; }
+      
+      document.getElementById("copied").innerHTML = "-- copied, " + message;
+    }
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+
+  <div class="max-w-3xl mx-auto space-y-6">
+    
+    <!-- Main Card Container -->
+    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 sm:p-8">
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mb-2">
+        ACDI Script Creator
+      </h1>
+      <p class="text-sm text-slate-500 mb-6">JavaScript Conversion & Custom Script Generator</p>
+
+      <div class="space-y-6">
+        
+        <!-- Input Row 1: Card Input -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label for="card" class="block text-sm font-medium text-slate-700 mb-1">Card Input Type</label>
+            <select id="card" name="card" class="w-full rounded-lg border-slate-300 bg-slate-50 border p-2.5 text-slate-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+              <option value="Hex">Hex</option>
+              <option value="Dec">Dec</option> 
+              <option value="HP">HP</option> 	
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="cardnumb" class="block text-sm font-medium text-slate-700 mb-1">Card Number Input</label>
+            <input id="cardnumb" name="cardnumb" type="text" placeholder="e.g. 1A2B3C" class="w-full rounded-lg border-slate-300 bg-slate-50 border p-2.5 text-slate-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+        </div>
+
+        <!-- Details display section -->
+        <div id="details" class="text-xs text-slate-500 italic min-h-[1rem]"></div>
+
+        <!-- Input Row 2: Expected Output -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label for="expcard" class="block text-sm font-medium text-slate-700 mb-1">Expected Output Type</label>
+            <select id="expcard" name="expcard" class="w-full rounded-lg border-slate-300 bg-slate-50 border p-2.5 text-slate-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+              <option value="Dec">Dec</option>
+              <option value="Hex">Hex</option>  
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="expected" class="block text-sm font-medium text-slate-700 mb-1">Expected Card Number</label>
+            <input id="expected" name="expected" type="text" placeholder="e.g. 12345" class="w-full rounded-lg border-slate-300 bg-slate-50 border p-2.5 text-slate-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            <span id="pad" class="text-xs text-amber-600 font-medium block mt-1"></span>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div>
+          <button type="button" onclick="ConvertCardString()" class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Create Script
+          </button>
+        </div>
+
+        <!-- Script Output Header/Status -->
+        <div class="pt-2 border-t border-slate-100">
+          <div class="text-sm font-medium text-slate-700 mb-2">
+            Script Output: <span id="cardreturn" class="font-bold text-blue-600"></span>
+          </div>
+
+          <!-- Code Textarea -->
+          <label for="scriptout" class="block text-sm font-medium text-slate-700 mb-1">Your Custom Script:</label>
+          <textarea id="scriptout" name="scriptout" rows="8" readonly placeholder="// Script will appear here..." class="w-full font-mono text-xs p-3 bg-slate-900 text-emerald-400 rounded-lg border border-slate-700 focus:outline-none resize-none"></textarea>
+          
+          <div class="mt-3 flex flex-wrap items-center gap-3">
+            <button type="button" onclick="myCopy()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-medium rounded-lg shadow transition focus:outline-none focus:ring-2 focus:ring-slate-500">
+              Copy to Clipboard
+            </button>
+            <span id="copied" class="text-xs font-medium text-emerald-600"></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Instructions Card -->
+    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 sm:p-8">
+      <h2 class="text-lg font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Instructions</h2>
+      <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+        Load the script on one device to test first. If it works, modify the global setting.
+      </p>
+
+      <ol class="list-decimal list-inside space-y-2 text-xs sm:text-sm text-slate-600">
+        <li class="pl-1">
+          On the PaperCut server, save script text as a <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded border border-slate-200 font-mono text-xs">card.js</code> file in <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded border border-slate-200 font-mono text-xs">C:\Program Files\PaperCut MF\Server\Custom</code>
+        </li>
+        <li class="pl-1">
+          Go to <span class="font-medium text-slate-700">PaperCut Web Interface &gt; Devices &gt; [Device] &gt; Advanced Config &gt; ext.device.card-no-converter</span>
+        </li>
+        <li class="pl-1">
+          In the <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded border border-slate-200 font-mono text-xs">ext.device.card-no-converter</code> field enter: <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded border border-slate-200 font-mono text-xs">javascript:custom/card.js</code>
+        </li>
+        <li class="pl-1">
+          Test. If it works, change this setting back to <strong>GLOBAL</strong>.
+        </li>
+        <li class="pl-1">
+          Go to <span class="font-medium text-slate-700">Options &gt; Config editor (advanced) &gt; ext-device.card-no-converter</span>
+        </li>
+        <li class="pl-1">
+          In the <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded border border-slate-200 font-mono text-xs">ext.device.card-no-converter</code> field enter: <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded border border-slate-200 font-mono text-xs">javascript:custom/card.js</code>
+        </li>
+        <li class="pl-1">
+          Test on multiple devices.
+        </li>
+      </ol>
+    </div>
+
+  </div>
+
+</body>
+<script>
+function convert(cardNumber,type,expected,exptype){
+var HEXBASE = 16;
+var BINBASE = 2;
+var DECBASE = 10;
+
+// 3's check for easy fix 
+threesCheck = cardNumber;
+
+//reset if type is changed - future use
+scriptout = '';
+
+var Hex = 'Hex';
+var Dec = 'Dec';
+var HP = 'HP';
+
+//Card Type is HEX. Options for HEX/DEC and HEX/HEX
+if (type === Hex){
+	if (exptype === Dec){
+		//This converts the HEX and DEC to Binary
+		str2b = parseInt(cardNumber,HEXBASE).toString(BINBASE);
+		exp2b = parseInt(expected,DECBASE).toString(BINBASE);
+		pos = str2b.indexOf(exp2b);		//position of the match
+	}
+	if (exptype === Hex){
+		//Convert HEX and HEX to Binary
+		str2b = parseInt(cardNumber,HEXBASE).toString(BINBASE);
+		exp2b = parseInt(expected,HEXBASE).toString(BINBASE);
+		pos = str2b.indexOf(exp2b);		//position of the match
+	}
+	//length of both and get positions of match
+	strlen = str2b.length;
+	strexp = exp2b.length;
+	first = (strlen - pos);
+	second = strlen - (pos + strexp);
+	
+	str2d = parseInt(str2b.substring(str2b.length - first, str2b.length - second), BINBASE).toString(DECBASE);
+	
+	if (exptype === Hex){
+		str2d = parseInt(str2d,DECBASE).toString(HEXBASE);		//swap it back from DEC > HEX
+		str2d = str2d.toUpperCase();
+	}
+	//examples for unknown expected values for DEC
+	example = parseInt(str2b.substring(str2b.length - 14, str2b.length - 1), BINBASE).toString(DECBASE);
+	example2 = parseInt(str2b.substring(str2b.length - 17, str2b.length - 1), BINBASE).toString(DECBASE);
+	
+	//make the output length the same as expected, ie pad zeros
+	// converting dec > bin stips leading zeros anyway
+	n = expected.length;
+	//trying for instead of while
+	for (i = 0; i < n; i++){
+		if (str2d.length != expected.length){
+		str2d = 0 + str2d 
+		
+		}
+	}
+	
+	if (exptype === Dec){
+		scriptout = `function convert(cardNumber){ 
+	str2b = parseInt(cardNumber,16).toString(2);
+	str2d = parseInt(str2b.substring(str2b.length - ` + first + `, str2b.length - ` + second +`), 2).toString(10);
+	while (str2d.length < ` + expected.length + `) {
+		str2d = "0" + str2d;}\r\nreturn str2d;}`
+	} else {
+		scriptout = `function convert(cardNumber){ 
+	str2b = parseInt(cardNumber,16).toString(2);
+	str2d = parseInt(str2b.substring(str2b.length - ` + first + `, str2b.length - ` + second +`), 2).toString(10);
+	str2d = parseInt(str2d,10).toString(16);\r\nreturn str2d;}`
+	}
+	//error out if cannot create the script
+	if (str2d.toUpperCase() != expected.toUpperCase()){
+		str2d = 'Error -- cannot generate that expected value';
+		scriptout = '';
+	}
+	//script works, add some text
+	if (str2d.toUpperCase() == expected.toUpperCase()){
+		str2d = str2d.toUpperCase() + ' -- it is a match';
+	}
+	//add a 0 if the examples match
+	if(example == example2){
+			example2 = 0 + example2
+	}
+	//details section
+	if (exptype === Dec){	
+		details = 'Length of input = ~' + strlen + 'bits. Possible outputs are: ' + example +', ' + example2;
+	} else {
+		details = 'Length of input = ~' + strlen+ 'bits. ';
+	}
+	
+	
+	
+}
+	
+//Card type is DEC, DEC/Hex and Dec/dec options
+if (type === Dec){
+	if (exptype === Dec){
+		//This converts the DEC and DEC to Binary
+		//actually don't need to convert
+		//str2b = parseInt(cardNumber,DECBASE).toString(BINBASE);
+		//exp2b = parseInt(expected,DECBASE).toString(BINBASE);
+		str2b = cardNumber;
+		exp2b = expected;
+		//str2d = cardNumber;
+		pos2 = str2b.indexOf(exp2b);		//position of the match left to right
+		pos = str2b.lastIndexOf(exp2b);		//position from right to left
+	
+		// using 'pos' var -- first match from right to left
+		//length of both and get positions of match
+		strlen = str2b.length;
+		strexp = exp2b.length;
+		first = (strlen - pos);
+		second = strlen - (pos + strexp);
+		//Binary > Decimal
+		str2d = str2b.substring(str2b.length - first, str2b.length - second);
+	
+		n = expected.length;
+		j = cardNumber.length;
+		k = 0;
+		m = 0;
+		
+		// Pad zeros stuff... leaving this out for now
+		//for (i = 0; i < n; i++){
+			//if (str2d.length != expected.length){
+			//str2d = 0 + str2d 
+		
+			//}
+		//}	
+	
+		for (i = 0; i < j; i++){
+			strworking = cardNumber.substring(k, n);
+			position = strworking.indexOf(expected);
+			if (position != -1){
+				m = m + 1;
+				//scriptout = "matches: " + m + ", k=" + k + ", n=" + n + ", string=" + strworking + ", j=" + j;
+			}
+			k = k + 1;
+			n = n + 1;
+		
+		}
+		// if found more than one match, use this code for script field
+		if (m > 1){
+				str2d = str2d + " -- " + m + " matches found, manually edit the specific position if required " 
+				scriptout = `function convert(cardNumber){
+//*****NOTES*********
+//  cardNumber length is from 0 - ` + cardNumber.length + `. Using first match found, right to left.
+//  First number is the Start position, Second is the End. Count from right to left
+//*******************
+	cardNumber = cardNumber.substring(cardNumber.length - ` + first + `, cardNumber.length - ` + second + `);\r\nreturn cardNumber;}`
+			
+		}
+		//if find one match, normal stuff
+		if (m === 1){
+				str2d = str2d + " -- match found "
+				scriptout = `function convert(cardNumber){
+		cardNumber = cardNumber.substring(cardNumber.length - ` + first + `, cardNumber.length - ` + second + `);\r\nreturn cardNumber;}`
+				
+		}
+		//if no match found at all
+		if (m === 0){
+				scriptout = "no match found at all"
+				str2d = " -- error no match"
+		}
+	}
+	if (exptype === Hex){
+		//Convert DEC and HEX to Binary
+		str2b = parseInt(cardNumber,DECBASE).toString(BINBASE);
+		exp2b = parseInt(expected,HEXBASE).toString(BINBASE);
+		pos = str2b.indexOf(exp2b);		//position of the match, left to right
+		
+		//length of both and get positions of match
+		strlen = str2b.length;
+		strexp = exp2b.length;
+		first = (strlen - pos);
+		second = strlen - (pos + strexp);
+		//Binary > Decimal
+		//str2d = parseInt(str2b.substring(str2b.length - first, str2b.length - second), BINBASE).toString(DECBASE);
+		str2d = str2b.substring(str2b.length - first, str2b.length - second);
+		str2d = parseInt(str2d,BINBASE).toString(HEXBASE);		//swap it back from DEC > HEX
+		//error out if cannot create the script
+		if (str2d != expected){
+			str2d = 'Error -- cannot generate that expected value';
+			scriptout = '';
+		}
+		//script works, add some text
+		if (str2d == expected){
+			str2d = str2d + ' -- it is a match';
+			scriptout = `function convert(cardNumber){ 
+	str2b = parseInt(cardNumber,10).toString(2);
+	str2d = parseInt(str2b.substring(str2b.length - ` + first + `, str2b.length - ` + second +`), 2).toString(10);	
+	str2d = parseInt(str2d,10).toString(16);\r\nreturn str2d;}`
+		}
+		
+	}
+	
+	//leave details blank for now
+	details = '';
+	
+}
+//credit to Seth
+if (type == HP){
+
+/*		
+HP has its own protocol for readers. 
+It sends a command with the card in reverse byte order.
+
+R00EF041A02002602 
+
+R00 - Means New Command
+EF04 - Means Prox Card
+1A  (26 in decimal) Means number of bits on the card this case that is 26 bits 
+
+Then the card data is 02002602
+
+But it is in reverse byte order.  Which means the value of the card is actually 02260002 in hex
+
+binary 10001001100000000000000010
+
+This card is 16 bit ID code of 0000000000000001
+
+Which is 1 in decimal.
+
+Another example:
+R00EF041A552BFE03
+	data: 552BFE03
+	in right order: 03FE2B55
+	binary: 11111111100010101101010101
+	find 17,1:       0001010110101010 = 5546
+	
+
+
+*/
+		var HEXBASE = 16;
+		var BINBASE = 2;
+		var DECBASE = 10;
+		
+		cardCheck = cardNumber.substr(0,9);
+		
+		var LeftCharStart = 9;
+		var NumberofChar = 8;
+		
+		cardNumber = cardNumber.substr(LeftCharStart,NumberofChar);
+		cardNumber = cardNumber.substr(6,2) + cardNumber.substr(4,2) + cardNumber.substr(2,2) + cardNumber.substr(0,2);
+		
+		var InputBase = HEXBASE; // HEXBASE,BINBASE,or DECBASE
+		var OutBase = DECBASE; // HEXBASE,BINBASE,or DECBASE
+		var RightOffSetStart = 17; //Offset from Right of binary number to start of string
+		var RightOffSetEnd = 1; 
+		var numberofdigits = expected.length; // getting length of expected input
+		
+		binary = parseInt(cardNumber,InputBase).toString(BINBASE);
+
+		newbinary = binary.substring(binary.length - RightOffSetStart,binary.length - RightOffSetEnd);
+
+		newnumb=newbinary;
+		newnumb=parseInt(newbinary, BINBASE).toString(OutBase);
+			
+		//pad zeros if needed
+			var s = newnumb + "";
+			while (s.length < numberofdigits) {s = "0" + s;}
+			
+
+		
+	str2d = s;
+	details = "Example output from HP would be: R00EF041A552BFE03";
+	
+		if(s == expected){
+			str2d = s +	' -- it is a match';
+		
+	
+		// script out code to be copied 
+	
+		scriptout = `function convert(cardNumber){ 
+	var HEXBASE = 16;
+	var BINBASE = 2;
+	var DECBASE = 10;
+	var LeftCharStart = 9;
+	var NumberofChar = 8;
+	
+	cardNumber = cardNumber.substr(LeftCharStart,NumberofChar);
+	cardNumber = cardNumber.substr(6,2) + cardNumber.substr(4,2) + cardNumber.substr(2,2) + cardNumber.substr(0,2);
+	
+	var InputBase = HEXBASE;
+	var OutBase = DECBASE;
+	var RightOffsetStart = 17;
+	var RightOffsetEnd = 1;
+	var numberofdigits = ` + expected.length + `;
+	
+	binary = parseInt(cardNumber,InputBase).toString(BINBASE);
+	newbinary = binary.substring(binary.length - RightOffsetStart,binary.length - RightOffsetEnd);
+	
+	newnumb = newbinary;
+	newnumb = parseInt(newbinary, BINBASE).toString(OutBase);
+	
+	var s = newnumb + "";
+	while (s.length < numberofdigits){
+	s = "0" + s; }
+	
+	return s;	}
+	`
+	
+		} else if(cardCheck === ""){
+			str2d = "";
+			scriptout = "Card number missing";} 
+		else {
+			str2d = ' -- no match';
+			scriptout = `What number are you expecting? ` + s + `?`; 
+		}
+		
+		
+		//adding a check in for standard 26bit numbers for now, will need to work on this for more complex setups
+		if (cardCheck != "R00EF041A" & cardCheck != ""){
+			scriptout = `You got an odd one there buddy. Output is not from a prox card or it's not 26 bits.\r\nYour card output does not start with "R00EF041A".\r\nTry a notepad test with your Card Reader. \r\nThis is a work in progress to include more types.\r\n~BK`;
+			
+			s = "";
+		}
+		
+}
+	
+return [str2d,scriptout,details];
+
+}
+
+</script>
+</html>

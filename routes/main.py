@@ -25,6 +25,10 @@ def resource_hub(user):
 def training(user):
     return render_template('training.html', user=user)
 
+@main_bp.route('/tools/cardscriptcreator')
+def cardscriptcreator(user):
+    return render_template('cardscriptcreator.html', user=user)
+
 @main_bp.route('/ace')
 @login_required
 def ace_portal(user):
