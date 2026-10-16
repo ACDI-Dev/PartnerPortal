@@ -26,8 +26,12 @@ def training(user):
     return render_template('training.html', user=user)
 
 @main_bp.route('/tools/cardscriptcreator')
-def cardscriptcreator(user):
-    return render_template('cardscriptcreator.html', user=user)
+def cardscriptcreator():
+    return render_template('cardscriptcreator.html')
+
+@main_bp.route('/tools/cardscripttester')
+def cardscripttester():
+    return render_template('cardscripttester.html')
 
 @main_bp.route('/ace')
 @login_required
